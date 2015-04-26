@@ -72,7 +72,7 @@ def query_stories_in_time_range(client, start_time, end_time, sr='Random_Acts_Of
     url = r'http://www.reddit.com/r/{sr}/search.json?q=timestamp:{st}..{et}'.format(sr=sr, st=int(start_time),
                                                                                     et=int(end_time))
     r = client.get(url, params=parameters)
-    print 'sent URL is', r.url
+    # print 'sent URL is', r.url
     j = json.loads(r.text)
     return j
 
