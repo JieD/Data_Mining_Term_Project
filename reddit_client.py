@@ -2,6 +2,7 @@ import json
 import requests
 from pprint import pprint as pp2
 import lib
+import time
 
 
 # login using provided username, password and user agent
@@ -38,12 +39,11 @@ def login(username, password, user_agent):
 
 
 # query stories using the passed in parameters to form request
-def query_stories(client, limit=100, sr='Random_Acts_Of_Pizza', sorting='', **kwargs):
+def query_stories(client, limit=lib.QUERY_LIMIT, sr='Random_Acts_Of_Pizza', sorting='new', **kwargs):
     """retrieves X (max 100) amount of stories in a subreddit\n
     'sr' the subreddit from which to get story, can concatenate using '+'
     'sorting' is whether or not the sorting of the reddit should be customized or not,
     new, top or hot. if it is: Allowed passing params/queries such as t=hour, week, month, year or all
-    'return_json' whether return json or a list of stories
     '**kwargs' set extra parameters, e.g. before & after"""
 
     # query to send
@@ -63,6 +63,21 @@ def query_stories(client, limit=100, sr='Random_Acts_Of_Pizza', sorting='', **kw
     return j
 
 
+# query stories using search within timestamp
+# regular query only returns the latest 1000 stories
+def query_stories_in_time_range(client, start_time, end_time, sr='Random_Acts_Of_Pizza', sorting='new',
+                                limit=lib.QUERY_LIMIT, **kwargs):
+    parameters = {'sort': sorting, 'limit': limit, 'restrict_sr': 'on', 'syntax': 'cloudsearch'}
+    parameters.update(kwargs)
+    url = r'http://www.reddit.com/r/{sr}/search.json?q=timestamp:{st}..{et}'.format(sr=sr, st=int(start_time),
+                                                                                    et=int(end_time))
+    r = client.get(url, params=parameters)
+    print 'sent URL is', r.url
+    j = json.loads(r.text)
+    return j
+
+
+# the http response contain after and before information
 def get_name_range(json_stories):
     j = json_stories['data']
     after_name = j['after']
@@ -71,18 +86,17 @@ def get_name_range(json_stories):
 
 
 def parse_stories(json_stories, return_json=False):
-    count = 0
-
+    """return_json - whether return json or a list of stories"""
     if return_json:  # return raw json
         return json_stories
     else:  # return a list of stories
         stories = []
-        for story in json_stories['data']['children']:
-            stories.append(story['data'])
+        if json_stories:  # check if stories is empty
+            for story in json_stories['data']['children']:
+                stories.append(story['data'])
             #pp2(story)
-            print
-            count += 1
-        print 'number of stories is: {COUNT}'.format(COUNT=count)
+            #print 'name: ', story['data']['name']
+        #print 'number of stories is: {0}'.format(str(len(stories)))
 
         #data = stories[0]['data']
         # pp2(data)
@@ -93,10 +107,29 @@ def parse_stories(json_stories, return_json=False):
         return stories
 
 
+def first_query(client, sr):
+    json_stories = query_stories(client, limit=1, sr=sr)
+    stories = parse_stories(json_stories)
+    return stories[len(stories) - 1]
+
+
 def main():
     client = login(lib.USERNAME, lib.PASSWORD, lib.USER_AGENT)
-    json_stories = query_stories(client, limit=1)
-    return parse_stories(json_stories)
+    start_time = 1429330959
+    end_time = time.time()
+    after_name = ''
+    while True:
+        json_stories = query_stories_in_time_range(client, start_time, end_time, limit=10, after=after_name)
+        j = parse_stories(json_stories)
+        length = len(j)
+        if length == 10:
+            after_name = j[length - 1]['name']
+        else:
+            break
+
+    #json_stories = query_stories(client, limit=2)
+    #parse_stories(json_stories)
+    #pp2(first_query(client, lib.ROAP))
 
 
 if __name__ == "__main__":
