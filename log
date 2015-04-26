@@ -1,0 +1,5 @@
+4/18 - Sqlite3 db syntax: for string, use ? instead of python string format.
+4/19 - Request reddit server using normal syntax. After 1000 stories, no new stories returned. Solution: use search in request.
+4/20 - Test request reddit server using search with timestamp. Timestamps of returned stories don't agree with the timestamp specified in the request. Solution: give a fixed long time period, use after to separate.
+4/21 - Update comments.
+4/25 -
