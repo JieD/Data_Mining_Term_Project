@@ -43,3 +43,7 @@ STORY_FIELDS_DICT = {'approved_by':   STRING_TYPE,  'archived': STRING_TYPE,  'a
                    'url':           STRING_TYPE}
 story_primary_key = 'name'
 story_primary_key_type = STRING_TYPE
+
+FIELDS_DICT = {
+    'giver_name': STRING_TYPE, 'requester_id': STRING_TYPE, 'requester_name': STRING_TYPE,
+}
