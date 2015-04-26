@@ -102,36 +102,36 @@ def get_stories_in_year(client, sr, start_time, cursor, table_name, file_name):
 
 # use search with timestamp (regular query can only fetch the latest 1000 stories)
 def get_stories_in_time_range(client, sr, start_time, end_time, cursor, table_name, file_name):
-    out_f = open(file_name, 'w')
-    out_f.write("Start recording fetch info for {0}\n".format(sr))
+    #out_f = open(file_name, 'w')
+    #out_f.write("Start recording fetch info for {0}\n".format(sr))
     after_name = ''
     limit = lib.QUERY_LIMIT
 
-    while start_time + lib.DAY_SECONDS < end_time:
-        while 1:
-            json_stories = reddit_client.query_stories_in_time_range(client, start_time, end_time, limit=limit,
-                                                                     after=after_name)
-            stories = reddit_client.parse_stories(json_stories)
-            if stories:  # not empty list
-                insert_stories(cursor, table_name, stories)
-            else:  # empty list (probably has fetched 1000 stories for the request
+    while True:
+        json_stories = reddit_client.query_stories_in_time_range(client, start_time, end_time, sr=sr, limit=limit,
+                                                                 after=after_name)
+        stories = reddit_client.parse_stories(json_stories)
+
+        if not stories:  # empty list (probably has fetched 1000 stories for the request
+            end_time = last_story['created_utc']
+            if start_time < end_time:
+                # adjust timestamp throw in delta (Day_Seconds) to overcome the bias in the reddit search result
+                end_time += lib.DAY_SECONDS
+                continue
+            else:
                 break
+        # store stories into the db
+        insert_stories(cursor, table_name, stories)
+        length = len(stories)
+        lib.count += length
+        last_story = stories[length - 1]
+        after_name = last_story['name']
 
-            length = len(stories)
-            lib.count += length
-            last_story = stories[length - 1]
-            after_name = last_story['name']
-            if length is not limit:
-                break
-            if lib.count % lib.THRESHOLD == 0:
-                out_f.write("The {0}th story: name = {1}, author = {2}\n".
-                            format(str(lib.count), last_story['name'], last_story['author']))
-
-        # adjust timestamp, throw in delta (Day_Seconds) to overcome the bias in the reddit search result
-        end_time = last_story['created_utc'] + lib.DAY_SECONDS
-
-    out_f.write("Finish recording fetch into for {0}\n".format(sr))
-    out_f.close()
+    # write meta information
+    #out_f.write("The {0}th story: name = {1}, author = {2}\n".
+    #            format(str(lib.count), last_story['name'], last_story['author']))
+    #out_f.write("Finish recording fetch into for {0}\n".format(sr))
+    #out_f.close()
 
 
 def main():
@@ -144,6 +144,8 @@ def main():
     create_story_table(cursor, table_name)
 
     client = reddit_client.login(lib.USERNAME, lib.PASSWORD, lib.USER_AGENT)
+
+    # retrieve the latest 1000 stories
     #get_stories_in_year(client, lib.ROAP, lib.START_2014, cursor, lib.RAW_ROAP_TABLE_NAME, lib.FILE_NAME)
     end_time = time.time()
     get_stories_in_time_range(client, lib.ROAP, lib.START_2014, end_time, cursor, lib.RAW_ROAP_TABLE_NAME, lib.FILE_NAME)
