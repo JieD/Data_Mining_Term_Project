@@ -53,6 +53,21 @@ def update(cursor, table_name, id_column, id_value, column_name, column_value):
                    format(tn=table_name, cn=column_name, idc=id_column), (column_value, id_value))
 
 
+# retrieve data
+def select_all(cursor, table_name, id_column, *args):
+    columns = id_column
+    for arg in args:
+        columns += ', ' + arg
+    cursor.execute("SELECT {cns} FROM {tn}".format(idc=id_column, cns=columns, tn=table_name))
+    return cursor
+
+
+def select_condition(cursor, table_name, column_name, column_value):
+    cursor.execute("SELECT {idc}, {cn} FROM {tn} WHERE {cn}=?".format(idc=lib.story_primary_key, cn=column_name,
+                                                                     tn=table_name), (column_value,))
+    return cursor
+
+
 # insert one row
 def insert_story(cursor, table_name, story):
     idc = lib.story_primary_key
@@ -140,18 +155,17 @@ def main():
     table_name = lib.RAW_ROAP_TABLE_NAME
     cursor = conn.cursor()
 
-    delete_table(cursor, table_name)
-    create_story_table(cursor, table_name)
-
-    client = reddit_client.login(lib.USERNAME, lib.PASSWORD, lib.USER_AGENT)
+    #delete_table(cursor, table_name)
+    #create_story_table(cursor, table_name)
+    #client = reddit_client.login(lib.USERNAME, lib.PASSWORD, lib.USER_AGENT)
 
     # retrieve the latest 1000 stories
     #get_stories_in_year(client, lib.ROAP, lib.START_2014, cursor, lib.RAW_ROAP_TABLE_NAME, lib.FILE_NAME)
-    end_time = time.time()
-    get_stories_in_time_range(client, lib.ROAP, lib.START_2014, end_time, cursor, lib.RAW_ROAP_TABLE_NAME, lib.FILE_NAME)
+    #end_time = time.time()
+    #get_stories_in_time_range(client, lib.ROAP, lib.START_2014, end_time, cursor, lib.RAW_ROAP_TABLE_NAME, lib.FILE_NAME)
 
     # committing changes and closing the connection to the database file
-    conn.commit()
+    #conn.commit()
     conn.close()
 
 
