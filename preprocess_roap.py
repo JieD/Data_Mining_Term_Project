@@ -5,7 +5,7 @@ from pprint import pprint as pp2
 
 
 def assign_label(cursor):
-    cursor = db_client.select_all(cursor, lib.RAW_ROAP_TABLE_NAME, lib.story_primary_key, 'title', 'author')
+    cursor = db_client.select_all(cursor, lib.RAW_ROAP_TABLE_NAME, lib.raw_story_primary_key, 'title', 'author')
     for row in cursor:
         id = row[0]
         title = row[1]
@@ -36,11 +36,22 @@ def find_giver(title):
     return ''
 
 
+def create_intermediate_table(cursor, table_name):
+    db_client.create_story_table(cursor, table_name, lib.intermediate_story_primary_key,
+                                 lib.intermediate_story_primary_key_type, lib.INTERMEDIATE_FIELDS_DICT)
+
+
 def main():
+    # init
     conn = sqlite3.connect(lib.DB_NAME)
     source_name = lib.RAW_ROAP_TABLE_NAME
+    table_name = lib.ROAP_TABLE_NAME
     cursor = conn.cursor()
-    cursor = db_client.select_all(cursor, source_name, lib.story_primary_key, 'title', 'author')
+    db_client.delete_table(cursor, table_name)
+    create_intermediate_table(cursor, table_name)
+
+    #
+    cursor = db_client.select_all(cursor, source_name, lib.raw_story_primary_key, 'title', 'author')
     story = cursor.fetchone()
     pp2(story)
     #title = story[1]
