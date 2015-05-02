@@ -32,13 +32,13 @@ def add_column_with_default(cursor, table_name, column_name, column_type, defaul
                    .format(tn=table_name, cn=column_name, ct=column_type, df=default_value))
 
 
-def create_story_table(cursor, table_name):
+def create_story_table(cursor, table_name, primary_key, primary_key_type, field_dict):
     # creating a table with 1 column and set it as PRIMARY KEY
-    create_table_with_primary_key(cursor, table_name, lib.story_primary_key, lib.story_primary_key_type)
+    create_table_with_primary_key(cursor, table_name, primary_key, primary_key_type)
 
     # add the rest columns
-    for key in lib.STORY_FIELDS_DICT.keys():
-        value = lib.STORY_FIELDS_DICT[key]
+    for key in field_dict.keys():
+        value = field_dict[key]
         add_column(cursor, table_name, key, value)
 
 
@@ -63,18 +63,18 @@ def select_all(cursor, table_name, id_column, *args):
 
 
 def select_condition(cursor, table_name, column_name, column_value):
-    cursor.execute("SELECT {idc}, {cn} FROM {tn} WHERE {cn}=?".format(idc=lib.story_primary_key, cn=column_name,
+    cursor.execute("SELECT {idc}, {cn} FROM {tn} WHERE {cn}=?".format(idc=lib.raw_story_primary_key, cn=column_name,
                                                                      tn=table_name), (column_value,))
     return cursor
 
 
 # insert one row
 def insert_story(cursor, table_name, story):
-    idc = lib.story_primary_key
+    idc = lib.raw_story_primary_key
     idv = story[idc]
     insert_id(cursor, table_name, idc, idv)
 
-    for key in lib.STORY_FIELDS_DICT.keys():
+    for key in lib.RAW_FIELDS_DICT.keys():
         cv = story[key]
         update(cursor, table_name, idc, idv, key, cv)
 
@@ -156,7 +156,7 @@ def main():
     cursor = conn.cursor()
 
     #delete_table(cursor, table_name)
-    #create_story_table(cursor, table_name)
+    #create_story_table(cursor, table_name, lib.story_primary_key, lib.story_primary_key_type, lib.RAW_FIELDS_DICT)
     #client = reddit_client.login(lib.USERNAME, lib.PASSWORD, lib.USER_AGENT)
 
     # retrieve the latest 1000 stories
