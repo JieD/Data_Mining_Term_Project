@@ -5,3 +5,4 @@
 4/25 - Given a long period of time, retrieve stories using search timestamp and after. However, for the same request, only 1000 stories returned. Need to update timestamp if the limit is reached.
 4/26 - retrieve info from db
 4/27 - parse story to find label
+5/2 - hand select data fields that may be relevant
