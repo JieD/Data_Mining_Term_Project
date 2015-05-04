@@ -4,27 +4,44 @@ import db_client
 from pprint import pprint as pp2
 
 
-def assign_label(cursor):
-    cursor = db_client.select_all(cursor, lib.RAW_ROAP_TABLE_NAME, lib.raw_story_primary_key, 'title', 'author')
-    for row in cursor:
-        id = row[0]
+# find the matching thanks to request (got pizza)
+def assign_label(cursor, source, destination):
+    source_id_column = lib.raw_story_primary_key
+    destination_id_column = lib.intermediate_story_primary_key
+    cursor = db_client.select_all(cursor, source, source_id_column, 'created', 'title', 'author', 'created', 'created_utc')
+    all_rows = cursor.fetchall()
+
+    i = 0
+    for row in all_rows:
+        name = row[0]
         title = row[1]
-        author = row[2][1:]
         label = check_title(title)
-        if label == 1:
-            'got pizza'
+        author = row[2][1:]
+        created = row[3]
+        created_utc = row[4]
+
+        # insert request & thanks into destination
+        if label is not -1:
+            i += 1
+            db_client.insert_id(cursor, destination, destination_id_column, name)
+            db_client.update(cursor, destination, destination_id_column, name, lib.story_label, label)
+            db_client.update(cursor, destination, destination_id_column, name, 'requester_username', author)
+            db_client.update(cursor, destination, destination_id_column, name, 'request_title', title)
+            db_client.update(cursor, destination, destination_id_column, name, 'unix_timestamp_local_of_request', created)
+            db_client.update(cursor, destination, destination_id_column, name, 'unix_timestamp_utc_of_request', created_utc)
+    print "Retrieve {0} requests & thanks".format(i)
 
 
 # check the tag information in the title
 # if thanks, then the author got a pizza
 # if not request nor thanks, then we are not interested
 def check_title(title):
-    first_word = title.split()[0]  # is tag
+    first_word = title.split()[0]  # tag
     #pp2(first_word)
     if 'request' not in first_word.lower():
-        if 'thanks' in first_word.lower():  # assign success label
-            pp2(title)
-            return 1  # get pizza
+        if 'thanks' in first_word.lower():
+            #pp2(title)
+            return 1  # got pizza
         else:
             return -1  # not interested
     else:
@@ -34,6 +51,19 @@ def check_title(title):
 # parse the title to find giver
 def find_giver(title):
     return ''
+
+
+# find matching thanks & requests
+def match_thank_request(cursor):
+    table_name = lib.ROAP_TABLE_NAME
+    id_column = lib.intermediate_story_primary_key
+    order_column = 'unix_timestamp_utc_of_request'
+    cursor = db_client.select_condition(cursor, table_name, id_column, lib.story_label, 1, order_column)
+    all_rows = cursor.fetchall()
+
+    for row in all_rows:
+        pp2(row[0])
+
 
 
 def create_intermediate_table(cursor, table_name):
@@ -51,12 +81,15 @@ def main():
     create_intermediate_table(cursor, table_name)
 
     #
-    cursor = db_client.select_all(cursor, source_name, lib.raw_story_primary_key, 'title', 'author')
-    story = cursor.fetchone()
-    pp2(story)
+    #cursor = db_client.select_all(cursor, source_name, lib.raw_story_primary_key, 'title', 'author')
+    #story = cursor.fetchone()
+    #pp2(story)
     #title = story[1]
     #check_title(title)
-    #assign_label(cursor)
+
+    assign_label(cursor, source_name, table_name)
+    match_thank_request(cursor)
+    conn.commit()
     conn.close()
 
 
