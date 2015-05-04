@@ -53,18 +53,27 @@ def update(cursor, table_name, id_column, id_value, column_name, column_value):
                    format(tn=table_name, cn=column_name, idc=id_column), (column_value, id_value))
 
 
-# retrieve data
-def select_all(cursor, table_name, id_column, *args):
+# delete the row
+def delete(cursor, table_name, column_name, column_value):
+    cursor.execute("DELETE FROM {tn} WHERE {cn} = (?) ".format(tn=table_name, cn=column_name), (column_value,))
+
+
+# retrieve data from specified columns
+def select_all(cursor, table_name, id_column, order_column, *args):
     columns = id_column
     for arg in args:
         columns += ', ' + arg
-    cursor.execute("SELECT {cns} FROM {tn}".format(idc=id_column, cns=columns, tn=table_name))
+    cursor.execute("SELECT {cns} FROM {tn} ORDER BY {oc} ASC".format(cns=columns, tn=table_name, oc=order_column))
     return cursor
 
 
-def select_condition(cursor, table_name, column_name, column_value):
-    cursor.execute("SELECT {idc}, {cn} FROM {tn} WHERE {cn}=?".format(idc=lib.raw_story_primary_key, cn=column_name,
-                                                                     tn=table_name), (column_value,))
+# retrieve data meet certain criteria
+def select_condition(cursor, table_name, id_column, column_name, column_value, order_column, *args):
+    columns = id_column
+    for arg in args:
+        columns += ', ' + arg
+    cursor.execute("SELECT {cns} FROM {tn} WHERE {cn}=? ORDER BY {oc} ASC".
+                   format(cns=columns, tn=table_name, cn=column_name, oc=order_column), (column_value,))
     return cursor
 
 
@@ -155,6 +164,7 @@ def main():
     table_name = lib.RAW_ROAP_TABLE_NAME
     cursor = conn.cursor()
 
+    #delete(cursor, table_name, lib.raw_story_primary_key, 't3_33wonl')
     #delete_table(cursor, table_name)
     #create_story_table(cursor, table_name, lib.story_primary_key, lib.story_primary_key_type, lib.RAW_FIELDS_DICT)
     #client = reddit_client.login(lib.USERNAME, lib.PASSWORD, lib.USER_AGENT)
@@ -165,7 +175,7 @@ def main():
     #get_stories_in_time_range(client, lib.ROAP, lib.START_2014, end_time, cursor, lib.RAW_ROAP_TABLE_NAME, lib.FILE_NAME)
 
     # committing changes and closing the connection to the database file
-    #conn.commit()
+    conn.commit()
     conn.close()
 
 
