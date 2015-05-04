@@ -50,6 +50,9 @@ RAW_FIELDS_DICT = {'approved_by':   STRING_TYPE,  'archived': STRING_TYPE,  'aut
 
 story_label = 'receive_pizza_or_not'
 story_label_type = INTEGER_TYPE
+THANKS = 1
+REQUEST = 0
+OTHERS = -1
 
 intermediate_story_primary_key = 'request_id'  # name
 intermediate_story_primary_key_type = STRING_TYPE

@@ -21,7 +21,7 @@ def assign_label(cursor, source, destination):
         created_utc = row[4]
 
         # insert request & thanks into destination
-        if label is not -1:
+        if label is not lib.OTHERS:
             i += 1
             db_client.insert_id(cursor, destination, destination_id_column, name)
             db_client.update(cursor, destination, destination_id_column, name, lib.story_label, label)
@@ -41,11 +41,11 @@ def check_title(title):
     if 'request' not in first_word.lower():
         if 'thanks' in first_word.lower():
             #pp2(title)
-            return 1  # got pizza
+            return lib.THANKS  # got pizza
         else:
-            return -1  # not interested
+            return lib.OTHERS  # not interested
     else:
-        return 0  # request
+        return lib.REQUEST  # request
 
 
 # parse the title to find giver
@@ -54,11 +54,17 @@ def find_giver(title):
 
 
 # find matching thanks & requests
+# find all thanks
+# for each thanks:
+#   find all the posts (before the post time) made by the author
+#   the closest one is the request that is fulfilled
 def match_thank_request(cursor):
     table_name = lib.ROAP_TABLE_NAME
     id_column = lib.intermediate_story_primary_key
     order_column = 'unix_timestamp_utc_of_request'
-    cursor = db_client.select_condition(cursor, table_name, id_column, lib.story_label, 1, order_column)
+
+    # get all thanks
+    cursor = db_client.select_condition(cursor, table_name, id_column, lib.story_label, lib.THANKS, order_column)
     all_rows = cursor.fetchall()
 
     for row in all_rows:
