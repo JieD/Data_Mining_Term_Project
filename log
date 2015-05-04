@@ -6,3 +6,4 @@
 4/26 - retrieve info from db
 4/27 - parse story to find label
 5/2 - hand select data fields that may be relevant
+5/3 - insert data into intermediate story table
