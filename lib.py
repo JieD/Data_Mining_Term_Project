@@ -11,6 +11,10 @@ START_2012 = 1325376000.0
 START_2013 = 1356998400.0
 START_2014 = 1388534400.0
 DAY_SECONDS = 86400.0
+WEEK_SECONDS = DAY_SECONDS * 7
+MONTH_SECONDS = DAY_SECONDS * 30
+QUARTER_SECONDS = MONTH_SECONDS * 3
+YEAR_SECONDS = DAY_SECONDS * 365
 
 #
 FILE_NAME = 'roap_info.txt'
@@ -53,6 +57,8 @@ story_label_type = INTEGER_TYPE
 THANKS = 1
 REQUEST = 0
 OTHERS = -1
+SUCCESS = 1
+NOT_SUCCESS = 0
 
 intermediate_story_primary_key = 'request_id'  # name
 intermediate_story_primary_key_type = STRING_TYPE

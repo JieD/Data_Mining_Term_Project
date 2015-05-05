@@ -8,7 +8,7 @@ from pprint import pprint as pp2
 def assign_label(cursor, source, destination):
     source_id_column = lib.raw_story_primary_key
     destination_id_column = lib.intermediate_story_primary_key
-    cursor = db_client.select_all(cursor, source, source_id_column, 'created', 'title', 'author', 'created', 'created_utc')
+    cursor = db_client.select_all(cursor, source, 'created', source_id_column, 'title', 'author', 'created', 'created_utc')
     all_rows = cursor.fetchall()
 
     i = 0
@@ -16,7 +16,7 @@ def assign_label(cursor, source, destination):
         name = row[0]
         title = row[1]
         label = check_title(title)
-        author = row[2][1:]
+        author = row[2]
         created = row[3]
         created_utc = row[4]
 
@@ -58,18 +58,69 @@ def find_giver(title):
 # for each thanks:
 #   find all the posts (before the post time) made by the author
 #   the closest one is the request that is fulfilled
-def match_thank_request(cursor):
+#   delete this thanks
+#   if zero request found, probably the author participate in an offer story and won
+def match_thanks_request(cursor):
     table_name = lib.ROAP_TABLE_NAME
     id_column = lib.intermediate_story_primary_key
-    order_column = 'unix_timestamp_utc_of_request'
+    time_column = 'unix_timestamp_utc_of_request'
+    author_column = 'requester_username'
+    label_column = lib.story_label
 
     # get all thanks
-    cursor = db_client.select_condition(cursor, table_name, id_column, lib.story_label, lib.THANKS, order_column)
+    cursor = db_client.select_condition(cursor, table_name, lib.story_label, lib.THANKS, time_column,
+                                        id_column, author_column, time_column)
     all_rows = cursor.fetchall()
 
+    # find the matching request
+    zero_match = 0
+    num_success = 0
     for row in all_rows:
-        pp2(row[0])
+        thanks_name = row[0]
+        author = row[1]
+        created_utc = row[2]
+        start_time = created_utc - lib.QUARTER_SECONDS  # give one month period
+        end_time = created_utc - 1
 
+        # find all requests made by the author within the time period
+        columns = db_client.combine_columns(id_column, author_column, time_column)
+        cursor = cursor.execute("SELECT {cns} FROM {tn} WHERE {cn1}=? AND {cn2}=? AND {cn3} BETWEEN (?) AND (?)".
+                                format(cns=columns, tn=table_name, cn1=author_column, cn2=label_column, cn3=time_column),
+                                (author, lib.REQUEST, start_time, end_time,))
+        stories = cursor.fetchall()
+        num_requests = len(stories)
+        if num_requests > 0:
+            story = stories[num_requests - 1]  # the latest request is the one
+            request_name = story[0]
+            db_client.update(cursor, table_name, id_column, request_name, label_column, lib.SUCCESS)  # update label
+            #if num_requests > 1:
+            #    print "{0}: {1} - {2} - {3}".format(story[0], story[1], num_requests, story[2])
+            num_success += 1
+        else:
+            zero_match += 1
+
+        # delete thanks
+        db_client.delete(cursor, table_name, id_column, thanks_name)
+    print "zero match: {}".format(zero_match)
+    print "number of success: {}".format(num_success)
+
+
+# debugging method for checking
+def test(cursor):
+    table_name = lib.ROAP_TABLE_NAME
+    id_column = lib.intermediate_story_primary_key
+    time_column = 'unix_timestamp_utc_of_request'
+    author = 'Clobberknockers'
+    author_column = 'requester_username'
+    cursor = db_client.select_condition(cursor, table_name, author_column, author, time_column, id_column,
+                                        'request_title', lib.story_label)
+    all_rows = cursor.fetchall()
+
+    i = 0
+    for row in all_rows:
+        i += 1
+        print row[0], row[1], row[2]
+    print i
 
 
 def create_intermediate_table(cursor, table_name):
@@ -83,18 +134,14 @@ def main():
     source_name = lib.RAW_ROAP_TABLE_NAME
     table_name = lib.ROAP_TABLE_NAME
     cursor = conn.cursor()
+
     db_client.delete_table(cursor, table_name)
     create_intermediate_table(cursor, table_name)
 
-    #
-    #cursor = db_client.select_all(cursor, source_name, lib.raw_story_primary_key, 'title', 'author')
-    #story = cursor.fetchone()
-    #pp2(story)
-    #title = story[1]
-    #check_title(title)
-
     assign_label(cursor, source_name, table_name)
-    match_thank_request(cursor)
+    match_thanks_request(cursor)
+    #test(cursor)
+
     conn.commit()
     conn.close()
 
