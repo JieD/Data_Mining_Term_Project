@@ -1,6 +1,8 @@
 import sqlite3
+import sys
 import lib
 import db_client
+import export
 from pprint import pprint as pp2
 
 
@@ -8,7 +10,7 @@ from pprint import pprint as pp2
 def assign_label(cursor, source, destination):
     source_id_column = lib.raw_story_primary_key
     destination_id_column = lib.intermediate_story_primary_key
-    cursor = db_client.select_all(cursor, source, 'created', source_id_column, 'title', 'author', 'created', 'created_utc')
+    cursor = db_client.select_all(cursor, source, source_id_column, 'title', 'author', 'created', 'created_utc')
     all_rows = cursor.fetchall()
 
     i = 0
@@ -25,10 +27,10 @@ def assign_label(cursor, source, destination):
             i += 1
             db_client.insert_id(cursor, destination, destination_id_column, name)
             db_client.update(cursor, destination, destination_id_column, name, lib.story_label, label)
-            db_client.update(cursor, destination, destination_id_column, name, 'requester_username', author)
-            db_client.update(cursor, destination, destination_id_column, name, 'request_title', title)
-            db_client.update(cursor, destination, destination_id_column, name, 'unix_timestamp_local_of_request', created)
-            db_client.update(cursor, destination, destination_id_column, name, 'unix_timestamp_utc_of_request', created_utc)
+            db_client.update(cursor, destination, destination_id_column, name, 'author', author)
+            db_client.update(cursor, destination, destination_id_column, name, 'title', title)
+            db_client.update(cursor, destination, destination_id_column, name, 'created', created)
+            db_client.update(cursor, destination, destination_id_column, name, 'created_utc', created_utc)
     print "Retrieve {0} requests & thanks".format(i)
 
 
@@ -48,7 +50,13 @@ def check_title(title):
         return lib.REQUEST  # request
 
 
-# parse the title to find giver
+# drop the tag in the title
+def drop_tag(title):
+    words = title.split()[1:]
+    return ' '.join(words)
+
+
+# parse the title to find giver - TODO
 def find_giver(title):
     return ''
 
@@ -63,8 +71,8 @@ def find_giver(title):
 def match_thanks_request(cursor):
     table_name = lib.ROAP_TABLE_NAME
     id_column = lib.intermediate_story_primary_key
-    time_column = 'unix_timestamp_utc_of_request'
-    author_column = 'requester_username'
+    time_column = 'created'
+    author_column = 'author'
     label_column = lib.story_label
 
     # get all thanks
@@ -109,11 +117,11 @@ def match_thanks_request(cursor):
 def test(cursor):
     table_name = lib.ROAP_TABLE_NAME
     id_column = lib.intermediate_story_primary_key
-    time_column = 'unix_timestamp_utc_of_request'
+    time_column = 'created'
     author = 'Clobberknockers'
-    author_column = 'requester_username'
+    author_column = 'author'
     cursor = db_client.select_condition(cursor, table_name, author_column, author, time_column, id_column,
-                                        'request_title', lib.story_label)
+                                        'title', lib.story_label)
     all_rows = cursor.fetchall()
 
     i = 0
@@ -123,6 +131,51 @@ def test(cursor):
     print i
 
 
+# copy the rest fields from raw to intermediate table
+def cpy_rest(cursor, source, destination):
+    source_id_column = lib.raw_story_primary_key
+    destination_id_column = lib.intermediate_story_primary_key
+    columns = ['edited', 'num_comments', 'score', 'ups', 'downs', 'selftext']
+
+    cursor = db_client.select_all(cursor, destination, destination_id_column)
+    all_rows = cursor.fetchall()
+
+    for row in all_rows:
+        name = row[0]
+        # sqlite3 - why not support copy? - TODO
+        #db_client.cpy_columns(cursor, source, destination, columns, columns, source_id_column, name)
+        for column in columns:
+            cursor = db_client.select_condition_no(cursor, source, source_id_column, name, column)
+            row = cursor.fetchone()
+            value = row[0]
+            db_client.update(cursor, destination, destination_id_column, name, column, value)
+
+    update_edited(cursor, destination)
+
+
+# update edited to 1 or 0
+def update_edited(cursor, destination):
+    destination_id_column = lib.intermediate_story_primary_key
+    edited_column = 'edited'
+
+    cursor = db_client.select_all(cursor, destination, destination_id_column, edited_column)
+    all_rows = cursor.fetchall()
+
+    for row in all_rows:
+        name = row[0]
+        edited = row[1]
+        if edited > 0.0:  # has been edited
+            edited = 1
+        db_client.update(cursor, destination, destination_id_column, name, edited_column, edited)
+
+
+# return the number of words in a string
+def get_text_length(s):
+    words = s.split()
+    return len(words)
+
+
+# create intermediate table to store filtered attributes
 def create_intermediate_table(cursor, table_name):
     db_client.create_story_table(cursor, table_name, lib.intermediate_story_primary_key,
                                  lib.intermediate_story_primary_key_type, lib.INTERMEDIATE_FIELDS_DICT)
@@ -135,12 +188,18 @@ def main():
     table_name = lib.ROAP_TABLE_NAME
     cursor = conn.cursor()
 
-    db_client.delete_table(cursor, table_name)
-    create_intermediate_table(cursor, table_name)
+    #db_client.delete_table(cursor, table_name)
+    #create_intermediate_table(cursor, table_name)
 
-    assign_label(cursor, source_name, table_name)
-    match_thanks_request(cursor)
+    #assign_label(cursor, source_name, table_name)
+    #match_thanks_request(cursor)
     #test(cursor)
+    #cpy_rest(cursor, source_name, table_name)
+
+    #db_client.export.py(cursor, table_name, lib.OUT_FILE, lib.INTERMEDIATE_FIELDS_DICT.keys())
+    #db_client.export1(conn, table_name, lib.OUT_FILE, lib.INTERMEDIATE_FIELDS_DICT.keys())
+    export.write(conn, table_name, lib.OUT_FILE, 'downs', 'ups', 'num_comments', 'edited', 'label')
+
 
     conn.commit()
     conn.close()

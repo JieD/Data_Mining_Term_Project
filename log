@@ -6,4 +6,8 @@
 4/26 - retrieve info from db
 4/27 - parse story to find label
 5/2 - hand select data fields that may be relevant
-5/3 - insert data into intermediate story table, find matching request to thanks,
+5/3 - insert data into intermediate story table, find matching request to thanks
+5/4 - assign true label and edited, copy the rest attributes
+5/5 - export table to csv, print success story, debug
+5/6 - text length, text include hyperlink, attribute selection
+5/7 - change label value to fit into WEKA
