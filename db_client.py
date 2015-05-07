@@ -131,9 +131,10 @@ def export1(conn, table_name, csv_file_name, column_list):
 # count the number of records meet specific criteria
 def count(cursor, table_name, column_name, column_value):
     cursor = cursor.execute("SELECT COUNT({cn}) FROM {tn} WHERE {cn}=(?)".format(cn=column_name, tn=table_name),
-                          (column_value,))
+                            (column_value,))
     row = cursor.fetchone()
     return row[0]
+
 
 # insert one row
 def insert_story(cursor, table_name, story):
