@@ -90,10 +90,10 @@ def match_thanks_request(cursor):
         start_time = created_utc - lib.QUARTER_SECONDS  # give one month period
         end_time = created_utc - 1
 
-        # find all requests made by the author within the time period
+        # find all requests made by the author within the time period, order by post time
         columns = db_client.combine_columns(id_column, author_column, time_column)
-        cursor = cursor.execute("SELECT {cns} FROM {tn} WHERE {cn1}=? AND {cn2}=? AND {cn3} BETWEEN (?) AND (?)".
-                                format(cns=columns, tn=table_name, cn1=author_column, cn2=label_column, cn3=time_column),
+        cursor = cursor.execute("SELECT {cns} FROM {tn} WHERE {cn1}=? AND {cn2}=? AND {cn3} BETWEEN (?) AND (?) ORDER BY {oc} ASC".
+                                format(cns=columns, tn=table_name, cn1=author_column, cn2=label_column, cn3=time_column, oc=time_column),
                                 (author, lib.REQUEST, start_time, end_time,))
         stories = cursor.fetchall()
         num_requests = len(stories)
@@ -109,25 +109,27 @@ def match_thanks_request(cursor):
 
         # delete thanks
         db_client.delete(cursor, table_name, id_column, thanks_name)
+    print "in total {} thanks".format(zero_match + num_success)
     print "zero match: {}".format(zero_match)
     print "number of success: {}".format(num_success)
 
 
-# debugging method for checking
+# debugging method to check label result
 def test(cursor):
     table_name = lib.ROAP_TABLE_NAME
     id_column = lib.intermediate_story_primary_key
     time_column = 'created'
-    author = 'Clobberknockers'
+    author = 'muffintopchop'
     author_column = 'author'
     cursor = db_client.select_condition(cursor, table_name, author_column, author, time_column, id_column,
-                                        'title', lib.story_label)
+                                        'title', 'selftext', lib.story_label)
     all_rows = cursor.fetchall()
 
     i = 0
     for row in all_rows:
         i += 1
-        print row[0], row[1], row[2]
+        print row[0], row[1], row[2], row[3]
+        print "-----------------------------"
     print i
 
 
@@ -169,12 +171,6 @@ def update_edited(cursor, destination):
         db_client.update(cursor, destination, destination_id_column, name, edited_column, edited)
 
 
-# return the number of words in a string
-def get_text_length(s):
-    words = s.split()
-    return len(words)
-
-
 # create intermediate table to store filtered attributes
 def create_intermediate_table(cursor, table_name):
     db_client.create_story_table(cursor, table_name, lib.intermediate_story_primary_key,
@@ -188,18 +184,13 @@ def main():
     table_name = lib.ROAP_TABLE_NAME
     cursor = conn.cursor()
 
-    #db_client.delete_table(cursor, table_name)
-    #create_intermediate_table(cursor, table_name)
+    db_client.delete_table(cursor, table_name)
+    create_intermediate_table(cursor, table_name)
 
-    #assign_label(cursor, source_name, table_name)
-    #match_thanks_request(cursor)
+    assign_label(cursor, source_name, table_name)
+    match_thanks_request(cursor)
+    cpy_rest(cursor, source_name, table_name)
     #test(cursor)
-    #cpy_rest(cursor, source_name, table_name)
-
-    #db_client.export.py(cursor, table_name, lib.OUT_FILE, lib.INTERMEDIATE_FIELDS_DICT.keys())
-    #db_client.export1(conn, table_name, lib.OUT_FILE, lib.INTERMEDIATE_FIELDS_DICT.keys())
-    export.write(conn, table_name, lib.OUT_FILE, 'downs', 'ups', 'num_comments', 'edited', 'label')
-
 
     conn.commit()
     conn.close()
