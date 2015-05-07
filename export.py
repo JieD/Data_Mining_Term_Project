@@ -49,3 +49,11 @@ def write(conn, table_name, csv_file_name, column_list):
     data = cursor.execute("SELECT {cns} FROM {tn}".format(cns=columns, tn=table_name))
     writer = UnicodeWriter(open(csv_file_name, "wb"))
     writer.writerows(data)
+
+def write(conn, table_name, csv_file_name, *args):
+    columns = db_client.combine_columns(*args)
+    cursor = conn.cursor()
+    data = cursor.execute("SELECT {cns} FROM {tn}".format(cns=columns, tn=table_name))
+    writer = UnicodeWriter(open(csv_file_name, "wb"))
+    writer.writerow(args)
+    writer.writerows(data)
