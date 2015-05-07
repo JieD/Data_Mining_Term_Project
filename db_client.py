@@ -1,4 +1,6 @@
 import sqlite3
+import csv
+import pandas.io.sql as sql
 import lib
 import reddit_client
 import time
@@ -58,24 +60,80 @@ def delete(cursor, table_name, column_name, column_value):
     cursor.execute("DELETE FROM {tn} WHERE {cn} = (?) ".format(tn=table_name, cn=column_name), (column_value,))
 
 
-# retrieve data from specified columns
-def select_all(cursor, table_name, id_column, order_column, *args):
-    columns = id_column
-    for arg in args:
-        columns += ', ' + arg
-    cursor.execute("SELECT {cns} FROM {tn} ORDER BY {oc} ASC".format(cns=columns, tn=table_name, oc=order_column))
+# retrieve data from specified columns, no need to order
+def select_all(cursor, table_name, *args):
+    columns = combine_columns(*args)
+    cursor.execute("SELECT {cns} FROM {tn}".format(cns=columns, tn=table_name))
     return cursor
 
 
-# retrieve data meet certain criteria
-def select_condition(cursor, table_name, id_column, column_name, column_value, order_column, *args):
-    columns = id_column
-    for arg in args:
-        columns += ', ' + arg
+# retrieve data meet certain criteria without order
+def select_condition_no(cursor, table_name, column_name, column_value, *args):
+    columns = combine_columns(*args)
+    cursor.execute("SELECT {cns} FROM {tn} WHERE {cn}=?".
+                   format(cns=columns, tn=table_name, cn=column_name), (column_value,))
+    return cursor
+
+
+# retrieve data meet certain criteria with order
+def select_condition(cursor, table_name, column_name, column_value, order_column, *args):
+    columns = combine_columns(*args)
     cursor.execute("SELECT {cns} FROM {tn} WHERE {cn}=? ORDER BY {oc} ASC".
                    format(cns=columns, tn=table_name, cn=column_name, oc=order_column), (column_value,))
     return cursor
 
+
+# form the sql query for columns
+def combine_columns(*args):
+    columns = args[0]
+    for arg in args[1:]:
+        columns += ', ' + arg
+    return columns
+
+
+# form the sql query for column list
+def parse_column_list(column_list):
+    columns = column_list[0]
+    for arg in column_list[1:]:
+        columns += ', ' + arg
+    return columns
+
+
+def cpy_columns(cursor, source, destination, source_column_list, destination_column_list, condition_column, condition_column_value):
+    source_columns = parse_column_list(source_column_list)
+    destination_columns = parse_column_list(destination_column_list)
+    cursor.execute("INSERT INTO {dtn} ({dcs}) SELECT {scs} FROM {stn} WHERE {cn} = (?)".
+                   format(dtn=destination, dcs=destination_column_list, scs=source_column_list, stn=source,
+                          cn=condition_column), (condition_column_value,))
+
+
+"""
+# export table to csv file (not working due to encoding error) - use export.py
+def export(cursor, table_name, csv_file_name, column_list):
+    columns = parse_column_list(column_list)
+    data = cursor.execute("SELECT {cns} FROM {tn}".format(cns=columns, tn=table_name))
+
+    with open(csv_file_name, 'wb') as f:
+        writer = csv.writer(f)
+        writer.writerow(columns)
+        writer.writerows(data)
+
+
+# use pandas to export sql table to csv - error, not able to recognize the table
+def export1(conn, table_name, csv_file_name, column_list):
+    columns = parse_column_list(column_list)
+    conn = sqlite3.connect('database.db')
+    table = sql.read_frame("SELECT * FROM {tn}".format(cns=columns, tn=table_name), conn)
+    table.to_csv(csv_file_name)
+"""
+
+
+# count the number of records meet specific criteria
+def count(cursor, table_name, column_name, column_value):
+    cursor = cursor.execute("SELECT COUNT({cn}) FROM {tn} WHERE {cn}=(?)".format(cn=column_name, tn=table_name),
+                          (column_value,))
+    row = cursor.fetchone()
+    return row[0]
 
 # insert one row
 def insert_story(cursor, table_name, story):
