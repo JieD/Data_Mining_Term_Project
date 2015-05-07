@@ -20,6 +20,8 @@ YEAR_SECONDS = DAY_SECONDS * 365
 FILE_NAME = 'roap_info.txt'
 count = 0
 THRESHOLD = 1000
+OUT_FILE = 'data/data.csv'
+SUCCESS_FILE = 'data/success.txt'
 
 # set db values
 DB_NAME = "roap.db"
@@ -52,19 +54,57 @@ RAW_FIELDS_DICT = {'approved_by':   STRING_TYPE,  'archived': STRING_TYPE,  'aut
                    'url':           STRING_TYPE}
 
 
-story_label = 'receive_pizza_or_not'
-story_label_type = INTEGER_TYPE
-THANKS = 1
-REQUEST = 0
-OTHERS = -1
-SUCCESS = 1
-NOT_SUCCESS = 0
+story_label = 'label'
+story_label_type = STRING_TYPE
+THANKS = 'thanks'
+REQUEST = 'request'
+OTHERS = 'others'
+SUCCESS = 'success'
+NOT_SUCCESS = 'not_success'
+HYPERLINK_FEATURE = 'http'
 
-intermediate_story_primary_key = 'request_id'  # name
+
+intermediate_story_primary_key = 'name'  # name
 intermediate_story_primary_key_type = STRING_TYPE
 
 # intermediate story fields dictionary (prepare data)
 INTERMEDIATE_FIELDS_DICT = {
+    story_label: story_label_type,
+    'giver_username': STRING_TYPE,
+    'author': STRING_TYPE,
+    'edited': INTEGER_TYPE,
+    'num_comments': INTEGER_TYPE,
+    'score':        INTEGER_TYPE,
+    'ups':   INTEGER_TYPE,
+    'downs': INTEGER_TYPE,
+    'title': STRING_TYPE,
+    'selftext':  STRING_TYPE,
+    'text_length': INTEGER_TYPE,
+    'link_provided': INTEGER_TYPE,
+    'created':  FLOAT_TYPE,
+    'created_utc':    FLOAT_TYPE,
+}
+
+
+# rename fields to be easy understandable
+FIELD_NAME_DICT = {
+    'label':  'receive_pizza_or_not',
+    'name':   'request_id',
+    'author': 'requester_username',
+    'edited': 'request_was_edited',
+    'num_comments': 'request_num_comments_received_at_retrieval',
+    'score': 'request_num_upvotes_minus_downvotes',
+    'ups':   'request_num_upvotes',
+    'downs': 'request_num_downvotes',
+    'selftext': 'request_text',
+    'title':    'request_title',
+    'created':  'unix_timestamp_local_of_request',
+    'created_utc': 'unix_timestamp_utc_of_request'
+}
+
+
+# intermediate story fields dictionary (prepare data)
+INTERMEDIATE_ELIGIBLE_FIELDS_DICT = {
     story_label: story_label_type,
     'giver_username': STRING_TYPE,
     'requester_username': STRING_TYPE,  # author
@@ -78,3 +118,6 @@ INTERMEDIATE_FIELDS_DICT = {
     'unix_timestamp_local_of_request':  FLOAT_TYPE,  # created
     'unix_timestamp_utc_of_request':    FLOAT_TYPE,  # created_utc
 }
+
+
+
