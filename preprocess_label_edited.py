@@ -6,7 +6,7 @@ import export
 from pprint import pprint as pp2
 
 
-# find the matching thanks to request (got pizza)
+# assign preliminary label (thanks, request, others)
 def assign_label(cursor, source, destination):
     source_id_column = lib.raw_story_primary_key
     destination_id_column = lib.intermediate_story_primary_key
@@ -133,6 +133,20 @@ def test(cursor):
     print i
 
 
+# change not successful request label
+def label_unsuccessful_request(cursor, table_name):
+    label_column = lib.story_label
+    id_column = lib.intermediate_story_primary_key
+    cursor = db_client.select_condition_no(cursor, table_name, label_column, lib.REQUEST, id_column)
+    all_rows = cursor.fetchall()
+
+    i = 0
+    for row in all_rows:
+        i += 1
+        name = row[0]
+        db_client.update(cursor, table_name, id_column, name, label_column, lib.NOT_SUCCESS)
+    print "number of not success: {}".format(i)
+
 # copy the rest fields from raw to intermediate table
 def cpy_rest(cursor, source, destination):
     source_id_column = lib.raw_story_primary_key
@@ -189,6 +203,7 @@ def main():
 
     assign_label(cursor, source_name, table_name)
     match_thanks_request(cursor)
+    label_unsuccessful_request(cursor, table_name)
     cpy_rest(cursor, source_name, table_name)
     #test(cursor)
 
