@@ -22,6 +22,7 @@ count = 0
 THRESHOLD = 1000
 OUT_FILE = 'data/data.csv'
 SUCCESS_FILE = 'data/success.txt'
+NOT_SUCCESS_FILE = 'data/not_success.txt'
 
 # set db values
 DB_NAME = "roap.db"
@@ -39,7 +40,7 @@ NULL_TYPE = "NULL"
 raw_story_primary_key = 'name'
 raw_story_primary_key_type = STRING_TYPE
 
-# raw story fields dictionary
+# raw story fields dictionary (33)
 RAW_FIELDS_DICT = {'approved_by':   STRING_TYPE,  'archived': STRING_TYPE,  'author':      STRING_TYPE,
                    'clicked':       BOOLEAN_TYPE, 'created':  FLOAT_TYPE,   'created_utc': FLOAT_TYPE,
                    'distinguished': STRING_TYPE,  'domain':   STRING_TYPE,  'downs':       INTEGER_TYPE,
@@ -59,8 +60,8 @@ story_label_type = STRING_TYPE
 THANKS = 'thanks'
 REQUEST = 'request'
 OTHERS = 'others'
-SUCCESS = 'success'
-NOT_SUCCESS = 'not_success'
+SUCCESS = 'got_pizza'
+NOT_SUCCESS = 'no_pizza'
 HYPERLINK_FEATURE = 'http'
 
 

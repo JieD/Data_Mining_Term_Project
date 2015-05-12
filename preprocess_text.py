@@ -19,10 +19,23 @@ def include_link(s):
 # print text for success
 def print_success(cursor):
     cursor = db_client.select_condition(cursor, lib.ROAP_TABLE_NAME, 'label', lib.SUCCESS, 'created_utc',
-                                        lib.intermediate_story_primary_key, 'author', 'text_length', 'link_provided',
-                                        'selftext')
+                                        lib.intermediate_story_primary_key, 'author', 'edited', 'link_provided',
+                                        'text_length', 'title', 'selftext')
     all_rows = cursor.fetchall()
     out_file = open(lib.SUCCESS_FILE, 'w')
+
+    for row in all_rows:
+        out_file.write(form_output(row))
+    out_file.close()
+
+
+# print text for non-success
+def print_non_success(cursor):
+    cursor = db_client.select_condition(cursor, lib.ROAP_TABLE_NAME, 'label', lib.NOT_SUCCESS, 'created_utc',
+                                        lib.intermediate_story_primary_key, 'author', 'edited', 'link_provided',
+                                        'text_length', 'selftext')
+    all_rows = cursor.fetchall()
+    out_file = open(lib.NOT_SUCCESS_FILE, 'w')
 
     for row in all_rows:
         out_file.write(form_output(row))
@@ -49,7 +62,6 @@ def form_output(row):
     return line
 
 
-
 def simple_text_analysis(cursor, table_name, id_column):
     cursor = db_client.select_all(cursor, table_name, id_column, 'selftext')
     all_rows = cursor.fetchall()
@@ -72,10 +84,10 @@ def main():
 
     simple_text_analysis(cursor, table_name, id_column)
     print_success(cursor)
-    quick_query(cursor, table_name, 'author', 'CDearsVVV', 'selftext')
+    print_non_success(cursor)
+    #quick_query(cursor, table_name, 'author', 'CDearsVVV', 'selftext')
 
     export.write(conn, table_name, lib.OUT_FILE, 'ups', 'num_comments', 'edited', 'text_length', 'link_provided', 'label')
-
 
     conn.commit()
     conn.close()

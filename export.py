@@ -50,6 +50,7 @@ def write(conn, table_name, csv_file_name, column_list):
     writer = UnicodeWriter(open(csv_file_name, "wb"))
     writer.writerows(data)
 
+
 def write(conn, table_name, csv_file_name, *args):
     columns = db_client.combine_columns(*args)
     cursor = conn.cursor()
