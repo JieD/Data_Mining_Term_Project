@@ -10,6 +10,7 @@ START_2011 = 1293840000.0
 START_2012 = 1325376000.0
 START_2013 = 1356998400.0
 START_2014 = 1388534400.0
+START_2015 = 1420070400.0
 DAY_SECONDS = 86400.0
 WEEK_SECONDS = DAY_SECONDS * 7
 MONTH_SECONDS = DAY_SECONDS * 30
@@ -84,6 +85,14 @@ INTERMEDIATE_FIELDS_DICT = {
     'link_provided': INTEGER_TYPE,
     'created':  FLOAT_TYPE,
     'created_utc':    FLOAT_TYPE,
+}
+
+
+USER_FILEDS_DICT = {
+    'account_age_in_days_at_request': FLOAT_TYPE,
+    'account_age_in_days_at_retrieval': FLOAT_TYPE,
+    'account_link_karma_at_retrieval': INTEGER_TYPE,
+    'account_comment_karma_at_retrieval': INTEGER_TYPE,
 }
 
 
