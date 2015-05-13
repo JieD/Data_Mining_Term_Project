@@ -37,12 +37,15 @@ def add_column_with_default(cursor, table_name, column_name, column_type, defaul
 def create_story_table(cursor, table_name, primary_key, primary_key_type, field_dict):
     # creating a table with 1 column and set it as PRIMARY KEY
     create_table_with_primary_key(cursor, table_name, primary_key, primary_key_type)
-
     # add the rest columns
+    add_columns(cursor, table_name, field_dict)
+
+
+# add columns according to dictionary
+def add_columns(cursor, table_name, field_dict):
     for key in field_dict.keys():
         value = field_dict[key]
         add_column(cursor, table_name, key, value)
-
 
 # insert a new row, but only id is provided
 def insert_id(cursor, table_name, id_column, id_value):
@@ -136,6 +139,16 @@ def count(cursor, table_name, column_name, column_value):
     return row[0]
 
 
+# get distince values
+def get_distinct_values(cursor, table_name, column_name):
+    cursor = cursor.execute("SELECT DISTINCT {cn} FROM {tn}".format(cn=column_name, tn=table_name))
+    rows = cursor.fetchall()  # each row is a tuple
+    values = []
+    for row in rows:
+        values.append(row[0])  # only one element in the tuple
+    return values
+
+
 # insert one row
 def insert_story(cursor, table_name, story):
     idc = lib.raw_story_primary_key
@@ -225,13 +238,16 @@ def main():
 
     #delete(cursor, table_name, lib.raw_story_primary_key, 't3_33wonl')
     #delete_table(cursor, table_name)
-    #create_story_table(cursor, table_name, lib.story_primary_key, lib.story_primary_key_type, lib.RAW_FIELDS_DICT)
-    #client = reddit_client.login(lib.USERNAME, lib.PASSWORD, lib.USER_AGENT)
+
+    create_story_table(cursor, table_name, lib.raw_story_primary_key, lib.raw_story_primary_key_type, lib.RAW_FIELDS_DICT)
+    client = reddit_client.login(lib.USERNAME, lib.PASSWORD, lib.USER_AGENT)
 
     # retrieve the latest 1000 stories
-    #get_stories_in_year(client, lib.ROAP, lib.START_2014, cursor, lib.RAW_ROAP_TABLE_NAME, lib.FILE_NAME)
-    #end_time = time.time()
-    #get_stories_in_time_range(client, lib.ROAP, lib.START_2014, end_time, cursor, lib.RAW_ROAP_TABLE_NAME, lib.FILE_NAME)
+    #get_stories_in_year(client, lib.ROAP, lib.START_2015, cursor, lib.RAW_ROAP_TABLE_NAME, lib.FILE_NAME)
+
+    # retrieve stories in the given time period
+    end_time = time.time()
+    get_stories_in_time_range(client, lib.ROAP, lib.START_2015, end_time, cursor, lib.RAW_ROAP_TABLE_NAME, lib.FILE_NAME)
 
     # committing changes and closing the connection to the database file
     conn.commit()

@@ -108,7 +108,7 @@ def match_thanks_request(cursor):
             zero_match += 1
 
         # delete thanks
-        #db_client.delete(cursor, table_name, id_column, thanks_name)
+        db_client.delete(cursor, table_name, id_column, thanks_name)
     print "in total {} thanks".format(zero_match + num_success)
     print "zero match: {}".format(zero_match)
     print "number of success: {}".format(num_success)
@@ -119,7 +119,7 @@ def test(cursor):
     table_name = lib.ROAP_TABLE_NAME
     id_column = lib.intermediate_story_primary_key
     time_column = 'created'
-    author = 'davefromokinawa'
+    author = 'Dirkstarlight'
     author_column = 'author'
     cursor = db_client.select_condition(cursor, table_name, author_column, author, time_column, id_column,
                                         'title', 'selftext', lib.story_label)
@@ -146,6 +146,23 @@ def label_unsuccessful_request(cursor, table_name):
         name = row[0]
         db_client.update(cursor, table_name, id_column, name, label_column, lib.NOT_SUCCESS)
     print "number of not success: {}".format(i)
+
+
+# if a user has more than one requests, only save the earliest one
+def choose_first_request(cursor, table_name):
+    id_column = lib.intermediate_story_primary_key
+    author_column = 'author'
+    usernames = db_client.get_distinct_values(cursor, table_name, author_column)
+    for username in usernames:
+        cursor = db_client.select_condition(cursor, table_name, author_column, username, 'created', id_column)
+        all_rows = cursor.fetchall()
+
+        request_counts = len(all_rows)
+        if request_counts > 1:
+            for row in all_rows[1:]:
+                name = row[0]
+                db_client.delete(cursor, table_name, id_column, name)
+
 
 # copy the rest fields from raw to intermediate table
 def cpy_rest(cursor, source, destination):
@@ -198,14 +215,18 @@ def main():
     table_name = lib.ROAP_TABLE_NAME
     cursor = conn.cursor()
 
-    db_client.delete_table(cursor, table_name)
+    """db_client.delete_table(cursor, table_name)
     create_intermediate_table(cursor, table_name)
 
     assign_label(cursor, source_name, table_name)
     match_thanks_request(cursor)
     label_unsuccessful_request(cursor, table_name)
-    cpy_rest(cursor, source_name, table_name)
-    #test(cursor)
+    cpy_rest(cursor, source_name, table_name)"""
+    test(cursor)
+    choose_first_request(cursor, table_name)
+
+    test(cursor)
+
 
     conn.commit()
     conn.close()
