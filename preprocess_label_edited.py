@@ -215,17 +215,16 @@ def main():
     table_name = lib.ROAP_TABLE_NAME
     cursor = conn.cursor()
 
-    """db_client.delete_table(cursor, table_name)
+    db_client.delete_table(cursor, table_name)
     create_intermediate_table(cursor, table_name)
 
     assign_label(cursor, source_name, table_name)
     match_thanks_request(cursor)
     label_unsuccessful_request(cursor, table_name)
-    cpy_rest(cursor, source_name, table_name)"""
+    cpy_rest(cursor, source_name, table_name)
     test(cursor)
-    choose_first_request(cursor, table_name)
+    #choose_first_request(cursor, table_name)
 
-    test(cursor)
 
 
     conn.commit()
