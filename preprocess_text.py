@@ -16,26 +16,13 @@ def include_link(s):
     return lib.HYPERLINK_FEATURE in s
 
 
-# print text for success
-def print_success(cursor):
-    cursor = db_client.select_condition(cursor, lib.ROAP_TABLE_NAME, 'label', lib.SUCCESS, 'created_utc',
+# print requests (belong to specified label) to file
+def print_request(cursor, table_name, label, file_name):
+    cursor = db_client.select_condition(cursor, table_name, 'label', label, 'created_utc',
                                         lib.intermediate_story_primary_key, 'author', 'edited', 'link_provided',
                                         'text_length', 'title', 'selftext')
     all_rows = cursor.fetchall()
-    out_file = open(lib.SUCCESS_FILE, 'w')
-
-    for row in all_rows:
-        out_file.write(form_output(row))
-    out_file.close()
-
-
-# print text for non-success
-def print_non_success(cursor):
-    cursor = db_client.select_condition(cursor, lib.ROAP_TABLE_NAME, 'label', lib.NOT_SUCCESS, 'created_utc',
-                                        lib.intermediate_story_primary_key, 'author', 'edited', 'link_provided',
-                                        'text_length', 'selftext')
-    all_rows = cursor.fetchall()
-    out_file = open(lib.NOT_SUCCESS_FILE, 'w')
+    out_file = open(file_name, 'w')
 
     for row in all_rows:
         out_file.write(form_output(row))
@@ -62,6 +49,7 @@ def form_output(row):
     return line
 
 
+# extract text length and link information
 def simple_text_analysis(cursor, table_name, id_column):
     cursor = db_client.select_all(cursor, table_name, id_column, 'selftext')
     all_rows = cursor.fetchall()
@@ -75,6 +63,19 @@ def simple_text_analysis(cursor, table_name, id_column):
         db_client.update(cursor, table_name, id_column, name, 'link_provided', link_provided)
 
 
+def get_requests(cursor, table_name, label):
+    cursor = db_client.select_condition_no(cursor, table_name, 'label', label, 'selftext')
+
+# remove stop words
+def remove_stop_words(cursor, table_name, id_column):
+    cursor = db_client.select_all(cursor, table_name, id_column, 'selftext')
+    all_rows = cursor.fetchall()
+
+    for row in all_rows:
+        name = row[0]
+        text = row[1]
+
+
 def main():
     # init
     conn = sqlite3.connect(lib.DB_NAME)
@@ -83,8 +84,9 @@ def main():
     cursor = conn.cursor()
 
     simple_text_analysis(cursor, table_name, id_column)
-    print_success(cursor)
-    print_non_success(cursor)
+    print_request(cursor, table_name, lib.SUCCESS, lib.SUCCESS_FILE)
+    print_request(cursor, table_name, lib.NOT_SUCCESS, lib.NOT_SUCCESS_FILE)
+
     #quick_query(cursor, table_name, 'author', 'CDearsVVV', 'selftext')
 
     export.write(conn, table_name, lib.OUT_FILE, 'ups', 'num_comments', 'edited', 'text_length', 'link_provided', 'label')
