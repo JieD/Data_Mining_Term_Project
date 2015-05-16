@@ -96,14 +96,10 @@ def parse_stories(json_stories, return_json=False):
                 stories.append(story['data'])
             #pp2(story)
             #print 'name: ', story['data']['name']
-        #print 'number of stories is: {0}'.format(str(len(stories)))
+        print 'number of stories is: {0}'.format(str(len(stories)))
 
         #data = stories[0]['data']
-        # pp2(data)
         #created = data['created']
-        #edited = data['edited']
-        #pp2(edited)
-        #print '{0}'.format(isinstance(edited, bool))
         return stories
 
 
@@ -115,7 +111,7 @@ def first_query(client, sr):
 
 def main():
     client = login(lib.USERNAME, lib.PASSWORD, lib.USER_AGENT)
-    start_time = 1429330959
+    """start_time = 1429330959
     end_time = time.time()
     after_name = ''
     while True:
@@ -125,10 +121,10 @@ def main():
         if length == 10:
             after_name = j[length - 1]['name']
         else:
-            break
+            break"""
 
-    #json_stories = query_stories(client, limit=2)
-    #parse_stories(json_stories)
+    json_stories = query_stories(client, limit=2)
+    parse_stories(json_stories)
     #pp2(first_query(client, lib.ROAP))
 
 
