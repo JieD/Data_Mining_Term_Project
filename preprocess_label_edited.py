@@ -108,7 +108,7 @@ def match_thanks_request(cursor):
             zero_match += 1
 
         # delete thanks
-        db_client.delete(cursor, table_name, id_column, thanks_name)
+        #db_client.delete(cursor, table_name, id_column, thanks_name)
     print "in total {} thanks".format(zero_match + num_success)
     print "zero match: {}".format(zero_match)
     print "number of success: {}".format(num_success)
@@ -119,7 +119,7 @@ def test(cursor):
     table_name = lib.ROAP_TABLE_NAME
     id_column = lib.intermediate_story_primary_key
     time_column = 'created'
-    author = 'Dirkstarlight'
+    author = 'brunettestories'
     author_column = 'author'
     cursor = db_client.select_condition(cursor, table_name, author_column, author, time_column, id_column,
                                         'title', 'selftext', lib.story_label)

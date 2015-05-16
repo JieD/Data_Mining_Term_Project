@@ -65,6 +65,8 @@ def simple_text_analysis(cursor, table_name, id_column):
 
 def get_requests(cursor, table_name, label):
     cursor = db_client.select_condition_no(cursor, table_name, 'label', label, 'selftext')
+    all_rows = cursor.fetchall()
+
 
 # remove stop words
 def remove_stop_words(cursor, table_name, id_column):
