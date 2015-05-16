@@ -43,6 +43,7 @@ raw_story_primary_key_type = STRING_TYPE
 
 # raw story fields dictionary (33)
 RAW_FIELDS_DICT = {'approved_by':   STRING_TYPE,  'archived': STRING_TYPE,  'author':      STRING_TYPE,
+                   'author_flair_css_class': STRING_TYPE, 'author_flair_text': STRING_TYPE,
                    'clicked':       BOOLEAN_TYPE, 'created':  FLOAT_TYPE,   'created_utc': FLOAT_TYPE,
                    'distinguished': STRING_TYPE,  'domain':   STRING_TYPE,  'downs':       INTEGER_TYPE,
                    'edited':        FLOAT_TYPE,   'gilded':   INTEGER_TYPE, 'hidden':      BOOLEAN_TYPE,
