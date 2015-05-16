@@ -198,8 +198,7 @@ def get_stories_in_year(client, sr, start_time, cursor, table_name, file_name):
 
 # use search with timestamp (regular query can only fetch the latest 1000 stories)
 def get_stories_in_time_range(client, sr, start_time, end_time, cursor, table_name, file_name):
-    #out_f = open(file_name, 'w')
-    #out_f.write("Start recording fetch info for {0}\n".format(sr))
+    print "start query reddit"
     after_name = ''
     limit = lib.QUERY_LIMIT
 
@@ -223,11 +222,7 @@ def get_stories_in_time_range(client, sr, start_time, end_time, cursor, table_na
         last_story = stories[length - 1]
         after_name = last_story['name']
 
-    # write meta information
-    #out_f.write("The {0}th story: name = {1}, author = {2}\n".
-    #            format(str(lib.count), last_story['name'], last_story['author']))
-    #out_f.write("Finish recording fetch into for {0}\n".format(sr))
-    #out_f.close()
+    print "finish query reddit\n"
 
 
 def main():
@@ -236,10 +231,8 @@ def main():
     table_name = lib.RAW_ROAP_TABLE_NAME
     cursor = conn.cursor()
 
-    #delete(cursor, table_name, lib.raw_story_primary_key, 't3_33wonl')
     #delete_table(cursor, table_name)
-
-    create_story_table(cursor, table_name, lib.raw_story_primary_key, lib.raw_story_primary_key_type, lib.RAW_FIELDS_DICT)
+    #create_story_table(cursor, table_name, lib.raw_story_primary_key, lib.raw_story_primary_key_type, lib.RAW_FIELDS_DICT)
     client = reddit_client.login(lib.USERNAME, lib.PASSWORD, lib.USER_AGENT)
 
     # retrieve the latest 1000 stories
