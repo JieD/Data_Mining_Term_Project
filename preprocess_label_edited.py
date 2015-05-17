@@ -110,8 +110,8 @@ def match_thanks_request(cursor):
 
         # delete thanks
         db_client.delete(cursor, table_name, id_column, thanks_name)
-    print "in total {} thanks".format(zero_match + num_success)
-    print "zero match: {}".format(zero_match)
+    print "total number of thanks: {}".format(zero_match + num_success)
+    print "number of zero match thanks: {}".format(zero_match)
     print "number of preliminary success: {}".format(num_success)
 
 
@@ -200,7 +200,7 @@ def extract_edit_sentences(cursor, table_name, id_column, label, file_name):
         db_client.update(cursor, table_name, id_column, name, 'edit_remove_text', left_text)
 
 
-# extract sentences containing edit,
+# extract sentences containing edit and write to out_file
 # steps:
 # 1. check if contains edit
 # 2. if contain edits, find all paragraphs containing edits; else, return empty string
@@ -271,7 +271,7 @@ def read_labeled_edits(cursor, table_name, id_column, file_name):
         line = in_file.readline()
     # EOF
     in_file.close()
-    print "{0}\nnumber of success: {1}\nnumber of outliers: {2}\n".format(file_name, num_success, num_outliers)
+    print "{0}\nnumber of success: {1}\nnumber of outliers: {2}".format(file_name, num_success, num_outliers)
 
 
 # replace selftext with edit_remove_text
@@ -296,7 +296,7 @@ def treat_empty_text(cursor, table_name, id_column):
         db_client.update(cursor, table_name, id_column, name, 'edit_remove_text', title)
 
 
-def priliminary_text_analysis():
+#def priliminary_text_analysis():
 
 
 # update edited to 1 or 0
@@ -321,6 +321,13 @@ def create_intermediate_table(cursor, table_name):
                                  lib.intermediate_story_primary_key_type, lib.INTERMEDIATE_FIELDS_DICT)
 
 
+def label_count(cursor, table_name):
+    label_column = lib.story_label
+    success_count = db_client.count(cursor, table_name, label_column, lib.SUCCESS)
+    not_success_count = db_client.count(cursor, table_name, label_column, lib.NOT_SUCCESS)
+    print "\nin table {0}:\nnumber of success: {1}\nnumber of not success: {2}".format(table_name, success_count, not_success_count)
+
+
 def main():
     # init
     conn = sqlite3.connect(lib.DB_NAME)
@@ -340,17 +347,19 @@ def main():
 
     #choose_first_request(cursor, table_name)
 
-    print 'extract edits', '\n'
+    print '\nextract edits\n'
     extract_edit_sentences(cursor, table_name, id_column, lib.NOT_SUCCESS, lib.EDIT_NOT_SUCCESS_FILE)
     extract_edit_sentences(cursor, table_name, id_column, lib.SUCCESS, lib.EDIT_SUCCESS_FILE)
 
-    print 'read labels'
+    print 'read labels:'
     read_labeled_edits(cursor, table_name, id_column, lib.LABELED_EDIT_NOT_SUCCESS)
     read_labeled_edits(cursor, table_name, id_column, lib.LABELED_EDIT_SUCCESS)
     #test(cursor, 'fieldstudies')
 
     #update_selftext(cursor, table_name, id_column)
-    #treat_empty_text(cursor, table_name, id_column)
+    treat_empty_text(cursor, table_name, id_column)
+
+    label_count(cursor, table_name)
 
     conn.commit()
     conn.close()
