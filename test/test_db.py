@@ -1,7 +1,7 @@
 import sqlite3
 
 # if the database is already created, connect to it instead of making a new one
-conn = sqlite3.connect('test.db')
+conn = sqlite3.connect('db/test.db')
 print "Opened database successfully";
 
 with conn:

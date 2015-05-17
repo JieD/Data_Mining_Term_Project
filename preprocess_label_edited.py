@@ -122,15 +122,17 @@ def test(cursor, author):
     time_column = 'created'
     author_column = 'author'
     cursor = db_client.select_condition(cursor, table_name, author_column, author, time_column, id_column,
-                                        'title', 'selftext', lib.story_label)
+                                        'title', 'edited', 'selftext', lib.story_label)
     all_rows = cursor.fetchall()
 
     i = 0
     for row in all_rows:
         i += 1
-        print row[0], row[1], row[2], row[3]
+        print '\nid: {0}\ntitle: {1}\nedited: {2}'.format(row[0], row[1], row[2])
         print "-----------------------------"
-    print i
+        print '{0}\nlabel: {1}'.format(row[3], row[4])
+        print "-----------------------------"
+    print "\nnumber of posts: {0}".format(i)
 
 
 # change not successful request label
@@ -182,8 +184,7 @@ def cpy_rest(cursor, source, destination):
             row = cursor.fetchone()
             value = row[0]
             db_client.update(cursor, destination, destination_id_column, name, column, value)
-
-    #update_edited(cursor, destination)
+    update_edited(cursor, destination)  # get preliminary edit status
 
 
 # extract edits (if there are) for labeling purpose
@@ -258,6 +259,8 @@ def read_labeled_edits(cursor, table_name, id_column, file_name):
             edits_remove = db_client.select_condition_no(cursor, table_name, id_column, name, 'edit_remove_text').fetchone()[0]
             request_text = edits_remove + edits
             db_client.update(cursor, table_name, id_column, name, 'edit_remove_text', request_text)
+        else:  # update edit status to 0
+            db_client.update(cursor, table_name, id_column, name, 'edited', 0)
 
         if label == 1:  # change label to success
             num_success += 1
@@ -354,7 +357,7 @@ def main():
     print 'read labels:'
     read_labeled_edits(cursor, table_name, id_column, lib.LABELED_EDIT_NOT_SUCCESS)
     read_labeled_edits(cursor, table_name, id_column, lib.LABELED_EDIT_SUCCESS)
-    #test(cursor, 'fieldstudies')
+    #test(cursor, 'Franklyidontgivearip')
 
     #update_selftext(cursor, table_name, id_column)
     treat_empty_text(cursor, table_name, id_column)
