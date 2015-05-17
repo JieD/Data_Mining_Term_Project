@@ -34,7 +34,7 @@ LABELED_EDIT_NOT_SUCCESS = 'edit/labeled_edit_not_success.txt'
 LABELED_EDIT_SUCCESS = 'edit/labeled_edit_success.txt'
 
 # set db values
-DB_NAME = "roap.db"
+DB_NAME = "db/roap.db"
 RAW_ROAP_TABLE_NAME = "raw_roap"
 ROAP_TABLE_NAME = "roap"
 
@@ -91,10 +91,10 @@ INTERMEDIATE_FIELDS_DICT = {
     'title': STRING_TYPE,
     'selftext':  STRING_TYPE,
     'edit_remove_text': STRING_TYPE,
-    'tokenized_text': STRING_TYPE,
-    'tokenized_stemmed_text': STRING_TYPE,
     'text_length': INTEGER_TYPE,
     'link_provided': INTEGER_TYPE,
+    'tokenized_text': STRING_TYPE,
+    'tokenized_stemmed_text': STRING_TYPE,
     'created':  FLOAT_TYPE,
     'created_utc':    FLOAT_TYPE,
 }
