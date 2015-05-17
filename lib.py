@@ -1,3 +1,6 @@
+import nltk
+from nltk.stem.snowball import SnowballStemmer
+
 # set username and password values
 USERNAME = 'jied314'
 PASSWORD = 'Hotmail8'
@@ -24,6 +27,11 @@ THRESHOLD = 1000
 OUT_FILE = 'data/data.csv'
 SUCCESS_FILE = 'data/success.txt'
 NOT_SUCCESS_FILE = 'data/not_success.txt'
+
+EDIT_NOT_SUCCESS_FILE = 'edit/edit_not_success.txt'
+EDIT_SUCCESS_FILE = 'edit/edit_success.txt'
+LABELED_EDIT_NOT_SUCCESS = 'edit/labeled_edit_not_success.txt'
+LABELED_EDIT_SUCCESS = 'edit/labeled_edit_success.txt'
 
 # set db values
 DB_NAME = "roap.db"
@@ -82,6 +90,9 @@ INTERMEDIATE_FIELDS_DICT = {
     'downs': INTEGER_TYPE,
     'title': STRING_TYPE,
     'selftext':  STRING_TYPE,
+    'edit_remove_text': STRING_TYPE,
+    'tokenized_text': STRING_TYPE,
+    'tokenized_stemmed_text': STRING_TYPE,
     'text_length': INTEGER_TYPE,
     'link_provided': INTEGER_TYPE,
     'created':  FLOAT_TYPE,
@@ -129,6 +140,17 @@ INTERMEDIATE_ELIGIBLE_FIELDS_DICT = {
     'unix_timestamp_local_of_request':  FLOAT_TYPE,  # created
     'unix_timestamp_utc_of_request':    FLOAT_TYPE,  # created_utc
 }
+
+
+#initialize sentence detector
+#Load a given resource from the NLTK data package.
+sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
+
+# load nltk's English stopwords as variable called 'stopwords'
+stopwords = nltk.corpus.stopwords.words('english')
+
+# load nltk's SnowballStemmer as variabled 'stemmer'
+stemmer = SnowballStemmer("english")
 
 
 
