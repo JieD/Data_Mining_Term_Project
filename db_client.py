@@ -122,10 +122,10 @@ def export(cursor, table_name, csv_file_name, column_list):
         writer.writerows(data)
 
 
-# use pandas to export sql table to csv - error, not able to recognize the table
+# use pandas to export sql table to csv - error, not able to recognize the table (wrong db name)
 def export1(conn, table_name, csv_file_name, column_list):
     columns = parse_column_list(column_list)
-    conn = sqlite3.connect('database.db')
+    conn = sqlite3.connect(database.db)
     table = sql.read_frame("SELECT * FROM {tn}".format(cns=columns, tn=table_name), conn)
     table.to_csv(csv_file_name)
 """
