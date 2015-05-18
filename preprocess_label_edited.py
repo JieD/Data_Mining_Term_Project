@@ -1,4 +1,5 @@
 import sqlite3
+import sys
 import re
 import lib
 import db_client
@@ -69,9 +70,7 @@ def find_giver(title):
 #   the closest one is the request that is fulfilled
 #   delete this thanks
 #   if zero request found, probably the author participate in an offer story and won
-def match_thanks_request(cursor):
-    table_name = lib.ROAP_TABLE_NAME
-    id_column = lib.intermediate_story_primary_key
+def match_thanks_request(cursor, table_name, id_column):
     time_column = 'created'
     author_column = 'author'
     label_column = lib.story_label
@@ -122,7 +121,7 @@ def test(cursor, author):
     time_column = 'created'
     author_column = 'author'
     cursor = db_client.select_condition(cursor, table_name, author_column, author, time_column, id_column,
-                                        'title', 'edited', 'selftext', lib.story_label)
+                                        'title', 'edited', 'edit_remove_text', lib.story_label)
     all_rows = cursor.fetchall()
 
     i = 0
@@ -136,9 +135,8 @@ def test(cursor, author):
 
 
 # change not successful request label
-def label_unsuccessful_request(cursor, table_name):
+def label_unsuccessful_request(cursor, table_name, id_column):
     label_column = lib.story_label
-    id_column = lib.intermediate_story_primary_key
     cursor = db_client.select_condition_no(cursor, table_name, label_column, lib.REQUEST, id_column)
     all_rows = cursor.fetchall()
 
@@ -151,8 +149,7 @@ def label_unsuccessful_request(cursor, table_name):
 
 
 # if a user has more than one requests, only save the earliest one
-def choose_first_request(cursor, table_name):
-    id_column = lib.intermediate_story_primary_key
+def choose_first_request(cursor, table_name, id_column):
     author_column = 'author'
     usernames = db_client.get_distinct_values(cursor, table_name, author_column)
     for username in usernames:
@@ -170,7 +167,7 @@ def choose_first_request(cursor, table_name):
 def cpy_rest(cursor, source, destination):
     source_id_column = lib.raw_story_primary_key
     destination_id_column = lib.intermediate_story_primary_key
-    columns = ['edited', 'num_comments', 'score', 'ups', 'downs', 'selftext']
+    columns = ['author_flair_css_class', 'edited', 'num_comments', 'score', 'ups', 'downs', 'selftext']
 
     cursor = db_client.select_all(cursor, destination, destination_id_column)
     all_rows = cursor.fetchall()
@@ -188,34 +185,57 @@ def cpy_rest(cursor, source, destination):
 
 
 # extract edits (if there are) for labeling purpose
+# save the original request to edit_remove_text
 def extract_edit_sentences(cursor, table_name, id_column, label, file_name):
     out_file = open(file_name, 'w')
     out_file.write("Edit sentences for table = {0}, label = {1}\n\n".format(table_name, label))
-    cursor = db_client.select_condition(cursor, table_name, lib.story_label, label, 'created_utc', id_column, 'selftext')
+    cursor = db_client.select_two_conditions(cursor, table_name, {'edited': 1, lib.story_label: label},
+                                             'created_utc', id_column, 'selftext')
     all_rows = cursor.fetchall()
     for row in all_rows:
         name = row[0]
         text = row[1]
-        text = unicode(text).encode("utf-8")  # avoid encoding error (Unicode & ASCII)
-        left_text = extract_edit(name, text, out_file).decode("utf-8")
+        #text = unicode(text).encode("utf-8")  # avoid encoding error (Unicode & ASCII)
+        #left_text = extract_edit(name, text, out_file).decode("utf-8")
+        left_text = extract_edit(name, text, out_file)
         db_client.update(cursor, table_name, id_column, name, 'edit_remove_text', left_text)
 
 
 # extract sentences containing edit and write to out_file
 # steps:
-# 1. check if contains edit
-# 2. if contain edits, find all paragraphs containing edits; else, return empty string
+# 1. check is contains edit
+# 2. if contain edits, find all paragraphs containing edits; else, return empty string (not have edit tag, need a human labeler)
 # 3. for each paragraph containing edits, only keep the sentences came after edit, and write to out_file
 def extract_edit(name, text, out_file):
-    final_text = ""
+    edit_text = ""
     edit = re.compile(r'\b(edit)\b', re.I)
+    edit_tag = edit.search(text) is not None
     edit_start = False
 
-    if edit.search(text) is not None:  # contain edit
-        #print name
-        out_file.write("{0}\n".format(name))
+    #print name
+    out_file.write("{0}\n".format(name))
+
+    paragraphs = text.split('\n')
+    for paragraph in paragraphs:  # extract paragraphs containing edit
+        if edit_tag:  # contain edit tag
+            if edit.search(paragraph):  # paragraph contains edit
+                for sent in lib.sent_detector.tokenize(paragraph.strip(), realign_boundaries=True):
+                    if edit_start or edit.search(sent) is not None:
+                        edit_start = True
+                        #print sent
+                        out_file.write(sent + '\n')
+                    else:
+                        edit_text += sent  # sentence start before edit tag
+            else:
+                edit_text += (paragraph + '\n')  # paragraph not contains edit
+        else:  # not contain edit tag, write the whole request text
+            for sent in lib.sent_detector.tokenize(paragraph.strip(), realign_boundaries=True):
+                out_file.write(sent + '\n')
+
+
+    """if edit.search(text) is not None:  # contain edit tag
         paragraphs = text.split('\n')
-        for paragraph in paragraphs:  # extract the paragraph containing edit, but only start with sentences containing edit
+        for paragraph in paragraphs:  # extract paragraphs containing edit, but only start with edit tag
             if edit.search(paragraph):  # paragraph contains edit
                 edit_sents = []
                 for sent in lib.sent_detector.tokenize(paragraph.strip(), realign_boundaries=True):
@@ -225,14 +245,17 @@ def extract_edit(name, text, out_file):
                         #print sent
                         out_file.write(sent + '\n')
                     else:
-                        final_text += sent  # sentence not contains edit
+                        edit_text += sent  # sentence not contains edit
             else:
-                final_text += (paragraph + '\n')  # paragraph not contains edit
-        #print
-        out_file.write("\n")
-        return final_text
-    else:
-        return text
+                edit_text += (paragraph + '\n')  # paragraph not contains edit
+    else:  # not contain edit tag. need to check the whole text
+        paragraphs = text.split('\n')
+        for sent in lib.sent_detector.tokenize(paragraph.strip(), realign_boundaries=True):
+        text = '\n'.join(paragraphs)
+        out_file.write(text + '\n')"""
+    #print
+    out_file.write("\n")
+    return edit_text
 
 
 # read the label got from edits, and print result
@@ -248,19 +271,22 @@ def read_labeled_edits(cursor, table_name, id_column, file_name):
     line = in_file.readline()
     while line != '':
         edits = []
-        while line != '\r\n' and line != '':  # read all sentences between empty lines
+        while line != '\n' and line != '':  # read all sentences between empty lines
             edits.append(line.strip())
             line = in_file.readline()
         label = int(edits[0])
         name = edits[1]
         edit_sents = edits[2:]
         if len(edit_sents) > 0:  # add request edits back
-            edits = ' '.join(edit_sents).decode("utf-8")
-            edits_remove = db_client.select_condition_no(cursor, table_name, id_column, name, 'edit_remove_text').fetchone()[0]
-            request_text = edits_remove + edits
+            edits = ' '.join(edit_sents)
+            #print name
+            row = db_client.select_condition_no(cursor, table_name, id_column, name, 'edit_remove_text').fetchone()
+            if row is not None:
+                edits_remove = row[0]
+                request_text = edits_remove + edits
+            else:
+                request_text = edits
             db_client.update(cursor, table_name, id_column, name, 'edit_remove_text', request_text)
-        else:  # update edit status to 0
-            db_client.update(cursor, table_name, id_column, name, 'edited', 0)
 
         if label == 1:  # change label to success
             num_success += 1
@@ -277,15 +303,15 @@ def read_labeled_edits(cursor, table_name, id_column, file_name):
     print "{0}\nnumber of success: {1}\nnumber of outliers: {2}".format(file_name, num_success, num_outliers)
 
 
-# replace selftext with edit_remove_text
-def update_selftext(cursor, table_name, id_column):
-    cursor = db_client.select_all(cursor, table_name, id_column, 'edit_remove_text')
+# if not edited, replace edit_remove_text with selftext
+def fill_edit_remove_text(cursor, table_name, id_column):
+    cursor = db_client.select_condition_no(cursor, table_name, 'edited', 0, id_column, 'selftext')
     all_rows = cursor.fetchall()
 
     for row in all_rows:
         name = row[0]
-        edits = row[1]
-        db_client.update(cursor, table_name, id_column, name, 'selftext', edits)
+        text = row[1]
+        db_client.update(cursor, table_name, id_column, name, 'edit_remove_text', text)
 
 
 # if request body is empty, use title. (only for text analysis purpose)
@@ -297,9 +323,6 @@ def treat_empty_text(cursor, table_name, id_column):
         name = row[0]
         title = row[1]
         db_client.update(cursor, table_name, id_column, name, 'edit_remove_text', title)
-
-
-#def priliminary_text_analysis():
 
 
 # update edited to 1 or 0
@@ -332,10 +355,21 @@ def label_count(cursor, table_name):
 
 
 def main():
+    reload(sys)
+    sys.setdefaultencoding("utf-8")
+
     # init
     conn = sqlite3.connect(lib.DB_NAME)
+
     source_name = lib.RAW_ROAP_TABLE_NAME
     table_name = lib.ROAP_TABLE_NAME
+    edit_not_success_file = lib.EDIT_NOT_SUCCESS_FILE
+    edit_success_file = lib.EDIT_SUCCESS_FILE
+    """source_name = lib.FULL_RAW_ROAP_TABLE_NAME
+    table_name = lib.FULL_ROAP_TABLE_NAME
+    edit_not_success_file = lib.FULL_EDIT_NOT_SUCCESS_FILE
+    edit_success_file = lib.FULL_EDIT_SUCCESS_FILE"""
+
     id_column = lib.intermediate_story_primary_key
     cursor = conn.cursor()
 
@@ -343,23 +377,22 @@ def main():
     create_intermediate_table(cursor, table_name)
 
     assign_priliminary_label(cursor, source_name, table_name)
-    match_thanks_request(cursor)
-    label_unsuccessful_request(cursor, table_name)
+    match_thanks_request(cursor, table_name, id_column)
+    label_unsuccessful_request(cursor, table_name, id_column)
     cpy_rest(cursor, source_name, table_name)
     #test(cursor, '')
 
     #choose_first_request(cursor, table_name)
 
     print '\nextract edits\n'
-    extract_edit_sentences(cursor, table_name, id_column, lib.NOT_SUCCESS, lib.EDIT_NOT_SUCCESS_FILE)
-    extract_edit_sentences(cursor, table_name, id_column, lib.SUCCESS, lib.EDIT_SUCCESS_FILE)
+    extract_edit_sentences(cursor, table_name, id_column, lib.NOT_SUCCESS, edit_not_success_file)
+    extract_edit_sentences(cursor, table_name, id_column, lib.SUCCESS, edit_success_file)
 
     print 'read labels:'
     read_labeled_edits(cursor, table_name, id_column, lib.LABELED_EDIT_NOT_SUCCESS)
     read_labeled_edits(cursor, table_name, id_column, lib.LABELED_EDIT_SUCCESS)
+    fill_edit_remove_text(cursor, table_name, id_column)
     #test(cursor, 'Franklyidontgivearip')
-
-    #update_selftext(cursor, table_name, id_column)
     treat_empty_text(cursor, table_name, id_column)
 
     label_count(cursor, table_name)
