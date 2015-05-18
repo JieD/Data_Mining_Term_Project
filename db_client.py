@@ -86,6 +86,18 @@ def select_condition(cursor, table_name, column_name, column_value, order_column
     return cursor
 
 
+# retrieve data meeting two criterion
+def select_two_conditions(cursor, table_name, conditions, order_column, *args):
+    columns = combine_columns(*args)
+    condition_columns = conditions.keys()
+    condition_column1 = condition_columns[0]
+    condition_column2 = condition_columns[1]
+    cursor.execute("SELECT {cns} FROM {tn} WHERE {cn1}=? AND {cn2}=? ORDER BY {oc} ASC".
+                   format(cns=columns, tn=table_name, cn1=condition_column1, cn2=condition_column2,
+                          oc=order_column), (conditions[condition_column1], conditions[condition_column2]))
+    return cursor
+
+
 # form the sql query for columns
 def combine_columns(*args):
     columns = args[0]
@@ -201,6 +213,8 @@ def get_stories_in_time_range(client, sr, start_time, end_time, cursor, table_na
     print "start query reddit"
     after_name = ''
     limit = lib.QUERY_LIMIT
+    stop = 5
+    zero_count = 0
 
     while True:
         json_stories = reddit_client.query_stories_in_time_range(client, start_time, end_time, sr=sr, limit=limit,
@@ -208,6 +222,9 @@ def get_stories_in_time_range(client, sr, start_time, end_time, cursor, table_na
         stories = reddit_client.parse_stories(json_stories)
 
         if not stories:  # empty list (probably has fetched 1000 stories for the request
+            if zero_count > stop:
+                break
+            zero_count += 1
             end_time = last_story['created_utc']
             if start_time < end_time:
                 # adjust timestamp throw in delta (Day_Seconds) to overcome the bias in the reddit search result
@@ -215,6 +232,8 @@ def get_stories_in_time_range(client, sr, start_time, end_time, cursor, table_na
                 continue
             else:
                 break
+        else:
+            zero_count = 0
         # store stories into the db
         insert_stories(cursor, table_name, stories)
         length = len(stories)
@@ -228,11 +247,15 @@ def get_stories_in_time_range(client, sr, start_time, end_time, cursor, table_na
 def main():
     # connecting to the database file
     conn = sqlite3.connect(lib.DB_NAME)
+
     table_name = lib.RAW_ROAP_TABLE_NAME
+    file_name = lib.FILE_NAME
+    """table_name = lib.FULL_RAW_ROAP_TABLE_NAME
+    file_name = lib.FULL_FILE_NAME"""
     cursor = conn.cursor()
 
-    #delete_table(cursor, table_name)
-    #create_story_table(cursor, table_name, lib.raw_story_primary_key, lib.raw_story_primary_key_type, lib.RAW_FIELDS_DICT)
+    delete_table(cursor, table_name)
+    create_story_table(cursor, table_name, lib.raw_story_primary_key, lib.raw_story_primary_key_type, lib.RAW_FIELDS_DICT)
     client = reddit_client.login(lib.USERNAME, lib.PASSWORD, lib.USER_AGENT)
 
     # retrieve the latest 1000 stories
@@ -240,7 +263,7 @@ def main():
 
     # retrieve stories in the given time period
     end_time = time.time()
-    get_stories_in_time_range(client, lib.ROAP, lib.START_2015, end_time, cursor, lib.RAW_ROAP_TABLE_NAME, lib.FILE_NAME)
+    get_stories_in_time_range(client, lib.ROAP, lib.START_2015, end_time, cursor, table_name, file_name)
 
     # committing changes and closing the connection to the database file
     conn.commit()
