@@ -22,6 +22,7 @@ YEAR_SECONDS = DAY_SECONDS * 365
 
 #
 FILE_NAME = 'roap_info.txt'
+FULL_FILE_NAME = 'full_roap_info.txt'
 count = 0
 THRESHOLD = 1000
 OUT_FILE = 'data/data.csv'
@@ -32,11 +33,17 @@ EDIT_NOT_SUCCESS_FILE = 'edit/edit_not_success.txt'
 EDIT_SUCCESS_FILE = 'edit/edit_success.txt'
 LABELED_EDIT_NOT_SUCCESS = 'edit/labeled_edit_not_success.txt'
 LABELED_EDIT_SUCCESS = 'edit/labeled_edit_success.txt'
+FULL_EDIT_NOT_SUCCESS_FILE = 'edit/full_edit_not_success.txt'
+FULL_EDIT_SUCCESS_FILE = 'edit/full_edit_success.txt'
+FULL_LABELED_EDIT_NOT_SUCCESS = 'edit/full_labeled_edit_not_success.txt'
+FULL_LABELED_EDIT_SUCCESS = 'edit/full_labeled_edit_success.txt'
 
 # set db values
 DB_NAME = "db/roap.db"
 RAW_ROAP_TABLE_NAME = "raw_roap"
 ROAP_TABLE_NAME = "roap"
+FULL_RAW_ROAP_TABLE_NAME = "full_raw_roap"
+FULL_ROAP_TABLE_NAME = "full_roap"
 
 INTEGER_TYPE = "INTEGER"
 BOOLEAN_TYPE = "INTEGER"
@@ -83,6 +90,7 @@ INTERMEDIATE_FIELDS_DICT = {
     story_label: story_label_type,
     'giver_username': STRING_TYPE,
     'author': STRING_TYPE,
+    'author_flair_css_class': STRING_TYPE,
     'edited': INTEGER_TYPE,
     'num_comments': INTEGER_TYPE,
     'score':        INTEGER_TYPE,
@@ -91,8 +99,9 @@ INTERMEDIATE_FIELDS_DICT = {
     'title': STRING_TYPE,
     'selftext':  STRING_TYPE,
     'edit_remove_text': STRING_TYPE,
+    'reciprocate': INTEGER_TYPE,
     'text_length': INTEGER_TYPE,
-    'link_provided': INTEGER_TYPE,
+    'image_provided': INTEGER_TYPE,
     'tokenized_text': STRING_TYPE,
     'tokenized_stemmed_text': STRING_TYPE,
     'created':  FLOAT_TYPE,
@@ -142,15 +151,10 @@ INTERMEDIATE_ELIGIBLE_FIELDS_DICT = {
 }
 
 
-#initialize sentence detector
-#Load a given resource from the NLTK data package.
 sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
-
-# load nltk's English stopwords as variable called 'stopwords'
 stopwords = nltk.corpus.stopwords.words('english')
-
-# load nltk's SnowballStemmer as variabled 'stemmer'
 stemmer = SnowballStemmer("english")
 
 
-
+total_words_stemmed = []
+total_words = []
