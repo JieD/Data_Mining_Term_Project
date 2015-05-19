@@ -100,10 +100,10 @@ INTERMEDIATE_FIELDS_DICT = {
     'title': STRING_TYPE,
     'selftext':  STRING_TYPE,
     'edit_remove_text': STRING_TYPE,
+    'image_provided': INTEGER_TYPE,
     'reciprocate': INTEGER_TYPE,
     'exchange': INTEGER_TYPE,
     'text_length': INTEGER_TYPE,
-    'image_provided': INTEGER_TYPE,
     'tokenized_text': STRING_TYPE,
     'tokenized_stemmed_text': STRING_TYPE,
     'created':  FLOAT_TYPE,
@@ -165,8 +165,8 @@ total_name = []
 total_success_name = []
 total_not_success_name = []
 
-total_words_stemmed = []
-total_words = []
+total_stemmed_success_words = []
+total_success_words = []
 vocab_frame = pd.DataFrame()
 
 tfidf_matrix = []
