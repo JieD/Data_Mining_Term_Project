@@ -1,5 +1,6 @@
 import nltk
 from nltk.stem.snowball import SnowballStemmer
+import pandas as pd
 
 # set username and password values
 USERNAME = 'jied314'
@@ -155,6 +156,20 @@ sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
 stopwords = nltk.corpus.stopwords.words('english')
 stemmer = SnowballStemmer("english")
 
+total_text = []
+total_success_text = []
+total_not_success_text = []
+total_name = []
+total_success_name = []
+total_not_success_name = []
 
 total_words_stemmed = []
 total_words = []
+vocab_frame = pd.DataFrame()
+
+tfidf_matrix = []
+terms = []
+dist = []
+cluster_doc = 'cluster/doc_cluster.pkl'
+number_topics = 10
+number_topic_features = 10

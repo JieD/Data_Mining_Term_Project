@@ -83,7 +83,7 @@ def tokenize_all(cursor, table_name, id_column):
 
     for row in all_rows:
         name = row[0]
-        text = row[1]
+        text = row[1].lower()
 
         # first tokenize by sentence, then by word to ensure that punctuation is caught as it's own token
         tokens = [word for sent in nltk.sent_tokenize(text) for word in nltk.word_tokenize(sent)]
