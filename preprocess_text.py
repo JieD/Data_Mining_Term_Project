@@ -31,11 +31,16 @@ def check_reciprocate(text):
     return reciprocate_feature.search(text) is not None
 
 
+def check_exchange(text):
+    exchange_feature = re.compile(r'(trade|in return)', re.I)
+    return exchange_feature.search(text) is not None
+
+
 # print requests (belong to specified label) to file
 def print_request(cursor, table_name, label, file_name):
     cursor = db_client.select_condition(cursor, table_name, 'label', label, 'created_utc',
                                         lib.intermediate_story_primary_key, 'author', 'edited', 'image_provided',
-                                        'reciprocate', 'text_length', 'title', 'edit_remove_text')
+                                        'reciprocate', 'exchange', 'text_length', 'title', 'edit_remove_text')
     all_rows = cursor.fetchall()
     out_file = open(file_name, 'w')
 
@@ -103,11 +108,14 @@ def simple_text_analysis(cursor, table_name, id_column):
         text = row[1]
         is_image_provided = check_image_included(text)
         will_reciprocate = check_reciprocate(text)
+        will_exchange = check_exchange(text)
         db_client.update(cursor, table_name, id_column, name, 'image_provided', is_image_provided)
         db_client.update(cursor, table_name, id_column, name, 'reciprocate', will_reciprocate)
+        db_client.update(cursor, table_name, id_column, name, 'exchange', will_exchange)
 
 
 # count the text length after removing stopwords and non-letters
+# store text back in tokenized_text and tokenized_stemmed_text
 def count_text_length(cursor, table_name, id_column):
     print '\ncheck text length after removing stopwords'
     cursor = db_client.select_all(cursor, table_name, id_column, 'edit_remove_text')
@@ -116,29 +124,52 @@ def count_text_length(cursor, table_name, id_column):
     for row in all_rows:
         name = row[0]
         text = row[1].lower()
-
         # first tokenize by sentence, then by word to ensure that punctuation is caught as it's own token
         tokens = [word for sent in nltk.sent_tokenize(text) for word in nltk.word_tokenize(sent)]
-        stopwords_removed_tokens = [token for token in tokens if token not in lib.stopwords]  # remove stopwords
+        #stopwords_removed_tokens = [token for token in tokens if token not in lib.stopwords]  # remove stopwords
 
         filtered_tokens = []
         # filter out any tokens not containing letters (e.g., numeric tokens, raw punctuation)
-        for token in stopwords_removed_tokens:
+        for token in tokens:
             if re.search('[a-zA-Z]', token):
                 filtered_tokens.append(token)
-
+        tokenized_text = ' '.join(filtered_tokens)
         db_client.update(cursor, table_name, id_column, name, 'text_length', len(filtered_tokens))
+        db_client.update(cursor, table_name, id_column, name, 'tokenized_text', tokenized_text)
 
-    """lib.total_words.extend(filtered_tokens)
-    stems = [lib.stemmer.stem(t) for t in filtered_tokens]
-    lib.total_words_stemmed.extend(stems)
-    print "total number of filtered tokens: {0}".format(len(lib.total_words))
-    print "total number of unique filtered tokens: {0}".format(len(set(lib.total_words)))
-    print text, '\n'
-    print "number of tokens: {0}\nnumber of tokens after stopwords removed: {1}".format(len(tokens), len(filtered_tokens))
-    print filtered_tokens, '\n', stems"""
-    """print 'tokens: {0}\n'.format(lib.total_words[:500])
-    print 'stemmed tokens: {0}\n'.format(lib.total_words_stemmed[:500])"""
+
+# remove nltk and application specific stopwords, http links
+def extract_valid_tokens(cursor, table_name, id_column):
+    print '\nextract noun tokens:'
+    t0 = time()
+
+    cursor = db_client.select_all(cursor, table_name, id_column, 'tokenized_text')
+    all_rows = cursor.fetchall()
+
+    for row in all_rows:
+        name = row[0]
+        text = row[1].lower()
+        #print text, '\n'
+
+        tokens = [token for token in nltk.word_tokenize(text)]
+        stopwords_removed_tokens = [token for token in tokens if token not in lib.stopwords and token not in lib.custom_stopwords]  # remove stopwords
+        #print ' '.join(stopwords_removed_tokens), '\n'
+
+        filtered_tokens = []
+        for token in stopwords_removed_tokens:
+            if 'http' not in token:
+                filtered_tokens.append(token)
+        filtered_text = ' '.join(filtered_tokens)
+        #print filtered_text, '\n'
+
+        noun_tokens = extract_nouns(filtered_tokens)
+        noun_text = ' '.join(noun_tokens)
+        noun_stemmed_tokens = [lib.stemmer.stem(token) for token in noun_tokens]
+        noun_stemmed_text = ' '.join(noun_stemmed_tokens)
+        db_client.update(cursor, table_name, id_column, name, 'tokenized_text', noun_text)
+        db_client.update(cursor, table_name, id_column, name, 'tokenized_stemmed_text', noun_stemmed_text)
+        #print noun_text, '\n'
+    print("done in %0.3fs." % (time() - t0))
 
 
 # tokenize and stem the text
@@ -164,27 +195,36 @@ def tokenize_only(text):
     for token in tokens:
         if re.search('[a-zA-Z]', token):
             filtered_tokens.append(token)
-    return extract_nouns(filtered_tokens)
+    noun_tokens = extract_nouns(filtered_tokens)
+    #print text
+    #print filtered_tokens, '\n'
+    #print noun_tokens, '\n'
+    return noun_tokens
 
 
+# use POS-tagging to find nouns
 def extract_nouns(tokens):
     word_tag_paris = nltk.pos_tag(tokens)
-    noun_tokens = [token for (token, tag) in word_tag_paris if tag == 'NN']
+    #print word_tag_paris, '\n'
+    noun_tokens = [token for (token, tag) in word_tag_paris if 'NN' in tag]
     return noun_tokens
 
 
 # associates words with its stems (note repetition exists)
 def create_word_stem_dictionary():
-    print '\nbuild vocabulary frame:'
-
+    print '\ntokenize and extract nouns:'
+    t0 = time()
     for text in lib.total_success_text:
         tokenized_words = tokenize_only(text)
         lib.total_words.extend(tokenized_words)
         stemmed_words = [lib.stemmer.stem(t) for t in tokenized_words]
         lib.total_words_stemmed.extend(stemmed_words)
+    print("done in %0.3fs." % (time() - t0))
 
-
+    print '\nbuild vocabulary frame:'
+    t0 = time()
     lib.vocab_frame = pd.DataFrame({'words': lib.total_words}, index=lib.total_words_stemmed)
+    print("done in %0.3fs." % (time() - t0))
     print 'there are ' + str(lib.vocab_frame.shape[0]) + ' items in vocab_frame'
     #print lib.vocab_frame
 
@@ -192,9 +232,11 @@ def create_word_stem_dictionary():
 # build tf_idf
 def apply_tf_idf(text_list):
     print '\napply tf_idf'
-    #define vectorizer parameters
-    tfidf_vectorizer = TfidfVectorizer(max_df=0.2, min_df = 0.1, stop_words='english', tokenizer=tokenize_and_stem)
+    t0 = time()
+    # define vectorizer parameters
+    tfidf_vectorizer = TfidfVectorizer(max_df=0.2, min_df=0.02, stop_words='english', tokenizer=tokenize_and_stem)
     lib.tfidf_matrix = tfidf_vectorizer.fit_transform(text_list)  #fit the vectorizer to text_list
+    print("done in %0.3fs." % (time() - t0))
     print(lib.tfidf_matrix.shape)
 
     lib.terms = tfidf_vectorizer.get_feature_names()
@@ -262,19 +304,20 @@ def main():
     id_column = lib.intermediate_story_primary_key
     cursor = conn.cursor()
 
-    #simple_text_analysis(cursor, table_name, id_column)
+    simple_text_analysis(cursor, table_name, id_column)
     #count_text_length(cursor, table_name, id_column)
+    #extract_valid_tokens(cursor, table_name, id_column)
 
-    extract_text(cursor, table_name)
-    create_word_stem_dictionary()
-    apply_tf_idf(lib.total_success_text)
-    apply_kmeans()
-    apply_nmf()
+    #extract_text(cursor, table_name)
+    #create_word_stem_dictionary()
+    #apply_tf_idf(lib.total_success_text)
+    #apply_kmeans()
+    #apply_nmf()
 
-    """print_request(cursor, table_name, lib.SUCCESS, lib.SUCCESS_FILE)
+    print_request(cursor, table_name, lib.SUCCESS, lib.SUCCESS_FILE)
     print_request(cursor, table_name, lib.NOT_SUCCESS, lib.NOT_SUCCESS_FILE)
     #quick_query(cursor, table_name, 'author', 'CDearsVVV', 'selftext')
-    export.write(conn, table_name, lib.OUT_FILE, 'ups', 'num_comments', 'edited', 'reciprocate', 'image_provided', 'text_length', 'label')"""
+    #export.write(conn, table_name, lib.OUT_FILE, 'ups', 'num_comments', 'edited', 'reciprocate', 'image_provided', 'text_length', 'label')
 
     conn.commit()
     conn.close()
