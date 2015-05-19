@@ -101,6 +101,7 @@ INTERMEDIATE_FIELDS_DICT = {
     'selftext':  STRING_TYPE,
     'edit_remove_text': STRING_TYPE,
     'reciprocate': INTEGER_TYPE,
+    'exchange': INTEGER_TYPE,
     'text_length': INTEGER_TYPE,
     'image_provided': INTEGER_TYPE,
     'tokenized_text': STRING_TYPE,
@@ -153,8 +154,9 @@ INTERMEDIATE_ELIGIBLE_FIELDS_DICT = {
 
 
 sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
-stopwords = nltk.corpus.stopwords.words('english')
 stemmer = SnowballStemmer("english")
+stopwords = nltk.corpus.stopwords.words('english')
+custom_stopwords = ['\'m', 'n\'t', 'reddit', 'random', 'edit', 'location']
 
 total_text = []
 total_success_text = []
@@ -171,5 +173,5 @@ tfidf_matrix = []
 terms = []
 dist = []
 cluster_doc = 'cluster/doc_cluster.pkl'
-number_topics = 10
+number_topics = 6
 number_topic_features = 10
