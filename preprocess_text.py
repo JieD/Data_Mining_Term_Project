@@ -27,7 +27,7 @@ def check_image_included(text):
 
 # check whether is willing to reciprocate
 def check_reciprocate(text):
-    reciprocate_feature = re.compile(r'(pay it forward|pay it back|return the favor)', re.I)
+    reciprocate_feature = re.compile(r'(pay it forward|pay it back|return the favor|repay)', re.I)
     return reciprocate_feature.search(text) is not None
 
 
@@ -96,10 +96,8 @@ def remove_stopwords_and_non_nouns(cursor, table_name, id_column):
 
         filtered_tokens = []
         for token in stopwords_removed_tokens:
-            if 'http' not in token:
+            if 'http' not in token:  # remove http link
                 filtered_tokens.append(token)
-        filtered_text = ' '.join(filtered_tokens)
-        #print filtered_text, '\n'
 
         noun_tokens = extract_nouns(filtered_tokens)
         noun_text = ' '.join(noun_tokens)
@@ -137,7 +135,7 @@ def extract_text_for_analysis(cursor, table_name):
     print 'total number of not success text: {0}'.format(len(lib.total_not_success_text))"""
 
 
-# store all text fetched from cursor to text_list
+# store all text fetched from cursor to lists for further analysis
 def store_text_and_tokens(cursor, name_list, text_list, token_list, stemmed_token_list):
     all_rows = cursor.fetchall()
     for row in all_rows:
@@ -149,6 +147,17 @@ def store_text_and_tokens(cursor, name_list, text_list, token_list, stemmed_toke
         stemmed_tokens = [lib.stemmer.stem(t) for t in tokens]
         token_list.extend(tokens)
         stemmed_token_list.extend(stemmed_tokens)
+        #text_list.append(' '.join(stemmed_tokens))
+
+
+# associates words with its stems (note repetition exists)
+def create_word_stem_dictionary():
+    print '\nbuild vocabulary frame:'
+    t0 = time()
+    lib.vocab_frame = pd.DataFrame({'words': lib.total_success_words}, index=lib.total_stemmed_success_words)
+    print("done in %0.3fs." % (time() - t0))
+    print 'there are ' + str(lib.vocab_frame.shape[0]) + ' items in vocab_frame'
+    #print lib.vocab_frame
 
 
 # tokenize and stem the text
@@ -176,23 +185,13 @@ def tokenize_only(text):
     return filtered_tokens
 
 
-# associates words with its stems (note repetition exists)
-def create_word_stem_dictionary():
-    print '\nbuild vocabulary frame:'
-    t0 = time()
-    lib.vocab_frame = pd.DataFrame({'words': lib.total_success_words}, index=lib.total_stemmed_success_words)
-    print("done in %0.3fs." % (time() - t0))
-    print 'there are ' + str(lib.vocab_frame.shape[0]) + ' items in vocab_frame'
-    #print lib.vocab_frame
-
-
 # build tf_idf
 def apply_tf_idf(text_list):
     print '\napply tf_idf'
     t0 = time()
     # define vectorizer parameters
-    tfidf_vectorizer = TfidfVectorizer(max_df=0.2, stop_words='english', tokenizer=tokenize_and_stem,)
-    lib.tfidf_matrix = tfidf_vectorizer.fit_transform(text_list)  #fit the vectorizer to text_list
+    tfidf_vectorizer = TfidfVectorizer(max_df=0.2, min_df=0.02, stop_words='english', tokenizer=tokenize_and_stem)
+    lib.tfidf_matrix = tfidf_vectorizer.fit_transform(text_list)  # fit the vectorizer to text_list
     print("done in %0.3fs." % (time() - t0))
     print(lib.tfidf_matrix.shape)
 
@@ -203,6 +202,7 @@ def apply_tf_idf(text_list):
 
 
 def apply_kmeans():
+    out_file = open(lib.kmeans_topics_doc, 'w')
     num_clusters = lib.number_topics
     km = KMeans(n_clusters=num_clusters)
     km.fit(lib.tfidf_matrix)
@@ -212,7 +212,7 @@ def apply_kmeans():
 
     requests = {'name': lib.total_success_name, 'text': lib.total_success_text, 'cluster': clusters}
     frame = pd.DataFrame(requests, index=[clusters], columns=['name', 'cluster'])
-    print '\ncluster counts:\n', frame['cluster'].value_counts(), '\n'  # number of stories per cluster (clusters from 0 to 4)
+    print '\ncluster counts:\n', frame['cluster'].value_counts(), '\n'  # number of stories per cluster
 
     #grouped = frame['rank'].groupby(frame['cluster']) #groupby cluster for aggregation purposes
     #print grouped.mean() #average rank (1 to 100) per cluster
@@ -224,17 +224,31 @@ def apply_kmeans():
     for i in range(num_clusters):
         print "\nCluster {0} words:".format(i)
 
-        for index in order_centroids[i, :lib.number_topic_features]:  # replace 6 with n words per cluster .encode('utf-8', 'ignore')
-            print ' {0}'.format(lib.vocab_frame.ix[lib.terms[index].split(' ')].values.tolist()[0][0]),
+        """length = len(order_centroids[i])
+        j = 0
+        for index in order_centroids[i, :(length - 1)]:
+            if j >= lib.number_topic_features:
+                break
+            term = lib.terms[index]
+            tag = nltk.pos_tag([term])[0][1]
+            if 'NN' in tag:
+                j += 1
+                print ' {0}'.format(lib.vocab_frame.ix[lib.terms[index].split(' ')].values.tolist()[0][0]),
+        print '\n'"""
+
+        for index in order_centroids[i, :lib.number_topic_features]:  # replace 6 with n words per cluster
+            term = lib.vocab_frame.ix[lib.terms[index].split(' ')].values.tolist()[0][0]
+            print ' {0}'.format(term),
+            out_file.write('{0} '.format(term))
         print '\n'
+        out_file.write('\n')
 
         """print "Cluster {0} names:".format(i)
         for name in frame.ix[i]['name'].values.tolist():
             print ' {0},'.format(name)
         print '\n'
         """
-    print '\n'
-
+    out_file.close()
 
 
 def apply_nmf():
@@ -244,11 +258,14 @@ def apply_nmf():
     nmf = NMF(n_components=lib.number_topics, random_state=1).fit(lib.tfidf_matrix)
     print("done in %0.3fs." % (time() - t0))
 
+    out_file = open(lib.nmf_topics_doc, 'w')
     for topic_idx, topic in enumerate(nmf.components_):
         print("Topic #%d:" % topic_idx)
-        print(" ".join([lib.terms[i]
-                        for i in topic.argsort()[:-lib.number_topic_features - 1:-1]]))
-        print()
+        terms = " ".join([lib.terms[i] for i in topic.argsort()[:-lib.number_topic_features - 1:-1]])
+        out_file.write('{}\n'.format(terms))
+        print terms
+        print
+    out_file.close()
 
 
 # print requests (belong to specified label) to file
@@ -295,8 +312,8 @@ def main():
     id_column = lib.intermediate_story_primary_key
     cursor = conn.cursor()
 
-    #simple_text_analysis(cursor, table_name, id_column)
-    #tokenize_and_count_length(cursor, table_name, id_column)
+    simple_text_analysis(cursor, table_name, id_column)
+    tokenize_and_count_length(cursor, table_name, id_column)
     remove_stopwords_and_non_nouns(cursor, table_name, id_column)
 
     extract_text_for_analysis(cursor, table_name)
