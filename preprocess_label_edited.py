@@ -325,6 +325,18 @@ def treat_empty_text(cursor, table_name, id_column):
         db_client.update(cursor, table_name, id_column, name, 'edit_remove_text', title)
 
 
+def combine_title_and_text(cursor, table_name, id_column):
+    cursor = db_client.select_all(cursor, table_name, id_column, 'title', 'edit_remove_text')
+    all_rows = cursor.fetchall()
+
+    for row in all_rows:
+        name = row[0]
+        title = row[1]
+        text = row[2]
+        full_text = '{0}\n{1}'.format(title, text).decode("utf-8")
+        db_client.update(cursor, table_name, id_column, name, 'edit_remove_text', full_text)
+
+
 # update edited to 1 or 0
 def update_edited(cursor, destination):
     destination_id_column = lib.intermediate_story_primary_key
@@ -393,7 +405,8 @@ def main():
     read_labeled_edits(cursor, table_name, id_column, lib.LABELED_EDIT_SUCCESS)
     fill_edit_remove_text(cursor, table_name, id_column)
     #test(cursor, 'Franklyidontgivearip')
-    treat_empty_text(cursor, table_name, id_column)
+    #treat_empty_text(cursor, table_name, id_column)
+    combine_title_and_text(cursor, table_name, id_column)
 
     label_count(cursor, table_name)
 
