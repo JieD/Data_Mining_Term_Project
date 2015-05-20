@@ -106,6 +106,11 @@ INTERMEDIATE_FIELDS_DICT = {
     'text_length': INTEGER_TYPE,
     'tokenized_text': STRING_TYPE,
     'tokenized_stemmed_text': STRING_TYPE,
+    'money': INTEGER_TYPE,
+    'job': INTEGER_TYPE,
+    'student': INTEGER_TYPE,
+    'family': INTEGER_TYPE,
+    'craving': INTEGER_TYPE,
     'created':  FLOAT_TYPE,
     'created_utc':    FLOAT_TYPE,
 }
@@ -156,7 +161,7 @@ INTERMEDIATE_ELIGIBLE_FIELDS_DICT = {
 sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
 stemmer = SnowballStemmer("english")
 stopwords = nltk.corpus.stopwords.words('english')
-custom_stopwords = ['\'m', 'n\'t', 'reddit', 'random', 'edit', 'location']
+custom_stopwords = ['\'m', 'n\'t', 'reddit', 'random', 'raop', 'edit', 'location']
 
 total_text = []
 total_success_text = []
@@ -173,5 +178,12 @@ tfidf_matrix = []
 terms = []
 dist = []
 cluster_doc = 'cluster/doc_cluster.pkl'
-number_topics = 6
-number_topic_features = 10
+number_topics = 10
+number_topic_features = 15
+
+kmeans_topics_doc = 'cluster/kmeans_topics.txt'
+nmf_topics_doc = 'cluster/nmf_topics.txt'
+topic_doc = 'cluster/topic_terms.txt'
+
+topic_term_dict = {}
+topic_threshold = 0.5
