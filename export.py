@@ -3,6 +3,7 @@ import csv
 import codecs
 import cStringIO
 import db_client
+import lib
 
 
 class UnicodeWriter:
@@ -54,7 +55,11 @@ def write(conn, table_name, csv_file_name, column_list):
 def write(conn, table_name, csv_file_name, *args):
     columns = db_client.combine_columns(*args)
     cursor = conn.cursor()
-    data = cursor.execute("SELECT {cns} FROM {tn}".format(cns=columns, tn=table_name))
+    not_success = db_client.select_condition_no(cursor, table_name, lib.story_label, lib.NOT_SUCCESS, *args)
+    #data = cursor.execute("SELECT {cns} FROM {tn}".format(cns=columns, tn=table_name))
     writer = UnicodeWriter(open(csv_file_name, "wb"))
     writer.writerow(args)
-    writer.writerows(data)
+    writer.writerows(not_success)
+    for i in range(0, 9):
+        success = db_client.select_condition_no(cursor, table_name, lib.story_label, lib.SUCCESS, *args)
+        writer.writerows(success)
