@@ -18,7 +18,7 @@ from random import randint
 
 # fetch topic & terms to dictionary
 def read_topics():
-    print '\nread topics and terms'
+    print 'read topics and terms'
     in_file = open(lib.topic_doc, 'r')
     while 1:
         line = in_file.readline()
@@ -33,8 +33,9 @@ def read_topics():
         #print lib.topic_term_dict[topic]
 
 
-def assign_topics(cursor, table_name, id_column):
-    print '\nassign topic frequencies'
+# count the frequency of words for each request belonging to each topic
+def topic_terms_frequency(cursor, table_name, id_column):
+    print '\nassign topic counts'
     cursor = db_client.select_all(cursor, table_name, id_column, 'tokenized_text')
     all_rows = cursor.fetchall()
     for row in all_rows:
@@ -66,7 +67,11 @@ def assign_topics(cursor, table_name, id_column):
 
 
 # oversampling and undersampling
-def resampling():
+def resampling(cursor, table_name):
+    print '\noversampling and undersampling'
+    label_column = lib.story_label
+    lib.success_count = db_client.count(cursor, table_name, label_column, lib.SUCCESS)
+    lib.not_success_count = db_client.count(cursor, table_name, label_column, lib.NOT_SUCCESS)
     count_dif = lib.not_success_count - lib.success_count
     success_list = read_file_to_list(lib.SUCCESS_OUT_FILE)
     not_success_list = read_file_to_list(lib.NOT_SUCCESS_OUT_FILE)
@@ -119,22 +124,28 @@ def main():
 
     # init
     conn = sqlite3.connect(lib.DB_NAME)
-    """table_name = lib.ROAP_TABLE_NAME
-    out_file = lib.OUT_FILE"""
-    table_name = lib.FULL_ROAP_TABLE_NAME
-    out_file = lib.FULL_OUT_FILE
+    table_name = lib.ROAP_TABLE_NAME
+    out_file = lib.OUT_FILE
+    """table_name = lib.FULL_ROAP_TABLE_NAME
+    out_file = lib.FULL_OUT_FILE"""
     success_out_file = lib.SUCCESS_OUT_FILE
     not_success_out_file = lib.NOT_SUCCESS_OUT_FILE
     id_column = lib.intermediate_story_primary_key
     cursor = conn.cursor()
 
-    #read_topics()
-    #assign_topics(cursor, table_name, id_column)
+    read_topics()
+    topic_terms_frequency(cursor, table_name, id_column)
 
-    export.write(conn, table_name, not_success_out_file, success_out_file, 'ups', 'num_comments', 'image_provided', 'reciprocate',
-                 'exchange', 'text_length', 'money', 'time', 'job', 'student', 'family', 'craving', 'label')
+    export.write(conn, table_name, out_file, not_success_out_file, success_out_file, 'ups', 'account_created_utc', 'link_karma',
+                 'comment_karma', 'num_comments', 'image_provided', 'reciprocate', 'exchange', 'text_length', 'money',
+                 'time', 'job', 'student', 'family', 'craving', 'label')
 
-    resampling()
+    """export.write(conn, table_name, not_success_out_file, success_out_file, 'ups', 'num_comments', 'image_provided',
+                 'reciprocate', 'exchange', 'text_length', 'money', 'time', 'job', 'student', 'family', 'craving',
+                 'label')"""
+    resampling(cursor, table_name)
+
+    lib.success_count = 10
 
     conn.commit()
     conn.close()
