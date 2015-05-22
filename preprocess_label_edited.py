@@ -168,7 +168,8 @@ def choose_first_request(cursor, table_name, id_column):
 def cpy_rest(cursor, source, destination):
     source_id_column = lib.raw_story_primary_key
     destination_id_column = lib.intermediate_story_primary_key
-    columns = ['author_flair_css_class', 'edited', 'num_comments', 'score', 'ups', 'downs', 'selftext']
+    columns = ['account_created_utc', 'link_karma', 'comment_karma', 'author_flair_css_class', 'edited', 'num_comments',
+               'score', 'ups', 'downs', 'selftext']
 
     cursor = db_client.select_all(cursor, destination, destination_id_column)
     all_rows = cursor.fetchall()
@@ -328,6 +329,7 @@ def treat_empty_text(cursor, table_name, id_column):
         db_client.update(cursor, table_name, id_column, name, 'edit_remove_text', title)
 
 
+# add title to the request text
 def combine_title_and_text(cursor, table_name, id_column):
     print '\ncombine title and text'
     cursor = db_client.select_all(cursor, table_name, id_column, 'title', 'edit_remove_text')
@@ -363,11 +365,12 @@ def create_intermediate_table(cursor, table_name):
                                  lib.intermediate_story_primary_key_type, lib.INTERMEDIATE_FIELDS_DICT)
 
 
+# count the number for each label
 def label_count(cursor, table_name):
     label_column = lib.story_label
-    success_count = db_client.count(cursor, table_name, label_column, lib.SUCCESS)
-    not_success_count = db_client.count(cursor, table_name, label_column, lib.NOT_SUCCESS)
-    print "\nin table {0}:\nnumber of success: {1}\nnumber of not success: {2}".format(table_name, success_count, not_success_count)
+    lib.success_count = db_client.count(cursor, table_name, label_column, lib.SUCCESS)
+    lib.not_success_count = db_client.count(cursor, table_name, label_column, lib.NOT_SUCCESS)
+    print "\nin table {0}:\nnumber of success: {1}\nnumber of not success: {2}".format(table_name, lib.success_count, lib.not_success_count)
 
 
 def main():
@@ -377,24 +380,24 @@ def main():
     # init
     conn = sqlite3.connect(lib.DB_NAME)
 
-    """source_name = lib.RAW_ROAP_TABLE_NAME
+    source_name = lib.RAW_ROAP_TABLE_NAME
     table_name = lib.ROAP_TABLE_NAME
     edit_not_success_file = lib.EDIT_NOT_SUCCESS_FILE
     edit_success_file = lib.EDIT_SUCCESS_FILE
     labeled_edit_not_success_file = lib.LABELED_EDIT_NOT_SUCCESS
-    labeled_edit_success_file = lib.LABELED_EDIT_SUCCESS"""
+    labeled_edit_success_file = lib.LABELED_EDIT_SUCCESS
 
-    source_name = lib.FULL_RAW_ROAP_TABLE_NAME
+    """source_name = lib.FULL_RAW_ROAP_TABLE_NAME
     table_name = lib.FULL_ROAP_TABLE_NAME
     edit_not_success_file = lib.FULL_EDIT_NOT_SUCCESS_FILE
     edit_success_file = lib.FULL_EDIT_SUCCESS_FILE
     labeled_edit_not_success_file = lib.FULL_LABELED_EDIT_NOT_SUCCESS
-    labeled_edit_success_file = lib.FULL_LABELED_EDIT_SUCCESS
+    labeled_edit_success_file = lib.FULL_LABELED_EDIT_SUCCESS"""
 
     id_column = lib.intermediate_story_primary_key
     cursor = conn.cursor()
 
-    """db_client.delete_table(cursor, table_name)
+    db_client.delete_table(cursor, table_name)
     create_intermediate_table(cursor, table_name)
 
     assign_priliminary_label(cursor, source_name, table_name)
@@ -415,7 +418,7 @@ def main():
     fill_edit_remove_text(cursor, table_name, id_column)
     #test(cursor, 'Franklyidontgivearip')
     #treat_empty_text(cursor, table_name, id_column)
-    combine_title_and_text(cursor, table_name, id_column)"""
+    combine_title_and_text(cursor, table_name, id_column)
 
     label_count(cursor, table_name)
 
