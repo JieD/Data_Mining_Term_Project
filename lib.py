@@ -26,9 +26,13 @@ FILE_NAME = 'roap_info.txt'
 FULL_FILE_NAME = 'full_roap_info.txt'
 count = 0
 THRESHOLD = 1000
-OUT_FILE = 'data/data.csv'
-SUCCESS_FILE = 'data/success.txt'
-NOT_SUCCESS_FILE = 'data/not_success.txt'
+OVER_FILE = 'data/over_data.csv'
+UNDER_FILE = 'data/under_data.csv'
+FULL_OUT_FILE = 'data/full_data.csv'
+SUCCESS_OUT_FILE = 'data/success.csv'
+NOT_SUCCESS_OUT_FILE = 'data/not_success.csv'
+SUCCESS_TEXT_FILE = 'data/success_text.txt'
+NOT_SUCCESS_TEXT_FILE = 'data/not_success_text.txt'
 
 EDIT_NOT_SUCCESS_FILE = 'edit/edit_not_success.txt'
 EDIT_SUCCESS_FILE = 'edit/edit_success.txt'
@@ -107,6 +111,7 @@ INTERMEDIATE_FIELDS_DICT = {
     'tokenized_text': STRING_TYPE,
     'tokenized_stemmed_text': STRING_TYPE,
     'money': INTEGER_TYPE,
+    'time': INTEGER_TYPE,
     'job': INTEGER_TYPE,
     'student': INTEGER_TYPE,
     'family': INTEGER_TYPE,
@@ -161,7 +166,7 @@ INTERMEDIATE_ELIGIBLE_FIELDS_DICT = {
 sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
 stemmer = SnowballStemmer("english")
 stopwords = nltk.corpus.stopwords.words('english')
-custom_stopwords = ['\'m', 'n\'t', 'reddit', 'random', 'raop', 'edit', 'location']
+custom_stopwords = ['\'m', 'n\'t', 'reddit', 'redditor', 'random', 'raop', 'edit', 'location']
 
 total_text = []
 total_success_text = []
@@ -179,11 +184,15 @@ terms = []
 dist = []
 cluster_doc = 'cluster/doc_cluster.pkl'
 number_topics = 10
-number_topic_features = 15
+number_topic_features = 20
 
 kmeans_topics_doc = 'cluster/kmeans_topics.txt'
 nmf_topics_doc = 'cluster/nmf_topics.txt'
-topic_doc = 'cluster/topic_terms.txt'
+#topic_doc = 'cluster/topic_terms.txt'
+topic_doc = 'cluster/selected_topic_terms.txt'
 
 topic_term_dict = {}
-topic_threshold = 0.5
+
+success_count = 2083
+not_success_count = 15719
+file_header = ''
