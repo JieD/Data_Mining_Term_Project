@@ -190,7 +190,7 @@ def apply_tf_idf(text_list):
     print '\napply tf_idf'
     t0 = time()
     # define vectorizer parameters
-    tfidf_vectorizer = TfidfVectorizer(max_df=0.2, min_df=0.02, stop_words='english', tokenizer=tokenize_and_stem)
+    tfidf_vectorizer = TfidfVectorizer(max_df=0.3, min_df=0.01, stop_words='english', tokenizer=tokenize_and_stem)
     lib.tfidf_matrix = tfidf_vectorizer.fit_transform(text_list)  # fit the vectorizer to text_list
     print("done in %0.3fs." % (time() - t0))
     print(lib.tfidf_matrix.shape)
@@ -202,6 +202,8 @@ def apply_tf_idf(text_list):
 
 
 def apply_kmeans():
+    print 'apply kmeans:'
+    t0 = time()
     out_file = open(lib.kmeans_topics_doc, 'w')
     num_clusters = lib.number_topics
     km = KMeans(n_clusters=num_clusters)
@@ -209,10 +211,12 @@ def apply_kmeans():
     joblib.dump(km, lib.cluster_doc)
     #km = joblib.load(lib.cluster_doc)
     clusters = km.labels_.tolist()
+    print("done in %0.3fs." % (time() - t0))
 
     requests = {'name': lib.total_success_name, 'text': lib.total_success_text, 'cluster': clusters}
     frame = pd.DataFrame(requests, index=[clusters], columns=['name', 'cluster'])
     print '\ncluster counts:\n', frame['cluster'].value_counts(), '\n'  # number of stories per cluster
+    out_file.write('\ncluster counts:\n{0}\n\n'.format(frame['cluster'].value_counts()))
 
     #grouped = frame['rank'].groupby(frame['cluster']) #groupby cluster for aggregation purposes
     #print grouped.mean() #average rank (1 to 100) per cluster
@@ -223,7 +227,7 @@ def apply_kmeans():
     #print order_centroids
     for i in range(num_clusters):
         print "\nCluster {0} words:".format(i)
-
+        out_file.write('Cluster {0} words:\n'.format(i))
         """length = len(order_centroids[i])
         j = 0
         for index in order_centroids[i, :(length - 1)]:
@@ -236,12 +240,12 @@ def apply_kmeans():
                 print ' {0}'.format(lib.vocab_frame.ix[lib.terms[index].split(' ')].values.tolist()[0][0]),
         print '\n'"""
 
-        for index in order_centroids[i, :lib.number_topic_features]:  # replace 6 with n words per cluster
+        for index in order_centroids[i, :lib.number_topic_features]:  # n words per cluster
             term = lib.vocab_frame.ix[lib.terms[index].split(' ')].values.tolist()[0][0]
             print ' {0}'.format(term),
             out_file.write('{0} '.format(term))
         print '\n'
-        out_file.write('\n')
+        out_file.write('\n\n')
 
         """print "Cluster {0} names:".format(i)
         for name in frame.ix[i]['name'].values.tolist():
@@ -261,8 +265,9 @@ def apply_nmf():
     out_file = open(lib.nmf_topics_doc, 'w')
     for topic_idx, topic in enumerate(nmf.components_):
         print("Topic #%d:" % topic_idx)
+        out_file.write('Topic #{}:\n'.format(topic_idx))
         terms = " ".join([lib.terms[i] for i in topic.argsort()[:-lib.number_topic_features - 1:-1]])
-        out_file.write('{}\n'.format(terms))
+        out_file.write('{}\n\n'.format(terms))
         print terms
         print
     out_file.close()
@@ -308,13 +313,14 @@ def main():
 
     # init
     conn = sqlite3.connect(lib.DB_NAME)
-    table_name = lib.ROAP_TABLE_NAME
+    #table_name = lib.ROAP_TABLE_NAME
+    table_name = lib.FULL_ROAP_TABLE_NAME
     id_column = lib.intermediate_story_primary_key
     cursor = conn.cursor()
 
-    simple_text_analysis(cursor, table_name, id_column)
-    tokenize_and_count_length(cursor, table_name, id_column)
-    remove_stopwords_and_non_nouns(cursor, table_name, id_column)
+    #simple_text_analysis(cursor, table_name, id_column)
+    #tokenize_and_count_length(cursor, table_name, id_column)
+    #remove_stopwords_and_non_nouns(cursor, table_name, id_column)
 
     extract_text_for_analysis(cursor, table_name)
     create_word_stem_dictionary()
