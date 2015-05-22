@@ -1,10 +1,44 @@
-papa john tonight painful night care mom car pockets wife guys saving home house time 
-story work sob thing guys write broke night short something send feel pick hours please 
-jobs months years parents pay birthday morning home something thing start sound paycheck someone guys 
-broke house eating mom nothing time anything dad sucks buy tonight today years paycheck husband 
-account cards bank return pay tells exchange draw home trade dominos forward thursday happy work 
-kids work school baby way car dinner family point hot dominos husband love years today 
-today someone work alone years something trade anything girl sure place celebrate home lt way 
-rice bag couple sick jobs months past years looking bank make paycheck chicken account broke 
-tomorrow check tonight make bank mother dominos years hungry tax advance girl end verification dinner 
-hungry student college draw uk friends anyone forgot home offer request break noodles lives florida 
+
+cluster counts:
+6    793
+1    295
+2    197
+4    161
+3    129
+7    123
+0    119
+8    105
+5     85
+9     76
+dtype: int64
+
+Cluster 0 words:
+tonight dinner night thank family usa week help tomorrow food someone friday awesome cook work girlfriend school jobs money pay 
+
+Cluster 1 words:
+week food jobs money help months thank time work house broke friday day something ramen family rent anything please someone 
+
+Cluster 2 words:
+day work today help food money anything home time thank jobs something week someone things pie anyone please eat bit 
+
+Cluster 3 words:
+student college broke money food thank week eat finals help school jobs hungry someone poor time semester day meal university 
+
+Cluster 4 words:
+pay forward months week thank help friday jobs money rent day broke time paycheck check today someone bank tomorrow work 
+
+Cluster 5 words:
+story sob someone day thank want broke food time week hungry work anything bit night anyone request pay money guys 
+
+Cluster 6 words:
+help money friends thank work anyone broke night home time guys year someone months family want jobs something please ramen 
+
+Cluster 7 words:
+hungry broke help day family anyone money week student thank want eat story kindness friday request food tx couple empty 
+
+Cluster 8 words:
+birthday today year jobs day sons tomorrow dinner work food something money party friends months home family daughter anything thank 
+
+Cluster 9 words:
+wife draw something work help anything pictures time kids things week want hungry art money year home months jobs sure 
+
