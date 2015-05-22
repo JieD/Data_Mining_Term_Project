@@ -1,6 +1,7 @@
 import sqlite3
 import sys
 import re
+import codecs
 import lib
 import db_client
 import export
@@ -269,11 +270,14 @@ def read_labeled_edits(cursor, table_name, id_column, file_name):
     num_outliers = 0
     in_file = open(file_name, 'r')
     line = in_file.readline()
+    line = in_file.readline()
     while line != '':
         edits = []
-        while line != '\n' and line != '':  # read all sentences between empty lines
+        while line != '\r\n' and line != '\n' and line != '':  # read all sentences between empty lines
             edits.append(line.strip())
             line = in_file.readline()
+
+        #print edits
         label = int(edits[0])
         name = edits[1]
         edit_sents = edits[2:]
@@ -281,12 +285,12 @@ def read_labeled_edits(cursor, table_name, id_column, file_name):
             edits = ' '.join(edit_sents)
             #print name
             row = db_client.select_condition_no(cursor, table_name, id_column, name, 'edit_remove_text').fetchone()
+            request_text = edits
             if row is not None:
                 edits_remove = row[0]
-                request_text = edits_remove + edits
-            else:
-                request_text = edits
-            db_client.update(cursor, table_name, id_column, name, 'edit_remove_text', request_text)
+                if edits_remove:
+                    request_text = edits_remove + edits
+            db_client.update(cursor, table_name, id_column, name, 'edit_remove_text', request_text.decode('utf-8'))
 
         if label == 1:  # change label to success
             num_success += 1
@@ -296,7 +300,6 @@ def read_labeled_edits(cursor, table_name, id_column, file_name):
             num_outliers += 1
             #print name, '\n'
             db_client.delete(cursor, table_name, id_column, name)
-
         line = in_file.readline()
     # EOF
     in_file.close()
@@ -326,6 +329,7 @@ def treat_empty_text(cursor, table_name, id_column):
 
 
 def combine_title_and_text(cursor, table_name, id_column):
+    print '\ncombine title and text'
     cursor = db_client.select_all(cursor, table_name, id_column, 'title', 'edit_remove_text')
     all_rows = cursor.fetchall()
 
@@ -373,19 +377,24 @@ def main():
     # init
     conn = sqlite3.connect(lib.DB_NAME)
 
-    source_name = lib.RAW_ROAP_TABLE_NAME
+    """source_name = lib.RAW_ROAP_TABLE_NAME
     table_name = lib.ROAP_TABLE_NAME
     edit_not_success_file = lib.EDIT_NOT_SUCCESS_FILE
     edit_success_file = lib.EDIT_SUCCESS_FILE
-    """source_name = lib.FULL_RAW_ROAP_TABLE_NAME
+    labeled_edit_not_success_file = lib.LABELED_EDIT_NOT_SUCCESS
+    labeled_edit_success_file = lib.LABELED_EDIT_SUCCESS"""
+
+    source_name = lib.FULL_RAW_ROAP_TABLE_NAME
     table_name = lib.FULL_ROAP_TABLE_NAME
     edit_not_success_file = lib.FULL_EDIT_NOT_SUCCESS_FILE
-    edit_success_file = lib.FULL_EDIT_SUCCESS_FILE"""
+    edit_success_file = lib.FULL_EDIT_SUCCESS_FILE
+    labeled_edit_not_success_file = lib.FULL_LABELED_EDIT_NOT_SUCCESS
+    labeled_edit_success_file = lib.FULL_LABELED_EDIT_SUCCESS
 
     id_column = lib.intermediate_story_primary_key
     cursor = conn.cursor()
 
-    db_client.delete_table(cursor, table_name)
+    """db_client.delete_table(cursor, table_name)
     create_intermediate_table(cursor, table_name)
 
     assign_priliminary_label(cursor, source_name, table_name)
@@ -393,20 +402,20 @@ def main():
     label_unsuccessful_request(cursor, table_name, id_column)
     cpy_rest(cursor, source_name, table_name)
     #test(cursor, '')
-
     #choose_first_request(cursor, table_name)
 
-    print '\nextract edits\n'
+    print '\nextract edits'
     extract_edit_sentences(cursor, table_name, id_column, lib.NOT_SUCCESS, edit_not_success_file)
     extract_edit_sentences(cursor, table_name, id_column, lib.SUCCESS, edit_success_file)
 
-    print 'read labels:'
-    read_labeled_edits(cursor, table_name, id_column, lib.LABELED_EDIT_NOT_SUCCESS)
-    read_labeled_edits(cursor, table_name, id_column, lib.LABELED_EDIT_SUCCESS)
+    print '\nread labels:'
+    read_labeled_edits(cursor, table_name, id_column, labeled_edit_not_success_file)
+    read_labeled_edits(cursor, table_name, id_column, labeled_edit_success_file)
+
     fill_edit_remove_text(cursor, table_name, id_column)
     #test(cursor, 'Franklyidontgivearip')
     #treat_empty_text(cursor, table_name, id_column)
-    combine_title_and_text(cursor, table_name, id_column)
+    combine_title_and_text(cursor, table_name, id_column)"""
 
     label_count(cursor, table_name)
 
