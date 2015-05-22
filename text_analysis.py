@@ -13,10 +13,12 @@ import re
 import os
 import codecs
 from sklearn import feature_extraction
+from random import randint
 
 
 # fetch topic & terms to dictionary
 def read_topics():
+    print '\nread topics and terms'
     in_file = open(lib.topic_doc, 'r')
     while 1:
         line = in_file.readline()
@@ -32,6 +34,7 @@ def read_topics():
 
 
 def assign_topics(cursor, table_name, id_column):
+    print '\nassign topic frequencies'
     cursor = db_client.select_all(cursor, table_name, id_column, 'tokenized_text')
     all_rows = cursor.fetchall()
     for row in all_rows:
@@ -62,21 +65,76 @@ def assign_topics(cursor, table_name, id_column):
         db_client.update(cursor, table_name, id_column, name, 'topic', max_topic)"""
 
 
+# oversampling and undersampling
+def resampling():
+    count_dif = lib.not_success_count - lib.success_count
+    success_list = read_file_to_list(lib.SUCCESS_OUT_FILE)
+    not_success_list = read_file_to_list(lib.NOT_SUCCESS_OUT_FILE)
+
+    success_index = []
+    not_success_index = []
+    for i in range(0, count_dif):
+        success_index.append(randint(0, lib.success_count - 1))
+    for j in range(0, lib.success_count):
+        not_success_index.append(randint(0, lib.not_success_count - 1))
+
+    write_file(success_list, success_index, not_success_list, lib.OVER_FILE)
+    write_file(not_success_list, not_success_index, success_list, lib.UNDER_FILE)
+
+    out_file = open(lib.OVER_FILE, 'a')
+    for line in success_list:
+        out_file.write(line)
+    out_file.close()
+
+
+# read the file by line and save to list
+def read_file_to_list(file_name):
+    in_file = open(file_name, 'r')
+    lib.file_header = in_file.readline()  # skip header
+    save_list = []
+    while 1:
+        line = in_file.readline()
+        if line == '':  # EOF
+            in_file.close()
+            break
+        save_list.append(line)
+    return save_list
+
+
+# write selected items from lists to out_file
+def write_file(source_list, index_list, add_list, out_file_name):
+    out_file = open(out_file_name, 'w')
+    out_file.write(lib.file_header)
+    for i in range(0, len(index_list)):
+        index = index_list[i]
+        out_file.write(source_list[index])
+    for i in range(0, len(add_list)):
+        out_file.write(add_list[i])
+    out_file.close()
+
+
 def main():
     reload(sys)
     sys.setdefaultencoding("utf-8")
 
     # init
     conn = sqlite3.connect(lib.DB_NAME)
-    table_name = lib.ROAP_TABLE_NAME
+    """table_name = lib.ROAP_TABLE_NAME
+    out_file = lib.OUT_FILE"""
+    table_name = lib.FULL_ROAP_TABLE_NAME
+    out_file = lib.FULL_OUT_FILE
+    success_out_file = lib.SUCCESS_OUT_FILE
+    not_success_out_file = lib.NOT_SUCCESS_OUT_FILE
     id_column = lib.intermediate_story_primary_key
     cursor = conn.cursor()
 
-    read_topics()
-    assign_topics(cursor, table_name, id_column)
+    #read_topics()
+    #assign_topics(cursor, table_name, id_column)
 
-    export.write(conn, table_name, lib.OUT_FILE, 'ups', 'num_comments', 'image_provided', 'reciprocate',
-                 'exchange', 'text_length', 'money', 'job', 'student', 'family', 'craving', 'label')
+    export.write(conn, table_name, not_success_out_file, success_out_file, 'ups', 'num_comments', 'image_provided', 'reciprocate',
+                 'exchange', 'text_length', 'money', 'time', 'job', 'student', 'family', 'craving', 'label')
+
+    resampling()
 
     conn.commit()
     conn.close()
