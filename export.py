@@ -52,14 +52,18 @@ def write(conn, table_name, csv_file_name, column_list):
     writer.writerows(data)
 
 
-def write(conn, table_name, csv_file_name, *args):
+def write(conn, table_name, not_success_file_name, success_file_name, *args):
     columns = db_client.combine_columns(*args)
     cursor = conn.cursor()
     not_success = db_client.select_condition_no(cursor, table_name, lib.story_label, lib.NOT_SUCCESS, *args)
     #data = cursor.execute("SELECT {cns} FROM {tn}".format(cns=columns, tn=table_name))
-    writer = UnicodeWriter(open(csv_file_name, "wb"))
+    writer = UnicodeWriter(open(not_success_file_name, "wb"))
     writer.writerow(args)
     writer.writerows(not_success)
-    for i in range(0, 9):
+    """for i in range(0, 1):
         success = db_client.select_condition_no(cursor, table_name, lib.story_label, lib.SUCCESS, *args)
-        writer.writerows(success)
+        writer.writerows(success)"""
+    writer = UnicodeWriter(open(success_file_name, "wb"))
+    writer.writerow(args)
+    success = db_client.select_condition_no(cursor, table_name, lib.story_label, lib.SUCCESS, *args)
+    writer.writerows(success)
