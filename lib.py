@@ -28,6 +28,7 @@ count = 0
 THRESHOLD = 1000
 OVER_FILE = 'data/over_data.csv'
 UNDER_FILE = 'data/under_data.csv'
+OUT_FILE = 'data/data.csv'
 FULL_OUT_FILE = 'data/full_data.csv'
 SUCCESS_OUT_FILE = 'data/success.csv'
 NOT_SUCCESS_OUT_FILE = 'data/not_success.csv'
@@ -76,6 +77,7 @@ RAW_FIELDS_DICT = {'approved_by':   STRING_TYPE,  'archived': STRING_TYPE,  'aut
                    'thumbnail':     STRING_TYPE,  'title':        STRING_TYPE,  'ups':           INTEGER_TYPE,
                    'url':           STRING_TYPE}
 
+USER_INFO_DICT = {'comment_karma': INTEGER_TYPE, 'link_karma': INTEGER_TYPE, 'account_created_utc': FLOAT_TYPE}
 
 story_label = 'label'
 story_label_type = STRING_TYPE
@@ -95,6 +97,9 @@ INTERMEDIATE_FIELDS_DICT = {
     story_label: story_label_type,
     'giver_username': STRING_TYPE,
     'author': STRING_TYPE,
+    'comment_karma': INTEGER_TYPE,
+    'link_karma': INTEGER_TYPE,
+    'account_created_utc': FLOAT_TYPE,
     'author_flair_css_class': STRING_TYPE,
     'edited': INTEGER_TYPE,
     'num_comments': INTEGER_TYPE,
