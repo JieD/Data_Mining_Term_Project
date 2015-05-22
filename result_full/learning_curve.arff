@@ -1,0 +1,27 @@
+Tester:     weka.experiment.PairedCorrectedTTester
+Analysing:  Percent_correct
+Datasets:   1
+Resultsets: 9
+Confidence: 0.05 (two tailed)
+Sorted by:  -
+Date:       5/21/15 12:34 AM
+
+
+Dataset                   (1) meta.Fil | (2) meta. (3) meta. (4) meta. (5) meta. (6) meta. (7) meta. (8) meta. (9) meta.
+------------------------------------------------------------------------------------------------------------------------
+full_data                (100)   75.41 |   78.65 v   81.77 v   84.57 v   86.73 v   88.72 v   90.08 v   91.09 v   91.88 v
+------------------------------------------------------------------------------------------------------------------------
+                               (v/ /*) |   (1/0/0)   (1/0/0)   (1/0/0)   (1/0/0)   (1/0/0)   (1/0/0)   (1/0/0)   (1/0/0)
+
+
+Key:
+(1) meta.FilteredClassifier '-F \"unsupervised.instance.RemovePercentage -P 90.0\" -W trees.J48 -- -C 0.25 -M 2' -4523450618538717400
+(2) meta.FilteredClassifier '-F \"unsupervised.instance.RemovePercentage -P 80.0\" -W trees.J48 -- -C 0.25 -M 2' -4523450618538717400
+(3) meta.FilteredClassifier '-F \"unsupervised.instance.RemovePercentage -P 70.0\" -W trees.J48 -- -C 0.25 -M 2' -4523450618538717400
+(4) meta.FilteredClassifier '-F \"unsupervised.instance.RemovePercentage -P 60.0\" -W trees.J48 -- -C 0.25 -M 2' -4523450618538717400
+(5) meta.FilteredClassifier '-F \"unsupervised.instance.RemovePercentage -P 50.0\" -W trees.J48 -- -C 0.25 -M 2' -4523450618538717400
+(6) meta.FilteredClassifier '-F \"unsupervised.instance.RemovePercentage -P 40.0\" -W trees.J48 -- -C 0.25 -M 2' -4523450618538717400
+(7) meta.FilteredClassifier '-F \"unsupervised.instance.RemovePercentage -P 30.0\" -W trees.J48 -- -C 0.25 -M 2' -4523450618538717400
+(8) meta.FilteredClassifier '-F \"unsupervised.instance.RemovePercentage -P 20.0\" -W trees.J48 -- -C 0.25 -M 2' -4523450618538717400
+(9) meta.FilteredClassifier '-F \"unsupervised.instance.RemovePercentage -P 10.0\" -W trees.J48 -- -C 0.25 -M 2' -4523450618538717400
+

@@ -1,44 +1,44 @@
 
 cluster counts:
-6    793
-1    295
-2    197
-4    161
-3    129
-7    123
-0    119
-8    105
-5     85
-9     76
+3    24
+0    22
+7    21
+5    20
+2    19
+1    19
+8    14
+4    13
+9     7
+6     6
 dtype: int64
 
 Cluster 0 words:
-tonight dinner night thank family usa week help tomorrow food someone friday awesome cook work girlfriend school jobs money pay 
+college student anyone yesterday thank week hungry work pay broke make account friday help ramen husband time noodles bank people 
 
 Cluster 1 words:
-week food jobs money help months thank time work house broke friday day something ramen family rent anything please someone 
+anything draw return story sob exchange something jokes want eating request hungry dominos thank acts person work hall tells dick 
 
 Cluster 2 words:
-day work today help food money anything home time thank jobs something week someone things pie anyone please eat bit 
+hungry house hut broke home fridge mom mother feed today offer nothing john uk money stuck help request dominos lives 
 
 Cluster 3 words:
-student college broke money food thank week eat finals help school jobs hungry someone poor time semester day meal university 
+months jobs dinner money thing morning pay lunch moment couple payday parents broke right thank income game years gon plenty 
 
 Cluster 4 words:
-pay forward months week thank help friday jobs money rent day broke time paycheck check today someone bank tomorrow work 
+pie money help someone place celebrate week country regardless night mom tomorrow today fl fellow dog care kindness friends wife 
 
 Cluster 5 words:
-story sob someone day thank want broke food time week hungry work anything bit night anyone request pay money guys 
+week jobs guys paycheck tonight buy thank hours unemployment pay check need years lt boss awesome tomorrow time start employment 
 
 Cluster 6 words:
-help money friends thank work anyone broke night home time guys year someone months family want jobs something please ramen 
+write short poem song youtube impress stuff story night tonight pleasure resources wish honor amp cents thing pockets monday grub 
 
 Cluster 7 words:
-hungry broke help day family anyone money week student thank want eat story kindness friday request food tx couple empty 
+today work years kids school time alone car help someone sons feel wisconsin money girlfriend way characters valentines cards spend 
 
 Cluster 8 words:
-birthday today year jobs day sons tomorrow dinner work food something money party friends months home family daughter anything thank 
+rice account bank help dollars thank beans tomorrow time got sick home years couple leave make refund poor lunchtime meal 
 
 Cluster 9 words:
-wife draw something work help anything pictures time kids things week want hungry art money year home months jobs sure 
+birthday idea something throw cheers news home house years grandfather worth tn shot feel share trade pie someone boyfriend hospital 
 

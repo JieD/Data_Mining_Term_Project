@@ -1,0 +1,341 @@
+=== Run information ===
+
+Scheme:weka.classifiers.trees.J48 -C 0.25 -M 2
+Relation:     full_data
+Instances:    17802
+Attributes:   13
+              ups
+              num_comments
+              image_provided
+              reciprocate
+              exchange
+              text_length
+              money
+              time
+              job
+              student
+              family
+              craving
+              label
+Test mode:10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+J48 pruned tree
+------------------
+
+text_length <= 15
+|   num_comments <= 1
+|   |   text_length <= 9
+|   |   |   num_comments <= 0: no_pizza (93.0/23.0)
+|   |   |   num_comments > 0
+|   |   |   |   time <= 1
+|   |   |   |   |   student <= 0
+|   |   |   |   |   |   money <= 0
+|   |   |   |   |   |   |   ups <= 1: no_pizza (14.0/5.0)
+|   |   |   |   |   |   |   ups > 1
+|   |   |   |   |   |   |   |   ups <= 4: got_pizza (17.0/2.0)
+|   |   |   |   |   |   |   |   ups > 4: no_pizza (7.0/1.0)
+|   |   |   |   |   |   money > 0: got_pizza (4.0)
+|   |   |   |   |   student > 0
+|   |   |   |   |   |   ups <= 2: no_pizza (3.0)
+|   |   |   |   |   |   ups > 2: got_pizza (2.0)
+|   |   |   |   time > 1: no_pizza (3.0)
+|   |   text_length > 9: no_pizza (314.0/40.0)
+|   num_comments > 1
+|   |   ups <= 1
+|   |   |   text_length <= 9
+|   |   |   |   text_length <= 3: no_pizza (2.0)
+|   |   |   |   text_length > 3: got_pizza (36.0/10.0)
+|   |   |   text_length > 9
+|   |   |   |   craving <= 0
+|   |   |   |   |   money <= 0: no_pizza (54.0/10.0)
+|   |   |   |   |   money > 0
+|   |   |   |   |   |   student <= 1
+|   |   |   |   |   |   |   family <= 0
+|   |   |   |   |   |   |   |   num_comments <= 7
+|   |   |   |   |   |   |   |   |   num_comments <= 2: got_pizza (3.0/1.0)
+|   |   |   |   |   |   |   |   |   num_comments > 2: no_pizza (3.0)
+|   |   |   |   |   |   |   |   num_comments > 7: got_pizza (4.0)
+|   |   |   |   |   |   |   family > 0: got_pizza (2.0)
+|   |   |   |   |   |   student > 1: no_pizza (3.0)
+|   |   |   |   craving > 0: got_pizza (6.0/2.0)
+|   |   ups > 1
+|   |   |   text_length <= 11
+|   |   |   |   craving <= 0: got_pizza (200.0/49.0)
+|   |   |   |   craving > 0
+|   |   |   |   |   ups <= 3: no_pizza (4.0)
+|   |   |   |   |   ups > 3: got_pizza (8.0)
+|   |   |   text_length > 11
+|   |   |   |   num_comments <= 2
+|   |   |   |   |   money <= 0: no_pizza (12.0/1.0)
+|   |   |   |   |   money > 0
+|   |   |   |   |   |   time <= 0: got_pizza (4.0/1.0)
+|   |   |   |   |   |   time > 0: no_pizza (2.0)
+|   |   |   |   num_comments > 2
+|   |   |   |   |   job <= 0: got_pizza (111.0/37.0)
+|   |   |   |   |   job > 0
+|   |   |   |   |   |   ups <= 3: got_pizza (3.0/1.0)
+|   |   |   |   |   |   ups > 3: no_pizza (3.0)
+text_length > 15
+|   num_comments <= 0: no_pizza (7855.0/247.0)
+|   num_comments > 0
+|   |   time <= 3
+|   |   |   text_length <= 101
+|   |   |   |   num_comments <= 2: no_pizza (2345.0/323.0)
+|   |   |   |   num_comments > 2
+|   |   |   |   |   text_length <= 19
+|   |   |   |   |   |   craving <= 0
+|   |   |   |   |   |   |   money <= 0
+|   |   |   |   |   |   |   |   ups <= 1
+|   |   |   |   |   |   |   |   |   time <= 0: no_pizza (14.0/2.0)
+|   |   |   |   |   |   |   |   |   time > 0
+|   |   |   |   |   |   |   |   |   |   ups <= 0: got_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   ups > 0: no_pizza (3.0)
+|   |   |   |   |   |   |   |   ups > 1
+|   |   |   |   |   |   |   |   |   job <= 0: got_pizza (54.0/23.0)
+|   |   |   |   |   |   |   |   |   job > 0
+|   |   |   |   |   |   |   |   |   |   time <= 1
+|   |   |   |   |   |   |   |   |   |   |   text_length <= 17: got_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   text_length > 17: no_pizza (6.0/2.0)
+|   |   |   |   |   |   |   |   |   |   time > 1: no_pizza (2.0)
+|   |   |   |   |   |   |   money > 0
+|   |   |   |   |   |   |   |   student <= 0: got_pizza (24.0/7.0)
+|   |   |   |   |   |   |   |   student > 0: no_pizza (7.0/2.0)
+|   |   |   |   |   |   craving > 0
+|   |   |   |   |   |   |   text_length <= 18: no_pizza (11.0/1.0)
+|   |   |   |   |   |   |   text_length > 18
+|   |   |   |   |   |   |   |   num_comments <= 7: no_pizza (3.0/1.0)
+|   |   |   |   |   |   |   |   num_comments > 7: got_pizza (2.0)
+|   |   |   |   |   text_length > 19
+|   |   |   |   |   |   time <= 1
+|   |   |   |   |   |   |   reciprocate <= 0
+|   |   |   |   |   |   |   |   family <= 1
+|   |   |   |   |   |   |   |   |   ups <= 4
+|   |   |   |   |   |   |   |   |   |   exchange <= 0
+|   |   |   |   |   |   |   |   |   |   |   text_length <= 67: no_pizza (519.0/107.0)
+|   |   |   |   |   |   |   |   |   |   |   text_length > 67
+|   |   |   |   |   |   |   |   |   |   |   |   student <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   time <= 0: got_pizza (26.0/12.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   time > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   money <= 0: no_pizza (26.0/7.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   money > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   num_comments <= 3: no_pizza (11.0/2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   num_comments > 3
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups <= 2: got_pizza (9.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups > 2
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length <= 78: no_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length > 78: got_pizza (6.0/2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   student > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   num_comments <= 8: no_pizza (17.0/2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   num_comments > 8: got_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   exchange > 0
+|   |   |   |   |   |   |   |   |   |   |   text_length <= 31: got_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   text_length > 31: no_pizza (25.0/2.0)
+|   |   |   |   |   |   |   |   |   ups > 4
+|   |   |   |   |   |   |   |   |   |   money <= 1
+|   |   |   |   |   |   |   |   |   |   |   image_provided <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   craving <= 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   money <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   job <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   family <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   student <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   time <= 0: no_pizza (86.0/38.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   time > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups <= 5: no_pizza (7.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups > 5
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length <= 43: no_pizza (33.0/9.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length > 43: got_pizza (19.0/6.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   student > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   craving <= 0: no_pizza (14.0/3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   craving > 0: got_pizza (3.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   family > 0: got_pizza (24.0/11.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   job > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   time <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   num_comments <= 12
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   num_comments <= 4
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length <= 37: got_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length > 37: no_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   num_comments > 4: no_pizza (10.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   num_comments > 12: got_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   time > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   craving <= 0: no_pizza (11.0/2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   craving > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups <= 9: got_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups > 9: no_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   money > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length <= 67
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   job <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   family <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length <= 29: got_pizza (17.0/6.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length > 29
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   student <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   time <= 0: no_pizza (22.0/6.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   time > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups <= 8: no_pizza (12.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups > 8: got_pizza (7.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   student > 0: no_pizza (9.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   family > 0: no_pizza (8.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   job > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups <= 22: got_pizza (5.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups > 22: no_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length > 67: got_pizza (18.0/2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   craving > 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   text_length <= 75
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   num_comments <= 3: got_pizza (3.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   num_comments > 3: no_pizza (19.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   text_length > 75: got_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   image_provided > 0
+|   |   |   |   |   |   |   |   |   |   |   |   time <= 0: no_pizza (16.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   time > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   num_comments <= 4: no_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   num_comments > 4
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length <= 33: no_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length > 33: got_pizza (6.0)
+|   |   |   |   |   |   |   |   |   |   money > 1: no_pizza (67.0/14.0)
+|   |   |   |   |   |   |   |   family > 1: no_pizza (65.0/5.0)
+|   |   |   |   |   |   |   reciprocate > 0
+|   |   |   |   |   |   |   |   text_length <= 54
+|   |   |   |   |   |   |   |   |   time <= 0
+|   |   |   |   |   |   |   |   |   |   ups <= 2: no_pizza (5.0/1.0)
+|   |   |   |   |   |   |   |   |   |   ups > 2: got_pizza (11.0/4.0)
+|   |   |   |   |   |   |   |   |   time > 0: no_pizza (31.0/10.0)
+|   |   |   |   |   |   |   |   text_length > 54: got_pizza (43.0/11.0)
+|   |   |   |   |   |   time > 1
+|   |   |   |   |   |   |   ups <= 30: no_pizza (1036.0/185.0)
+|   |   |   |   |   |   |   ups > 30
+|   |   |   |   |   |   |   |   job <= 1
+|   |   |   |   |   |   |   |   |   reciprocate <= 0
+|   |   |   |   |   |   |   |   |   |   time <= 2: no_pizza (13.0/3.0)
+|   |   |   |   |   |   |   |   |   |   time > 2
+|   |   |   |   |   |   |   |   |   |   |   num_comments <= 20: got_pizza (4.0)
+|   |   |   |   |   |   |   |   |   |   |   num_comments > 20: no_pizza (2.0)
+|   |   |   |   |   |   |   |   |   reciprocate > 0: got_pizza (4.0/1.0)
+|   |   |   |   |   |   |   |   job > 1: got_pizza (2.0)
+|   |   |   text_length > 101
+|   |   |   |   reciprocate <= 0
+|   |   |   |   |   time <= 2
+|   |   |   |   |   |   text_length <= 187
+|   |   |   |   |   |   |   student <= 0
+|   |   |   |   |   |   |   |   time <= 1
+|   |   |   |   |   |   |   |   |   job <= 2
+|   |   |   |   |   |   |   |   |   |   exchange <= 0
+|   |   |   |   |   |   |   |   |   |   |   time <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   ups <= 2: no_pizza (9.0)
+|   |   |   |   |   |   |   |   |   |   |   |   ups > 2
+|   |   |   |   |   |   |   |   |   |   |   |   |   family <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   job <= 0: no_pizza (7.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   job > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups <= 4: got_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups > 4: no_pizza (3.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   family > 0: got_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   time > 0
+|   |   |   |   |   |   |   |   |   |   |   |   image_provided <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   craving <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   num_comments <= 9
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   money <= 1: no_pizza (20.0/5.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   money > 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   num_comments <= 4: got_pizza (7.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   num_comments > 4: no_pizza (5.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   num_comments > 9: got_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   craving > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   family <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups <= 2: no_pizza (4.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups > 2
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length <= 114: no_pizza (3.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length > 114: got_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   family > 0: no_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   image_provided > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   text_length <= 134: no_pizza (5.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   text_length > 134: got_pizza (4.0)
+|   |   |   |   |   |   |   |   |   |   exchange > 0
+|   |   |   |   |   |   |   |   |   |   |   text_length <= 117: no_pizza (8.0/2.0)
+|   |   |   |   |   |   |   |   |   |   |   text_length > 117: got_pizza (6.0)
+|   |   |   |   |   |   |   |   |   job > 2: got_pizza (6.0/1.0)
+|   |   |   |   |   |   |   |   time > 1: no_pizza (112.0/33.0)
+|   |   |   |   |   |   |   student > 0
+|   |   |   |   |   |   |   |   num_comments <= 5
+|   |   |   |   |   |   |   |   |   time <= 0: got_pizza (6.0/1.0)
+|   |   |   |   |   |   |   |   |   time > 0
+|   |   |   |   |   |   |   |   |   |   student <= 4: no_pizza (41.0/14.0)
+|   |   |   |   |   |   |   |   |   |   student > 4: got_pizza (2.0)
+|   |   |   |   |   |   |   |   num_comments > 5: got_pizza (13.0/3.0)
+|   |   |   |   |   |   text_length > 187
+|   |   |   |   |   |   |   job <= 3: got_pizza (23.0/3.0)
+|   |   |   |   |   |   |   job > 3: no_pizza (2.0)
+|   |   |   |   |   time > 2: no_pizza (212.0/55.0)
+|   |   |   |   reciprocate > 0
+|   |   |   |   |   exchange <= 0
+|   |   |   |   |   |   time <= 2
+|   |   |   |   |   |   |   craving <= 1
+|   |   |   |   |   |   |   |   craving <= 0
+|   |   |   |   |   |   |   |   |   time <= 1
+|   |   |   |   |   |   |   |   |   |   family <= 1
+|   |   |   |   |   |   |   |   |   |   |   money <= 1: got_pizza (3.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   money > 1
+|   |   |   |   |   |   |   |   |   |   |   |   ups <= 2: got_pizza (6.0)
+|   |   |   |   |   |   |   |   |   |   |   |   ups > 2: no_pizza (5.0/1.0)
+|   |   |   |   |   |   |   |   |   |   family > 1: no_pizza (3.0/1.0)
+|   |   |   |   |   |   |   |   |   time > 1
+|   |   |   |   |   |   |   |   |   |   student <= 1
+|   |   |   |   |   |   |   |   |   |   |   student <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   money <= 2: got_pizza (9.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   money > 2
+|   |   |   |   |   |   |   |   |   |   |   |   |   num_comments <= 1: got_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   num_comments > 1: no_pizza (8.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   student > 0: got_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   student > 1: no_pizza (2.0)
+|   |   |   |   |   |   |   |   craving > 0: got_pizza (9.0/1.0)
+|   |   |   |   |   |   |   craving > 1: no_pizza (4.0/1.0)
+|   |   |   |   |   |   time > 2
+|   |   |   |   |   |   |   craving <= 2
+|   |   |   |   |   |   |   |   money <= 2
+|   |   |   |   |   |   |   |   |   student <= 0
+|   |   |   |   |   |   |   |   |   |   job <= 1
+|   |   |   |   |   |   |   |   |   |   |   ups <= 2
+|   |   |   |   |   |   |   |   |   |   |   |   ups <= 0: got_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   ups > 0: no_pizza (11.0/4.0)
+|   |   |   |   |   |   |   |   |   |   |   ups > 2: got_pizza (8.0/1.0)
+|   |   |   |   |   |   |   |   |   |   job > 1: no_pizza (5.0/1.0)
+|   |   |   |   |   |   |   |   |   student > 0: got_pizza (3.0)
+|   |   |   |   |   |   |   |   money > 2
+|   |   |   |   |   |   |   |   |   num_comments <= 3: no_pizza (13.0)
+|   |   |   |   |   |   |   |   |   num_comments > 3
+|   |   |   |   |   |   |   |   |   |   craving <= 0: got_pizza (7.0/1.0)
+|   |   |   |   |   |   |   |   |   |   craving > 0: no_pizza (5.0/1.0)
+|   |   |   |   |   |   |   craving > 2: no_pizza (3.0)
+|   |   |   |   |   exchange > 0: got_pizza (6.0)
+|   |   time > 3: no_pizza (3627.0/268.0)
+
+Number of Leaves  : 	142
+
+Size of the tree : 	283
+
+
+Time taken to build model: 0.73 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances       15748               88.462  %
+Incorrectly Classified Instances      2054               11.538  %
+Kappa statistic                          0.2506
+Mean absolute error                      0.1693
+Root mean squared error                  0.3073
+Relative absolute error                 81.9126 %
+Root relative squared error             95.6138 %
+Total Number of Instances            17802     
+
+=== Detailed Accuracy By Class ===
+
+               TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
+                 0.974     0.787      0.903     0.974     0.937      0.758    no_pizza
+                 0.213     0.026      0.517     0.213     0.302      0.758    got_pizza
+Weighted Avg.    0.885     0.698      0.858     0.885     0.863      0.758
+
+=== Confusion Matrix ===
+
+     a     b   <-- classified as
+ 15304   415 |     a = no_pizza
+  1639   444 |     b = got_pizza
+

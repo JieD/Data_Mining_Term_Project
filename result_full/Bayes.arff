@@ -1,0 +1,130 @@
+=== Run information ===
+
+Scheme:weka.classifiers.bayes.NaiveBayes 
+Relation:     full_data
+Instances:    32383
+Attributes:   13
+              ups
+              num_comments
+              image_provided
+              reciprocate
+              exchange
+              text_length
+              money
+              time
+              job
+              student
+              family
+              craving
+              label
+Test mode:10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+Naive Bayes Classifier
+
+                     Class
+Attribute         no_pizza got_pizza
+                    (0.49)    (0.51)
+=====================================
+ups
+  mean               3.5252    6.6278
+  std. dev.          7.2229    11.599
+  weight sum          15719     16664
+  precision          3.7222    3.7222
+
+num_comments
+  mean               1.9203    4.6825
+  std. dev.          4.2455    6.4484
+  weight sum          15719     16664
+  precision          2.7321    2.7321
+
+image_provided
+  mean               0.0378    0.0432
+  std. dev.          0.1907    0.2033
+  weight sum          15719     16664
+  precision               1         1
+
+reciprocate
+  mean               0.1422    0.1488
+  std. dev.          0.3492    0.3559
+  weight sum          15719     16664
+  precision               1         1
+
+exchange
+  mean               0.0331    0.0365
+  std. dev.           0.179    0.1875
+  weight sum          15719     16664
+  precision               1         1
+
+text_length
+  mean              78.1131   72.2186
+  std. dev.         65.7845   67.6501
+  weight sum          15719     16664
+  precision          3.3111    3.3111
+
+money
+  mean               1.5445    1.1058
+  std. dev.          1.8376    1.4786
+  weight sum          15719     16664
+  precision          1.1364    1.1364
+
+time
+  mean               3.6377    1.8081
+  std. dev.          3.4977    1.9465
+  weight sum          15719     16664
+  precision           1.275     1.275
+
+job
+  mean               0.6846    0.4592
+  std. dev.          1.2471    0.9609
+  weight sum          15719     16664
+  precision          1.1765    1.1765
+
+student
+  mean               0.5792    0.4098
+  std. dev.          1.2074    0.9963
+  weight sum          15719     16664
+  precision          1.1429    1.1429
+
+family
+  mean               0.2904    0.2548
+  std. dev.          1.0803    0.9846
+  weight sum          15719     16664
+  precision          2.6667    2.6667
+
+craving
+  mean               0.4565    0.3189
+  std. dev.          0.9526    0.7945
+  weight sum          15719     16664
+  precision          1.0909    1.0909
+
+
+
+Time taken to build model: 0.15 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances       20769               64.1355 %
+Incorrectly Classified Instances     11614               35.8645 %
+Kappa statistic                          0.2782
+Mean absolute error                      0.394 
+Root mean squared error                  0.4839
+Relative absolute error                 78.8761 %
+Root relative squared error             96.8292 %
+Total Number of Instances            32383     
+
+=== Detailed Accuracy By Class ===
+
+               TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
+                 0.535     0.258      0.661     0.535     0.592      0.713    no_pizza
+                 0.742     0.465      0.628     0.742     0.68       0.713    got_pizza
+Weighted Avg.    0.641     0.365      0.644     0.641     0.637      0.713
+
+=== Confusion Matrix ===
+
+     a     b   <-- classified as
+  8410  7309 |     a = no_pizza
+  4305 12359 |     b = got_pizza
+

@@ -47,6 +47,7 @@ def add_columns(cursor, table_name, field_dict):
         value = field_dict[key]
         add_column(cursor, table_name, key, value)
 
+
 # insert a new row, but only id is provided
 def insert_id(cursor, table_name, id_column, id_value):
     cursor.execute("INSERT OR IGNORE INTO {tn} ({idc}) VALUES (?)".format(tn=table_name, idc=id_column), (id_value,))
