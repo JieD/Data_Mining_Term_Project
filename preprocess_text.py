@@ -38,7 +38,7 @@ def check_exchange(text):
 
 # extract image_provided and reciprocate
 def simple_text_analysis(cursor, table_name, id_column):
-    print '\ncheck image_provided and reciprocate'
+    print '\ncheck image_provided, reciprocate and exchange'
     cursor = db_client.select_all(cursor, table_name, id_column, 'edit_remove_text')
     all_rows = cursor.fetchall()
 
@@ -117,7 +117,7 @@ def extract_nouns(tokens):
     return noun_tokens
 
 
-# extract all success text
+# extract all success text and store in lists
 def extract_text_for_analysis(cursor, table_name):
     print '\nextract all success text and tokens'
     cursor = db_client.select_condition_no(cursor, table_name, lib.story_label, lib.SUCCESS,
@@ -201,8 +201,9 @@ def apply_tf_idf(text_list):
     #print lib.dist
 
 
+# use kmeans to find clusters and top terms
 def apply_kmeans():
-    print 'apply kmeans:'
+    print '\napply kmeans:'
     t0 = time()
     out_file = open(lib.kmeans_topics_doc, 'w')
     num_clusters = lib.number_topics
@@ -228,17 +229,6 @@ def apply_kmeans():
     for i in range(num_clusters):
         print "\nCluster {0} words:".format(i)
         out_file.write('Cluster {0} words:\n'.format(i))
-        """length = len(order_centroids[i])
-        j = 0
-        for index in order_centroids[i, :(length - 1)]:
-            if j >= lib.number_topic_features:
-                break
-            term = lib.terms[index]
-            tag = nltk.pos_tag([term])[0][1]
-            if 'NN' in tag:
-                j += 1
-                print ' {0}'.format(lib.vocab_frame.ix[lib.terms[index].split(' ')].values.tolist()[0][0]),
-        print '\n'"""
 
         for index in order_centroids[i, :lib.number_topic_features]:  # n words per cluster
             term = lib.vocab_frame.ix[lib.terms[index].split(' ')].values.tolist()[0][0]
@@ -255,6 +245,7 @@ def apply_kmeans():
     out_file.close()
 
 
+# use nmf for topic modeling
 def apply_nmf():
     # Fit the NMF model
     print '\nfit the NMF model'
@@ -313,14 +304,14 @@ def main():
 
     # init
     conn = sqlite3.connect(lib.DB_NAME)
-    #table_name = lib.ROAP_TABLE_NAME
-    table_name = lib.FULL_ROAP_TABLE_NAME
+    table_name = lib.ROAP_TABLE_NAME
+    #table_name = lib.FULL_ROAP_TABLE_NAME
     id_column = lib.intermediate_story_primary_key
     cursor = conn.cursor()
 
-    #simple_text_analysis(cursor, table_name, id_column)
-    #tokenize_and_count_length(cursor, table_name, id_column)
-    #remove_stopwords_and_non_nouns(cursor, table_name, id_column)
+    simple_text_analysis(cursor, table_name, id_column)
+    tokenize_and_count_length(cursor, table_name, id_column)
+    remove_stopwords_and_non_nouns(cursor, table_name, id_column)
 
     extract_text_for_analysis(cursor, table_name)
     create_word_stem_dictionary()
