@@ -24,7 +24,7 @@ def extract_user_info(cursor, table_name, id_column, client):
         data = get_about_user(client, author)
         if 'error' in data:
             db_client.delete(cursor, table_name, id_column, name)
-            #print name
+            print name
         else:
             data = data['data']
             db_client.update(cursor, table_name, id_column, name, 'comment_karma', data['comment_karma'])
@@ -57,21 +57,35 @@ def is_user_name(name):
     j = json.loads(r.text)
 
 
+# calculate account age when requesting
+def calculate_account_age(cursor, table_name, id_column):
+    db_client.add_column(cursor, table_name, 'account_age', lib.FLOAT_TYPE)
+    cursor = db_client.select_all(cursor, table_name, id_column, 'account_created_utc', 'created_utc')
+    all_rows = cursor.fetchall()
+
+    for row in all_rows:
+        name = row[0]
+        account_created = row[1]
+        request_created = row[2]
+        account_age = request_created - account_created
+        db_client.update(cursor, table_name, id_column, name, 'account_age', account_age)
+
+
 def main():
     reload(sys)
     sys.setdefaultencoding("utf-8")
 
     # init
     conn = sqlite3.connect(lib.DB_NAME)
-    table_name = lib.RAW_ROAP_TABLE_NAME
-    #table_name = lib.ROAP_TABLE_NAME
-    #table_name = lib.FULL_ROAP_TABLE_NAME
+    #table_name = lib.RAW_ROAP_TABLE_NAME
+    table_name = lib.FULL_RAW_ROAP_TABLE_NAME
     id_column = lib.raw_story_primary_key
     cursor = conn.cursor()
 
-    client = reddit_client.login(lib.USERNAME, lib.PASSWORD, lib.USER_AGENT)
-    update_raw_table(cursor, table_name)
-    extract_user_info(cursor, table_name, id_column, client)
+    #client = reddit_client.login(lib.USERNAME, lib.PASSWORD, lib.USER_AGENT)
+    #update_raw_table(cursor, table_name)
+    #extract_user_info(cursor, table_name, id_column, client)
+    calculate_account_age(cursor, table_name, id_column)
 
     conn.commit()
     conn.close()
