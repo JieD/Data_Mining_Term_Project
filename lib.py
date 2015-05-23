@@ -2,6 +2,7 @@ import nltk
 from nltk.stem.snowball import SnowballStemmer
 import pandas as pd
 
+
 # set username and password values
 USERNAME = 'jied314'
 PASSWORD = 'Hotmail8'
@@ -100,6 +101,7 @@ INTERMEDIATE_FIELDS_DICT = {
     'comment_karma': INTEGER_TYPE,
     'link_karma': INTEGER_TYPE,
     'account_created_utc': FLOAT_TYPE,
+    'account_age': FLOAT_TYPE,
     'author_flair_css_class': STRING_TYPE,
     'edited': INTEGER_TYPE,
     'num_comments': INTEGER_TYPE,
