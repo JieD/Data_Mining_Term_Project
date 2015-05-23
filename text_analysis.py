@@ -5,14 +5,7 @@ import lib
 import export
 from pprint import pprint as pp2
 import string
-import numpy as np
-import pandas as pd
 import nltk
-from nltk.stem.snowball import SnowballStemmer
-import re
-import os
-import codecs
-from sklearn import feature_extraction
 from random import randint
 
 
@@ -56,7 +49,8 @@ def topic_terms_frequency(cursor, table_name, id_column):
 
         for topic in lib.topic_term_dict.keys():
             db_client.update(cursor, table_name, id_column, name, topic, topic_count[topic])
-        """max_count = 0
+        """ not assigning one topic, but multiple topics to a request
+        max_count = 0
         max_topic = 'none'
         for topic in lib.topic_term_dict.keys():
             #topic_count[topic] /= (1.0 * len(lib.topic_term_dict[topic]))
@@ -68,7 +62,7 @@ def topic_terms_frequency(cursor, table_name, id_column):
 
 # oversampling and undersampling
 def resampling(cursor, table_name):
-    print '\noversampling and undersampling'
+    print '\ncreate dataset using oversampling and undersampling'
     label_column = lib.story_label
     lib.success_count = db_client.count(cursor, table_name, label_column, lib.SUCCESS)
     lib.not_success_count = db_client.count(cursor, table_name, label_column, lib.NOT_SUCCESS)
@@ -136,16 +130,14 @@ def main():
     read_topics()
     topic_terms_frequency(cursor, table_name, id_column)
 
-    export.write(conn, table_name, out_file, not_success_out_file, success_out_file, 'ups', 'account_created_utc', 'link_karma',
-                 'comment_karma', 'num_comments', 'image_provided', 'reciprocate', 'exchange', 'text_length', 'money',
-                 'time', 'job', 'student', 'family', 'craving', 'label')
+    export.write(conn, table_name, out_file, not_success_out_file, success_out_file, 'account_age', 'account_created_utc',
+                 'link_karma', 'comment_karma', 'ups', 'num_comments', 'image_provided', 'reciprocate', 'exchange',
+                 'text_length', 'money', 'time', 'job', 'student', 'family', 'craving', 'label')
 
     """export.write(conn, table_name, not_success_out_file, success_out_file, 'ups', 'num_comments', 'image_provided',
                  'reciprocate', 'exchange', 'text_length', 'money', 'time', 'job', 'student', 'family', 'craving',
                  'label')"""
     resampling(cursor, table_name)
-
-    lib.success_count = 10
 
     conn.commit()
     conn.close()
