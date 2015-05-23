@@ -3,14 +3,12 @@ import re
 import sys
 import time
 from time import time
-import codecs
 import db_client
 import lib
 import export
 from pprint import pprint as pp2
 import nltk
 from nltk.stem.snowball import SnowballStemmer
-import numpy as np
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
