@@ -1,7 +1,6 @@
 import sqlite3
 import sys
 import re
-import codecs
 import lib
 import db_client
 import export
@@ -168,8 +167,8 @@ def choose_first_request(cursor, table_name, id_column):
 def cpy_rest(cursor, source, destination):
     source_id_column = lib.raw_story_primary_key
     destination_id_column = lib.intermediate_story_primary_key
-    columns = ['account_created_utc', 'link_karma', 'comment_karma', 'author_flair_css_class', 'edited', 'num_comments',
-               'score', 'ups', 'downs', 'selftext']
+    columns = ['account_age', 'account_created_utc', 'link_karma', 'comment_karma', 'author_flair_css_class', 'edited',
+               'num_comments', 'score', 'ups', 'downs', 'selftext']
 
     cursor = db_client.select_all(cursor, destination, destination_id_column)
     all_rows = cursor.fetchall()
