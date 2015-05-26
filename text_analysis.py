@@ -1,5 +1,6 @@
 import sqlite3
 import sys
+import time
 import db_client
 import lib
 import export
@@ -112,16 +113,35 @@ def write_file(source_list, index_list, add_list, out_file_name):
     out_file.close()
 
 
+
+def count_yearly(cursor, table_name):
+    create_column = 'created'
+    success_count_2011 = db_client.count_yearly_success(cursor, table_name, create_column, lib.START_2011, lib.START_2012)
+    success_count_2012 = db_client.count_yearly_success(cursor, table_name, create_column, lib.START_2012, lib.START_2013)
+    success_count_2013 = db_client.count_yearly_success(cursor, table_name, create_column, lib.START_2013, lib.START_2014)
+    success_count_2014 = db_client.count_yearly_success(cursor, table_name, create_column, lib.START_2014, lib.START_2015)
+    success_count_2015 = db_client.count_yearly_success(cursor, table_name, create_column, lib.START_2015, time.time())
+
+    count_2011 = db_client.count_yearly(cursor, table_name, create_column, lib.START_2011, lib.START_2012)
+    count_2012 = db_client.count_yearly(cursor, table_name, create_column, lib.START_2012, lib.START_2013)
+    count_2013 = db_client.count_yearly(cursor, table_name, create_column, lib.START_2013, lib.START_2014)
+    count_2014 = db_client.count_yearly(cursor, table_name, create_column, lib.START_2014, lib.START_2015)
+    count_2015 = db_client.count_yearly(cursor, table_name, create_column, lib.START_2015, time.time())
+    print '\nreport yearly count:\n 2011: {0} - {1}\n 2012: {2} - {3}\n 2013: {4} - {5}\n 2014: {6} - {7}\n 2015: {8} - {9}'.\
+        format(success_count_2011, count_2011, success_count_2012, count_2012, success_count_2013, count_2013,
+               success_count_2014, count_2014, success_count_2015, count_2015)
+
+
 def main():
     reload(sys)
     sys.setdefaultencoding("utf-8")
 
     # init
     conn = sqlite3.connect(lib.DB_NAME)
-    table_name = lib.ROAP_TABLE_NAME
-    out_file = lib.OUT_FILE
-    """table_name = lib.FULL_ROAP_TABLE_NAME
-    out_file = lib.FULL_OUT_FILE"""
+    """table_name = lib.ROAP_TABLE_NAME
+    out_file = lib.OUT_FILE"""
+    table_name = lib.FULL_ROAP_TABLE_NAME
+    out_file = lib.FULL_OUT_FILE
     success_out_file = lib.SUCCESS_OUT_FILE
     not_success_out_file = lib.NOT_SUCCESS_OUT_FILE
     id_column = lib.intermediate_story_primary_key
@@ -129,15 +149,14 @@ def main():
 
     read_topics()
     topic_terms_frequency(cursor, table_name, id_column)
+    count_yearly(cursor, table_name)
 
     export.write(conn, table_name, out_file, not_success_out_file, success_out_file, 'account_age', 'account_created_utc',
                  'link_karma', 'comment_karma', 'ups', 'num_comments', 'image_provided', 'reciprocate', 'exchange',
                  'text_length', 'money', 'time', 'job', 'student', 'family', 'craving', 'label')
-
-    """export.write(conn, table_name, not_success_out_file, success_out_file, 'ups', 'num_comments', 'image_provided',
-                 'reciprocate', 'exchange', 'text_length', 'money', 'time', 'job', 'student', 'family', 'craving',
-                 'label')"""
     resampling(cursor, table_name)
+
+    count_yearly(cursor, table_name)
 
     conn.commit()
     conn.close()

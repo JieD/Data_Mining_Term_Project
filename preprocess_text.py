@@ -2,6 +2,7 @@ import sqlite3
 import re
 import sys
 import time
+import string
 from time import time
 import db_client
 import lib
@@ -10,11 +11,13 @@ from pprint import pprint as pp2
 import nltk
 from nltk.stem.snowball import SnowballStemmer
 import pandas as pd
+import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.cluster import KMeans
 from sklearn.externals import joblib
 from sklearn.decomposition import NMF
+from gensim import corpora, models, similarities
 
 
 # check include image
@@ -109,11 +112,10 @@ def remove_stopwords_and_non_nouns(cursor, table_name, id_column):
 
 # use POS-tagging to find nouns
 def extract_nouns(tokens):
-    #word_tag_paris = nltk.pos_tag(tokens)
+    word_tag_paris = nltk.pos_tag(tokens)
     #print word_tag_paris, '\n'
-    #noun_tokens = [token for (token, tag) in word_tag_paris if 'NN' in tag]
-    #return noun_tokens
-    return tokens
+    noun_tokens = [token for (token, tag) in word_tag_paris if 'NN' in tag]
+    return noun_tokens
 
 
 # extract all success text and store in lists
@@ -166,7 +168,7 @@ def tokenize_and_stem(text):
     filtered_tokens = []
     # filter out any tokens not containing letters (e.g., numeric tokens, raw punctuation)
     for token in tokens:
-        if re.search('[a-zA-Z]', token):
+        if re.search('[a-zA-Z]', token) and not token.startswith("'") and token not in string.punctuation:
             filtered_tokens.append(token)
     stems = [lib.stemmer.stem(t) for t in filtered_tokens]
     return stems
@@ -189,7 +191,7 @@ def apply_tf_idf(text_list):
     print '\napply tf_idf'
     t0 = time()
     # define vectorizer parameters
-    tfidf_vectorizer = TfidfVectorizer(max_df=0.3, min_df=0.01, stop_words='english', tokenizer=tokenize_and_stem)
+    tfidf_vectorizer = TfidfVectorizer(max_df=0.2, min_df=0.01, stop_words='english', tokenizer=tokenize_and_stem)
     lib.tfidf_matrix = tfidf_vectorizer.fit_transform(text_list)  # fit the vectorizer to text_list
     print("done in %0.3fs." % (time() - t0))
     print(lib.tfidf_matrix.shape)
@@ -208,7 +210,7 @@ def apply_kmeans():
     num_clusters = lib.number_topics
     km = KMeans(n_clusters=num_clusters)
     km.fit(lib.tfidf_matrix)
-    joblib.dump(km, lib.cluster_doc)
+    joblib.dump(km, lib.kmeans_doc)
     #km = joblib.load(lib.cluster_doc)
     clusters = km.labels_.tolist()
     print("done in %0.3fs." % (time() - t0))
@@ -217,9 +219,6 @@ def apply_kmeans():
     frame = pd.DataFrame(requests, index=[clusters], columns=['name', 'cluster'])
     print '\ncluster counts:\n', frame['cluster'].value_counts(), '\n'  # number of stories per cluster
     out_file.write('\ncluster counts:\n{0}\n\n'.format(frame['cluster'].value_counts()))
-
-    #grouped = frame['rank'].groupby(frame['cluster']) #groupby cluster for aggregation purposes
-    #print grouped.mean() #average rank (1 to 100) per cluster
 
     print("Top terms per cluster:")
     #sort cluster centers by proximity to centroid
@@ -263,6 +262,42 @@ def apply_nmf():
     out_file.close()
 
 
+# use lda for topic modeling
+def apply_lda():
+    # Fit the lda model
+    print '\nfit Latent Dirichlet Allocation model'
+    text_words = [[word for word in tokenize_and_stem(text)] for text in lib.total_success_text]
+    dictionary = corpora.Dictionary(text_words)
+    dictionary.filter_extremes(no_below=20, no_above=0.2)
+    corpus = [dictionary.doc2bow(text) for text in text_words]
+    print 'length of corpus: {0}'.format(len(corpus))
+
+    t0 = time()
+    lda = models.LdaModel(corpus, num_topics=lib.number_topics, id2word=dictionary, update_every=5, chunksize=10000, passes=100)
+    print("done in %0.3fs." % (time() - t0))
+
+    joblib.dump(lda, lib.lda_doc)
+    #lda = joblib.load(lib.lda_doc)
+
+    out_file = open(lib.lda_topics_doc, 'w')
+    topics = lda.print_topics(lib.number_topics, num_words=lib.number_topic_features)
+    #print topics
+    topics_matrix = lda.show_topics(formatted=False, num_words=lib.number_topic_features)
+    topics_matrix = np.array(topics_matrix)
+    print topics_matrix.shape
+    topic_words = topics_matrix[:, :, 1]
+    index = 0
+    for i in topic_words:
+        print("\nTopic #%d:" % index)
+        out_file.write('Topic #{}:\n'.format(index))
+        for word in i:
+            print ' {0}'.format(str(word)),
+            out_file.write('{0} '.format(word))
+        print
+        out_file.write('\n\n')
+        index += 1
+
+
 # print requests (belong to specified label) to file
 def print_request(cursor, table_name, label, file_name):
     cursor = db_client.select_condition(cursor, table_name, 'label', label, 'created_utc',
@@ -303,8 +338,8 @@ def main():
 
     # init
     conn = sqlite3.connect(lib.DB_NAME)
-    table_name = lib.ROAP_TABLE_NAME
-    #table_name = lib.FULL_ROAP_TABLE_NAME
+    #table_name = lib.ROAP_TABLE_NAME
+    table_name = lib.FULL_ROAP_TABLE_NAME
     id_column = lib.intermediate_story_primary_key
     cursor = conn.cursor()
 
@@ -317,6 +352,7 @@ def main():
     apply_tf_idf(lib.total_success_text)
     apply_kmeans()
     apply_nmf()
+    apply_lda()
 
     """print_request(cursor, table_name, lib.SUCCESS, lib.SUCCESS_FILE)
     print_request(cursor, table_name, lib.NOT_SUCCESS, lib.NOT_SUCCESS_FILE)

@@ -379,19 +379,19 @@ def main():
     # init
     conn = sqlite3.connect(lib.DB_NAME)
 
-    source_name = lib.RAW_ROAP_TABLE_NAME
+    """source_name = lib.RAW_ROAP_TABLE_NAME
     table_name = lib.ROAP_TABLE_NAME
     edit_not_success_file = lib.EDIT_NOT_SUCCESS_FILE
     edit_success_file = lib.EDIT_SUCCESS_FILE
     labeled_edit_not_success_file = lib.LABELED_EDIT_NOT_SUCCESS
-    labeled_edit_success_file = lib.LABELED_EDIT_SUCCESS
+    labeled_edit_success_file = lib.LABELED_EDIT_SUCCESS"""
 
-    """source_name = lib.FULL_RAW_ROAP_TABLE_NAME
+    source_name = lib.FULL_RAW_ROAP_TABLE_NAME
     table_name = lib.FULL_ROAP_TABLE_NAME
     edit_not_success_file = lib.FULL_EDIT_NOT_SUCCESS_FILE
     edit_success_file = lib.FULL_EDIT_SUCCESS_FILE
     labeled_edit_not_success_file = lib.FULL_LABELED_EDIT_NOT_SUCCESS
-    labeled_edit_success_file = lib.FULL_LABELED_EDIT_SUCCESS"""
+    labeled_edit_success_file = lib.FULL_LABELED_EDIT_SUCCESS
 
     id_column = lib.intermediate_story_primary_key
     cursor = conn.cursor()
