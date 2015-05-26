@@ -1,0 +1,158 @@
+=== Run information ===
+
+Scheme:weka.classifiers.bayes.NaiveBayes 
+Relation:     over_data
+Instances:    31018
+Attributes:   17
+              account_age
+              account_created_utc
+              link_karma
+              comment_karma
+              ups
+              num_comments
+              image_provided
+              reciprocate
+              exchange
+              text_length
+              money
+              time
+              job
+              student
+              family
+              craving
+              label
+Test mode:10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+Naive Bayes Classifier
+
+                                Class
+Attribute                   got_pizza        no_pizza
+                                (0.5)           (0.5)
+======================================================
+account_age
+  mean                   39886902.4811   38728087.5593
+  std. dev.              34673302.7624   36120097.8838
+  weight sum                     15509           15509
+  precision                 15634.3501      15634.3501
+
+account_created_utc
+  mean                 1324078586.7747   1327872292.06
+  std. dev.              37734454.4681    36214384.791
+  weight sum                     15509           15509
+  precision                  25918.945       25918.945
+
+link_karma
+  mean                       2515.7832        1801.937
+  std. dev.                 15514.7216       8597.4449
+  weight sum                     15509           15509
+  precision                   202.9001        202.9001
+
+comment_karma
+  mean                       5778.9143       4313.7796
+  std. dev.                 15340.4262      14082.5336
+  weight sum                     15509           15509
+  precision                   156.4401        156.4401
+
+ups
+  mean                          6.5514          3.5293
+  std. dev.                    11.3981          7.2439
+  weight sum                     15509           15509
+  precision                     3.7222          3.7222
+
+num_comments
+  mean                           4.599          1.9095
+  std. dev.                     6.3332          4.2447
+  weight sum                     15509           15509
+  precision                     2.7321          2.7321
+
+image_provided
+  mean                          0.0774          0.0419
+  std. dev.                     0.2673          0.2004
+  weight sum                     15509           15509
+  precision                          1               1
+
+reciprocate
+  mean                          0.1934           0.151
+  std. dev.                      0.395          0.3581
+  weight sum                     15509           15509
+  precision                          1               1
+
+exchange
+  mean                          0.0476          0.0344
+  std. dev.                     0.2129          0.1823
+  weight sum                     15509           15509
+  precision                          1               1
+
+text_length
+  mean                        102.0447         83.6253
+  std. dev.                    82.4067         69.8499
+  weight sum                     15509           15509
+  precision                     3.0295          3.0295
+
+money
+  mean                          1.5151          1.5667
+  std. dev.                     1.6827          1.7837
+  weight sum                     15509           15509
+  precision                     1.2609          1.2609
+
+time
+  mean                           2.407          2.2281
+  std. dev.                     2.2088          2.2299
+  weight sum                     15509           15509
+  precision                     1.0769          1.0769
+
+job
+  mean                          0.6323           0.723
+  std. dev.                     1.1143          1.2788
+  weight sum                     15509           15509
+  precision                     1.1765          1.1765
+
+student
+  mean                          0.5359          0.6232
+  std. dev.                     1.1947          1.2748
+  weight sum                     15509           15509
+  precision                     1.1429          1.1429
+
+family
+  mean                          0.3497          0.3087
+  std. dev.                     1.0995          1.0932
+  weight sum                     15509           15509
+  precision                     2.3529          2.3529
+
+craving
+  mean                           0.363          0.4175
+  std. dev.                     0.8096          0.8855
+  weight sum                     15509           15509
+  precision                          1               1
+
+
+
+Time taken to build model: 0.16 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances       17982               57.9728 %
+Incorrectly Classified Instances     13036               42.0272 %
+Kappa statistic                          0.1595
+Mean absolute error                      0.4313
+Root mean squared error                  0.5382
+Relative absolute error                 86.261  %
+Root relative squared error            107.6315 %
+Total Number of Instances            31018     
+
+=== Detailed Accuracy By Class ===
+
+               TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
+                 0.266     0.106      0.714     0.266     0.387      0.681    got_pizza
+                 0.894     0.734      0.549     0.894     0.68       0.681    no_pizza
+Weighted Avg.    0.58      0.42       0.632     0.58      0.534      0.681
+
+=== Confusion Matrix ===
+
+     a     b   <-- classified as
+  4119 11390 |     a = got_pizza
+  1646 13863 |     b = no_pizza
+

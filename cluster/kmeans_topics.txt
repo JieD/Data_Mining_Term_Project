@@ -1,44 +1,44 @@
 
 cluster counts:
-3    24
-0    22
-7    21
-5    20
-2    19
-1    19
-8    14
+9    36
+7    19
+5    18
+3    18
+6    15
+2    15
 4    13
-9     7
-6     6
+8    11
+1    10
+0    10
 dtype: int64
 
 Cluster 0 words:
-college student anyone yesterday thank week hungry work pay broke make account friday help ramen husband time noodles bank people 
+birthday tonight buy broke grandfather awesome years love someone something tuesday super thing news car fridge mom guys sub idea 
 
 Cluster 1 words:
-anything draw return story sob exchange something jokes want eating request hungry dominos thank acts person work hall tells dick 
+guys someone room night warm use people work stuck tomorrow anyone please advance home hope something internet shot power luck 
 
 Cluster 2 words:
-hungry house hut broke home fridge mom mother feed today offer nothing john uk money stuck help request dominos lives 
+story write place short poem trade sob anything hungry person stuff feel youtube unemployment wings impress something cards clear truth 
 
 Cluster 3 words:
-months jobs dinner money thing morning pay lunch moment couple payday parents broke right thank income game years gon plenty 
+kids john work dominos time papa car draw tn unemployment way point school hut today baby options friday someone yay 
 
 Cluster 4 words:
-pie money help someone place celebrate week country regardless night mom tomorrow today fl fellow dog care kindness friends wife 
+today need bank mom tomorrow tonight usa work brother sucks groceries anyone dad dollars home nothing eating kindness pie butter 
 
 Cluster 5 words:
-week jobs guys paycheck tonight buy thank hours unemployment pay check need years lt boss awesome tomorrow time start employment 
+rice bag student cupboard sick months paycheck years past couple tea bank pasta make beans broke bit people employment folks 
 
 Cluster 6 words:
-write short poem song youtube impress stuff story night tonight pleasure resources wish honor amp cents thing pockets monday grub 
+anything years eating friends today school surprise dog family months let make wife alone starving check girlfriend lives cash error 
 
 Cluster 7 words:
-today work years kids school time alone car help someone sons feel wisconsin money girlfriend way characters valentines cards spend 
+hungry house home hut mother offer feed trade uk draw lives months break broke today tomorrow fridge request college student 
 
 Cluster 8 words:
-rice account bank help dollars thank beans tomorrow time got sick home years couple leave make refund poor lunchtime meal 
+account got bank characters leave time happy valentines client pay yesterday tomorrow ramen something work thursday interview paper eating boyfriend 
 
 Cluster 9 words:
-birthday idea something throw cheers news home house years grandfather worth tn shot feel share trade pie someone boyfriend hospital 
+jobs months dinner pay thing girl home morning years sure return pie plan sons time please birthday night something right 
 

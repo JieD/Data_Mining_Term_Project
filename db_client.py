@@ -152,6 +152,24 @@ def count(cursor, table_name, column_name, column_value):
     return row[0]
 
 
+# count the number of success within the time range
+def count_yearly_success(cursor, table_name, column_name, column_value_start, column_value_end):
+    cursor = cursor.execute("SELECT COUNT({lc}) FROM {tn} WHERE {lc}=(?) AND {cn}>=(?) AND {cn}<=(?)".
+                            format(lc=lib.story_label, tn=table_name, cn=column_name), (lib.SUCCESS, column_value_start,
+                                                                                        column_value_end,))
+    row = cursor.fetchone()
+    return row[0]
+
+
+# count the number of records within the time range
+def count_yearly(cursor, table_name, column_name, column_value_start, column_value_end):
+    cursor = cursor.execute("SELECT COUNT({lc}) FROM {tn} WHERE {cn}>=(?) AND {cn}<=(?)".
+                            format(lc=lib.story_label, tn=table_name, cn=column_name), (column_value_start,
+                                                                                        column_value_end,))
+    row = cursor.fetchone()
+    return row[0]
+
+
 # get distince values
 def get_distinct_values(cursor, table_name, column_name):
     cursor = cursor.execute("SELECT DISTINCT {cn} FROM {tn}".format(cn=column_name, tn=table_name))
@@ -210,7 +228,7 @@ def get_stories_in_year(client, sr, start_time, cursor, table_name, file_name):
 
 
 # use search with timestamp (regular query can only fetch the latest 1000 stories)
-def get_stories_in_time_range(client, sr, start_time, end_time, cursor, table_name, file_name):
+def get_stories_in_time_range(client, sr, start_time, end_time, cursor, table_name):
     print "start query reddit"
     after_name = ''
     limit = lib.QUERY_LIMIT
@@ -250,7 +268,6 @@ def main():
     conn = sqlite3.connect(lib.DB_NAME)
 
     table_name = lib.RAW_ROAP_TABLE_NAME
-    file_name = lib.FILE_NAME
     """table_name = lib.FULL_RAW_ROAP_TABLE_NAME
     file_name = lib.FULL_FILE_NAME"""
     cursor = conn.cursor()
@@ -264,7 +281,7 @@ def main():
 
     # retrieve stories in the given time period
     end_time = time.time()
-    get_stories_in_time_range(client, lib.ROAP, lib.START_2015, end_time, cursor, table_name, file_name)
+    get_stories_in_time_range(client, lib.ROAP, lib.START_2011, end_time, cursor, table_name)
 
     # committing changes and closing the connection to the database file
     conn.commit()

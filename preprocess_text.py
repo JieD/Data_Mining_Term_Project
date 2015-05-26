@@ -109,10 +109,11 @@ def remove_stopwords_and_non_nouns(cursor, table_name, id_column):
 
 # use POS-tagging to find nouns
 def extract_nouns(tokens):
-    word_tag_paris = nltk.pos_tag(tokens)
+    #word_tag_paris = nltk.pos_tag(tokens)
     #print word_tag_paris, '\n'
-    noun_tokens = [token for (token, tag) in word_tag_paris if 'NN' in tag]
-    return noun_tokens
+    #noun_tokens = [token for (token, tag) in word_tag_paris if 'NN' in tag]
+    #return noun_tokens
+    return tokens
 
 
 # extract all success text and store in lists

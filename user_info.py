@@ -82,9 +82,9 @@ def main():
     id_column = lib.raw_story_primary_key
     cursor = conn.cursor()
 
-    #client = reddit_client.login(lib.USERNAME, lib.PASSWORD, lib.USER_AGENT)
-    #update_raw_table(cursor, table_name)
-    #extract_user_info(cursor, table_name, id_column, client)
+    client = reddit_client.login(lib.USERNAME, lib.PASSWORD, lib.USER_AGENT)
+    update_raw_table(cursor, table_name)
+    extract_user_info(cursor, table_name, id_column, client)
     calculate_account_age(cursor, table_name, id_column)
 
     conn.commit()

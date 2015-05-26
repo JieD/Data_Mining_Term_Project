@@ -1,0 +1,673 @@
+=== Run information ===
+
+Scheme:weka.classifiers.trees.J48 -C 0.25 -M 2
+Relation:     full_data
+Instances:    17572
+Attributes:   17
+              account_age
+              account_created_utc
+              link_karma
+              comment_karma
+              ups
+              num_comments
+              image_provided
+              reciprocate
+              exchange
+              text_length
+              money
+              time
+              job
+              student
+              family
+              craving
+              label
+Test mode:10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+J48 pruned tree
+------------------
+
+comment_karma <= 24: no_pizza (2796.0/149.0)
+comment_karma > 24
+|   num_comments <= 2: no_pizza (10727.0/822.0)
+|   num_comments > 2
+|   |   account_age <= 94783: no_pizza (56.0/2.0)
+|   |   account_age > 94783
+|   |   |   job <= 3
+|   |   |   |   num_comments <= 7
+|   |   |   |   |   image_provided <= 0
+|   |   |   |   |   |   craving <= 1
+|   |   |   |   |   |   |   ups <= 10
+|   |   |   |   |   |   |   |   money <= 2
+|   |   |   |   |   |   |   |   |   reciprocate <= 0
+|   |   |   |   |   |   |   |   |   |   family <= 2
+|   |   |   |   |   |   |   |   |   |   |   num_comments <= 5
+|   |   |   |   |   |   |   |   |   |   |   |   student <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   text_length <= 69: no_pizza (488.0/96.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   text_length > 69
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   exchange <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   num_comments <= 4
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   num_comments <= 3
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   craving <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   money <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   family <= 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   family <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   link_karma <= 40: no_pizza (8.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   link_karma > 40
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   job <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   time <= 2
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc <= 1318314149: no_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc > 1318314149: got_pizza (8.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   time > 2: got_pizza (4.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   job > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc <= 1324412365: no_pizza (6.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc > 1324412365: got_pizza (4.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   family > 0: no_pizza (11.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   family > 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma <= 1834: no_pizza (5.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma > 1834: got_pizza (5.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   money > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   link_karma <= 1542
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma <= 57: got_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma > 57: no_pizza (37.0/3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   link_karma > 1542
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc <= 1361100250
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma <= 2177: no_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma > 2177: got_pizza (9.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc > 1361100250: no_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   craving > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   job <= 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   money <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   time <= 0: got_pizza (3.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   time > 0: no_pizza (8.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   money > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   time <= 2: got_pizza (4.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   time > 2
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma <= 1269: no_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma > 1269: got_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   job > 1: no_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   num_comments > 3: no_pizza (103.0/25.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   num_comments > 4
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length <= 163
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age <= 66205857
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   link_karma <= 1713
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   money <= 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   job <= 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups <= 5
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length <= 124: no_pizza (15.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length > 124: got_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups > 5
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   job <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups <= 8: got_pizza (3.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups > 8: no_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   job > 0: got_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   job > 1: no_pizza (6.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   money > 1: got_pizza (6.0/2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   link_karma > 1713: got_pizza (8.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age > 66205857: no_pizza (11.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length > 163: got_pizza (8.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   exchange > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc <= 1331875216: no_pizza (10.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc > 1331875216: got_pizza (7.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   student > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   job <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   family <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   time <= 5
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   student <= 1: no_pizza (67.0/8.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   student > 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age <= 58172337
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age <= 51299752: got_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age > 51299752: no_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups > 0: no_pizza (53.0/6.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age > 58172337
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   student <= 2: got_pizza (7.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   student > 2
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length <= 69: no_pizza (5.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length > 69: got_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   time > 5: no_pizza (11.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   family > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   family <= 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length <= 92: no_pizza (8.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length > 92: got_pizza (6.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   family > 1: no_pizza (4.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   job > 0: no_pizza (77.0/7.0)
+|   |   |   |   |   |   |   |   |   |   |   num_comments > 5
+|   |   |   |   |   |   |   |   |   |   |   |   craving <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   num_comments <= 6
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   money <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   time <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc <= 1351528557: no_pizza (22.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc > 1351528557
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age <= 42615155: no_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age > 42615155: got_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   time > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   job <= 0: no_pizza (33.0/10.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   job > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   student <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma <= 1262: got_pizza (4.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma > 1262
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length <= 110: no_pizza (7.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length > 110: got_pizza (3.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   student > 0: got_pizza (4.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   money > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   time <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups <= 3: got_pizza (9.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups > 3: no_pizza (4.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   time > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   money <= 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   exchange <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma <= 361: no_pizza (10.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma > 361
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   job <= 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   time <= 3
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   student <= 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   link_karma <= 418
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age <= 24951926: got_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age > 24951926: no_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   link_karma > 418: got_pizza (6.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   student > 1: no_pizza (3.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   time > 3: no_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   job > 1: got_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   exchange > 0: no_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   money > 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   link_karma <= 6929
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma <= 408: got_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma > 408: no_pizza (16.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   link_karma > 6929: got_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   num_comments > 6
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   money <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   job <= 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc <= 1300756164: no_pizza (8.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc > 1300756164
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   job <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   time <= 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma <= 8006
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups <= 6
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups <= 4
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   time <= 0: no_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   time > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma <= 2212: got_pizza (4.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma > 2212: no_pizza (5.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups > 4: got_pizza (4.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups > 6: no_pizza (4.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma > 8006: got_pizza (5.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   time > 1: no_pizza (9.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   job > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc <= 1322152559: no_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc > 1322152559: got_pizza (4.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   job > 1: no_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   money > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups <= 5
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma <= 4753
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma <= 388: no_pizza (7.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma > 388
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   time <= 2
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   job <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups <= 2
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups <= 1: got_pizza (4.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups > 1: no_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups > 2: got_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   job > 0: no_pizza (4.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   time > 2: got_pizza (4.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma > 4753: no_pizza (9.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups > 5: no_pizza (14.0)
+|   |   |   |   |   |   |   |   |   |   |   |   craving > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   family <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   time <= 1: no_pizza (20.0/3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   time > 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   num_comments <= 6
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   job <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc <= 1292825272: got_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc > 1292825272: no_pizza (6.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   job > 0: got_pizza (3.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   num_comments > 6: got_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   family > 0: no_pizza (18.0/1.0)
+|   |   |   |   |   |   |   |   |   |   family > 2
+|   |   |   |   |   |   |   |   |   |   |   ups <= 7
+|   |   |   |   |   |   |   |   |   |   |   |   student <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   family <= 5
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   ups <= 3
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   money <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc <= 1320409117: got_pizza (4.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc > 1320409117: no_pizza (8.0/2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   money > 0: no_pizza (16.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   ups > 3
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   money <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc <= 1336510766: no_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc > 1336510766: got_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   money > 0: got_pizza (5.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   family > 5: got_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   student > 0: got_pizza (7.0/2.0)
+|   |   |   |   |   |   |   |   |   |   |   ups > 7: no_pizza (8.0)
+|   |   |   |   |   |   |   |   |   reciprocate > 0
+|   |   |   |   |   |   |   |   |   |   num_comments <= 3
+|   |   |   |   |   |   |   |   |   |   |   job <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   comment_karma <= 109: got_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   comment_karma > 109
+|   |   |   |   |   |   |   |   |   |   |   |   |   ups <= 3: no_pizza (19.0/2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   ups > 3
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   family <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   link_karma <= 3602: got_pizza (5.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   link_karma > 3602: no_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   family > 0: no_pizza (6.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   job > 0: no_pizza (28.0/2.0)
+|   |   |   |   |   |   |   |   |   |   num_comments > 3
+|   |   |   |   |   |   |   |   |   |   |   time <= 4
+|   |   |   |   |   |   |   |   |   |   |   |   job <= 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   money <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   link_karma <= 469: no_pizza (5.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   link_karma > 469: got_pizza (9.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   money > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   money <= 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   num_comments <= 6
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   student <= 2: no_pizza (38.0/10.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   student > 2: got_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   num_comments > 6
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   link_karma <= 94: no_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   link_karma > 94: got_pizza (5.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   money > 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   job <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc <= 1337303111: got_pizza (21.0/6.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc > 1337303111: no_pizza (7.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   job > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   family <= 2
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age <= 37645779: no_pizza (6.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age > 37645779: got_pizza (4.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   family > 2: got_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   job > 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   ups <= 6: no_pizza (14.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   ups > 6: got_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   time > 4: no_pizza (17.0/3.0)
+|   |   |   |   |   |   |   |   money > 2
+|   |   |   |   |   |   |   |   |   money <= 6
+|   |   |   |   |   |   |   |   |   |   reciprocate <= 0
+|   |   |   |   |   |   |   |   |   |   |   student <= 1: no_pizza (203.0/30.0)
+|   |   |   |   |   |   |   |   |   |   |   student > 1
+|   |   |   |   |   |   |   |   |   |   |   |   link_karma <= 313: no_pizza (27.0/2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   link_karma > 313
+|   |   |   |   |   |   |   |   |   |   |   |   |   time <= 6
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   time <= 2
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma <= 2905
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   student <= 3: got_pizza (4.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   student > 3: no_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma > 2905: no_pizza (9.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   time > 2
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age <= 19403378: no_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age > 19403378: got_pizza (9.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   time > 6: no_pizza (5.0)
+|   |   |   |   |   |   |   |   |   |   reciprocate > 0
+|   |   |   |   |   |   |   |   |   |   |   ups <= 0: no_pizza (15.0)
+|   |   |   |   |   |   |   |   |   |   |   ups > 0
+|   |   |   |   |   |   |   |   |   |   |   |   job <= 2
+|   |   |   |   |   |   |   |   |   |   |   |   |   money <= 3: no_pizza (64.0/10.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   money > 3
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   craving <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length <= 101: no_pizza (24.0/3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length > 101
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   num_comments <= 5
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups <= 4
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma <= 1565: got_pizza (9.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma > 1565: no_pizza (5.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups > 4: no_pizza (6.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   num_comments > 5: got_pizza (5.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   craving > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age <= 20777428: no_pizza (8.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age > 20777428: got_pizza (5.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   job > 2
+|   |   |   |   |   |   |   |   |   |   |   |   |   money <= 3: got_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   money > 3: no_pizza (4.0/1.0)
+|   |   |   |   |   |   |   |   |   money > 6: no_pizza (39.0/2.0)
+|   |   |   |   |   |   |   ups > 10
+|   |   |   |   |   |   |   |   account_created_utc <= 1379004442
+|   |   |   |   |   |   |   |   |   job <= 1
+|   |   |   |   |   |   |   |   |   |   craving <= 0
+|   |   |   |   |   |   |   |   |   |   |   num_comments <= 3
+|   |   |   |   |   |   |   |   |   |   |   |   time <= 3
+|   |   |   |   |   |   |   |   |   |   |   |   |   money <= 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   time <= 1: no_pizza (15.0/4.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   time > 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma <= 1207: no_pizza (5.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma > 1207: got_pizza (8.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   money > 1: no_pizza (12.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   time > 3: no_pizza (11.0)
+|   |   |   |   |   |   |   |   |   |   |   num_comments > 3
+|   |   |   |   |   |   |   |   |   |   |   |   num_comments <= 5
+|   |   |   |   |   |   |   |   |   |   |   |   |   student <= 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   time <= 2
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   time <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   num_comments <= 4
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age <= 43293798: got_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age > 43293798: no_pizza (8.0/2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   num_comments > 4
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length <= 54
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length <= 36: got_pizza (4.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length > 36: no_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length > 54: got_pizza (7.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   time > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   reciprocate <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   family <= 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age <= 35654615
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length <= 65: no_pizza (3.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length > 65: got_pizza (6.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age > 35654615
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups <= 19: no_pizza (11.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups > 19
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups <= 21: got_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups > 21: no_pizza (5.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   family > 1: no_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   reciprocate > 0: no_pizza (5.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   time > 2
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   exchange <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   family <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   money <= 0: no_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   money > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   job <= 0: got_pizza (6.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   job > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age <= 74074646: no_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age > 74074646: got_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   family > 0: got_pizza (12.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   exchange > 0: got_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   student > 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age <= 20637077: got_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age > 20637077: no_pizza (6.0)
+|   |   |   |   |   |   |   |   |   |   |   |   num_comments > 5
+|   |   |   |   |   |   |   |   |   |   |   |   |   ups <= 26
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   link_karma <= 9023
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma <= 5296
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   num_comments <= 6
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   reciprocate <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   money <= 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   time <= 0: no_pizza (5.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   time > 0: got_pizza (6.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   money > 1: no_pizza (4.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   reciprocate > 0: got_pizza (3.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   num_comments > 6
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   money <= 1: no_pizza (10.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   money > 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma <= 1234: got_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma > 1234: no_pizza (5.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma > 5296: got_pizza (15.0/3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   link_karma > 9023: no_pizza (7.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   ups > 26: no_pizza (17.0/1.0)
+|   |   |   |   |   |   |   |   |   |   craving > 0
+|   |   |   |   |   |   |   |   |   |   |   student <= 4
+|   |   |   |   |   |   |   |   |   |   |   |   exchange <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   family <= 2: no_pizza (27.0/5.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   family > 2
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   time <= 5: got_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   time > 5: no_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   exchange > 0: got_pizza (3.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   student > 4: got_pizza (2.0)
+|   |   |   |   |   |   |   |   |   job > 1
+|   |   |   |   |   |   |   |   |   |   num_comments <= 3
+|   |   |   |   |   |   |   |   |   |   |   account_age <= 51263006: got_pizza (6.0)
+|   |   |   |   |   |   |   |   |   |   |   account_age > 51263006: no_pizza (6.0/1.0)
+|   |   |   |   |   |   |   |   |   |   num_comments > 3: no_pizza (31.0/5.0)
+|   |   |   |   |   |   |   |   account_created_utc > 1379004442: no_pizza (23.0/1.0)
+|   |   |   |   |   |   craving > 1: no_pizza (233.0/39.0)
+|   |   |   |   |   image_provided > 0
+|   |   |   |   |   |   exchange <= 0
+|   |   |   |   |   |   |   comment_karma <= 3272: no_pizza (119.0/27.0)
+|   |   |   |   |   |   |   comment_karma > 3272
+|   |   |   |   |   |   |   |   num_comments <= 6
+|   |   |   |   |   |   |   |   |   reciprocate <= 0
+|   |   |   |   |   |   |   |   |   |   craving <= 0
+|   |   |   |   |   |   |   |   |   |   |   account_age <= 75765875
+|   |   |   |   |   |   |   |   |   |   |   |   job <= 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   student <= 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length <= 137
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age <= 62462145
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc <= 1289746361: got_pizza (4.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc > 1289746361: no_pizza (11.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age > 62462145: got_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length > 137: got_pizza (5.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   student > 1: got_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   job > 1: no_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   account_age > 75765875: no_pizza (7.0)
+|   |   |   |   |   |   |   |   |   |   craving > 0
+|   |   |   |   |   |   |   |   |   |   |   link_karma <= 3402: got_pizza (7.0)
+|   |   |   |   |   |   |   |   |   |   |   link_karma > 3402: no_pizza (5.0/2.0)
+|   |   |   |   |   |   |   |   |   reciprocate > 0: got_pizza (6.0/1.0)
+|   |   |   |   |   |   |   |   num_comments > 6
+|   |   |   |   |   |   |   |   |   account_created_utc <= 1296244527: got_pizza (3.0/1.0)
+|   |   |   |   |   |   |   |   |   account_created_utc > 1296244527: no_pizza (8.0)
+|   |   |   |   |   |   exchange > 0
+|   |   |   |   |   |   |   account_age <= 95706468
+|   |   |   |   |   |   |   |   job <= 0: got_pizza (5.0)
+|   |   |   |   |   |   |   |   job > 0
+|   |   |   |   |   |   |   |   |   text_length <= 151: no_pizza (2.0)
+|   |   |   |   |   |   |   |   |   text_length > 151: got_pizza (2.0)
+|   |   |   |   |   |   |   account_age > 95706468: no_pizza (2.0)
+|   |   |   |   num_comments > 7
+|   |   |   |   |   exchange <= 0
+|   |   |   |   |   |   reciprocate <= 0
+|   |   |   |   |   |   |   image_provided <= 0
+|   |   |   |   |   |   |   |   comment_karma <= 1284
+|   |   |   |   |   |   |   |   |   student <= 2
+|   |   |   |   |   |   |   |   |   |   money <= 3
+|   |   |   |   |   |   |   |   |   |   |   money <= 2
+|   |   |   |   |   |   |   |   |   |   |   |   craving <= 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   craving <= 0: no_pizza (192.0/45.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   craving > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   ups <= 16: no_pizza (37.0/5.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   ups > 16: got_pizza (6.0)
+|   |   |   |   |   |   |   |   |   |   |   |   craving > 1: no_pizza (27.0/3.0)
+|   |   |   |   |   |   |   |   |   |   |   money > 2
+|   |   |   |   |   |   |   |   |   |   |   |   job <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   num_comments <= 12
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   link_karma <= 156
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   craving <= 0: no_pizza (4.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   craving > 0: got_pizza (4.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   link_karma > 156: no_pizza (4.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   num_comments > 12: got_pizza (4.0)
+|   |   |   |   |   |   |   |   |   |   |   |   job > 0: no_pizza (6.0)
+|   |   |   |   |   |   |   |   |   |   money > 3: no_pizza (24.0/1.0)
+|   |   |   |   |   |   |   |   |   student > 2
+|   |   |   |   |   |   |   |   |   |   family <= 1
+|   |   |   |   |   |   |   |   |   |   |   text_length <= 131
+|   |   |   |   |   |   |   |   |   |   |   |   num_comments <= 10: no_pizza (5.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   num_comments > 10: got_pizza (6.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   text_length > 131: no_pizza (7.0)
+|   |   |   |   |   |   |   |   |   |   family > 1: got_pizza (2.0)
+|   |   |   |   |   |   |   |   comment_karma > 1284
+|   |   |   |   |   |   |   |   |   time <= 1
+|   |   |   |   |   |   |   |   |   |   job <= 0
+|   |   |   |   |   |   |   |   |   |   |   craving <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   time <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   account_age <= 10364200: no_pizza (17.0/2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   account_age > 10364200
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   student <= 0: no_pizza (47.0/23.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   student > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length <= 40: no_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length > 40: got_pizza (5.0)
+|   |   |   |   |   |   |   |   |   |   |   |   time > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   student <= 2
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   student <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age <= 11706276
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc <= 1308121612: no_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc > 1308121612: got_pizza (8.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age > 11706276
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc <= 1336240459
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc <= 1315533490
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   num_comments <= 12: no_pizza (16.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   num_comments > 12
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc <= 1291327692: no_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc > 1291327692: got_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc > 1315533490: got_pizza (6.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc > 1336240459: no_pizza (12.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   student > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   num_comments <= 9: got_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   num_comments > 9: no_pizza (5.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   student > 2: no_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   craving > 0
+|   |   |   |   |   |   |   |   |   |   |   |   craving <= 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   time <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   money <= 0: no_pizza (7.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   money > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length <= 45: got_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length > 45: no_pizza (5.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   time > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma <= 2129: got_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma > 2129
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age <= 45275881: no_pizza (7.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age > 45275881: got_pizza (3.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   craving > 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma <= 7096: no_pizza (9.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma > 7096: got_pizza (3.0/1.0)
+|   |   |   |   |   |   |   |   |   |   job > 0
+|   |   |   |   |   |   |   |   |   |   |   craving <= 1: no_pizza (41.0/6.0)
+|   |   |   |   |   |   |   |   |   |   |   craving > 1: got_pizza (3.0/1.0)
+|   |   |   |   |   |   |   |   |   time > 1
+|   |   |   |   |   |   |   |   |   |   num_comments <= 22
+|   |   |   |   |   |   |   |   |   |   |   student <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   money <= 5
+|   |   |   |   |   |   |   |   |   |   |   |   |   family <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc <= 1317160411
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   craving <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   job <= 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   job <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   time <= 2
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups <= 9: got_pizza (10.0/2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   ups > 9: no_pizza (4.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   time > 2
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   money <= 1: no_pizza (11.0/2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   money > 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma <= 16849: got_pizza (5.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   comment_karma > 16849: no_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   job > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc <= 1266477217: no_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc > 1266477217
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc <= 1303826092: got_pizza (5.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc > 1303826092: no_pizza (3.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   job > 1: no_pizza (6.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   craving > 0: no_pizza (16.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc > 1317160411
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length <= 46: no_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   text_length > 46
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   num_comments <= 9
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   num_comments <= 8
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc <= 1350218358: got_pizza (5.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_created_utc > 1350218358
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age <= 10643615: got_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age > 10643615: no_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   num_comments > 8: no_pizza (3.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   num_comments > 9: got_pizza (16.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   family > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   money <= 2
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   money <= 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   link_karma <= 1172: got_pizza (13.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   link_karma > 1172
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age <= 22738453: no_pizza (6.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age > 22738453
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   job <= 0: got_pizza (5.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   job > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   time <= 2: no_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   time > 2: got_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   money > 1: no_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   money > 2: got_pizza (4.0)
+|   |   |   |   |   |   |   |   |   |   |   |   money > 5: no_pizza (7.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   student > 0
+|   |   |   |   |   |   |   |   |   |   |   |   ups <= 37: no_pizza (51.0/17.0)
+|   |   |   |   |   |   |   |   |   |   |   |   ups > 37: got_pizza (4.0)
+|   |   |   |   |   |   |   |   |   |   num_comments > 22
+|   |   |   |   |   |   |   |   |   |   |   time <= 5: no_pizza (19.0/2.0)
+|   |   |   |   |   |   |   |   |   |   |   time > 5: got_pizza (2.0)
+|   |   |   |   |   |   |   image_provided > 0
+|   |   |   |   |   |   |   |   job <= 0
+|   |   |   |   |   |   |   |   |   family <= 0
+|   |   |   |   |   |   |   |   |   |   account_age <= 67769973
+|   |   |   |   |   |   |   |   |   |   |   time <= 2
+|   |   |   |   |   |   |   |   |   |   |   |   account_created_utc <= 1338906487
+|   |   |   |   |   |   |   |   |   |   |   |   |   student <= 1
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   student <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   link_karma <= 1954
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   craving <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   link_karma <= 378: no_pizza (6.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   link_karma > 378: got_pizza (6.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   craving > 0: got_pizza (7.0/2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   link_karma > 1954: no_pizza (5.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   student > 0
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age <= 10892647: no_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   account_age > 10892647: got_pizza (3.0)
+|   |   |   |   |   |   |   |   |   |   |   |   |   student > 1: no_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   |   |   account_created_utc > 1338906487: no_pizza (8.0)
+|   |   |   |   |   |   |   |   |   |   |   time > 2
+|   |   |   |   |   |   |   |   |   |   |   |   money <= 4: got_pizza (5.0)
+|   |   |   |   |   |   |   |   |   |   |   |   money > 4: no_pizza (2.0)
+|   |   |   |   |   |   |   |   |   |   account_age > 67769973: no_pizza (9.0)
+|   |   |   |   |   |   |   |   |   family > 0
+|   |   |   |   |   |   |   |   |   |   num_comments <= 20: no_pizza (8.0/1.0)
+|   |   |   |   |   |   |   |   |   |   num_comments > 20: got_pizza (3.0)
+|   |   |   |   |   |   |   |   job > 0
+|   |   |   |   |   |   |   |   |   ups <= 5: no_pizza (5.0/1.0)
+|   |   |   |   |   |   |   |   |   ups > 5
+|   |   |   |   |   |   |   |   |   |   money <= 1
+|   |   |   |   |   |   |   |   |   |   |   student <= 0
+|   |   |   |   |   |   |   |   |   |   |   |   time <= 3: got_pizza (5.0)
+|   |   |   |   |   |   |   |   |   |   |   |   time > 3: no_pizza (3.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   student > 0: no_pizza (5.0)
+|   |   |   |   |   |   |   |   |   |   money > 1: got_pizza (7.0)
+|   |   |   |   |   |   reciprocate > 0
+|   |   |   |   |   |   |   craving <= 1
+|   |   |   |   |   |   |   |   craving <= 0: no_pizza (105.0/48.0)
+|   |   |   |   |   |   |   |   craving > 0
+|   |   |   |   |   |   |   |   |   time <= 7
+|   |   |   |   |   |   |   |   |   |   student <= 1
+|   |   |   |   |   |   |   |   |   |   |   job <= 2
+|   |   |   |   |   |   |   |   |   |   |   |   num_comments <= 8: got_pizza (5.0/1.0)
+|   |   |   |   |   |   |   |   |   |   |   |   num_comments > 8: no_pizza (14.0/2.0)
+|   |   |   |   |   |   |   |   |   |   |   job > 2: got_pizza (3.0/1.0)
+|   |   |   |   |   |   |   |   |   |   student > 1: no_pizza (6.0)
+|   |   |   |   |   |   |   |   |   time > 7: got_pizza (3.0)
+|   |   |   |   |   |   |   craving > 1
+|   |   |   |   |   |   |   |   account_created_utc <= 1342777931: no_pizza (16.0/1.0)
+|   |   |   |   |   |   |   |   account_created_utc > 1342777931: got_pizza (3.0)
+|   |   |   |   |   exchange > 0
+|   |   |   |   |   |   ups <= 4
+|   |   |   |   |   |   |   time <= 1: no_pizza (10.0)
+|   |   |   |   |   |   |   time > 1
+|   |   |   |   |   |   |   |   text_length <= 144: got_pizza (3.0)
+|   |   |   |   |   |   |   |   text_length > 144: no_pizza (5.0)
+|   |   |   |   |   |   ups > 4
+|   |   |   |   |   |   |   account_age <= 13543814: no_pizza (6.0)
+|   |   |   |   |   |   |   account_age > 13543814
+|   |   |   |   |   |   |   |   money <= 4
+|   |   |   |   |   |   |   |   |   account_age <= 81101197: got_pizza (20.0/2.0)
+|   |   |   |   |   |   |   |   |   account_age > 81101197: no_pizza (2.0)
+|   |   |   |   |   |   |   |   money > 4: no_pizza (2.0)
+|   |   |   job > 3: no_pizza (154.0/25.0)
+
+Number of Leaves  : 	306
+
+Size of the tree : 	611
+
+
+Time taken to build model: 1.05 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances       15322               87.1955 %
+Incorrectly Classified Instances      2250               12.8045 %
+Kappa statistic                          0.0826
+Mean absolute error                      0.1883
+Root mean squared error                  0.331 
+Relative absolute error                 90.8679 %
+Root relative squared error            102.8396 %
+Total Number of Instances            17572     
+
+=== Detailed Accuracy By Class ===
+
+               TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
+                 0.978     0.922      0.889     0.978     0.931      0.676    no_pizza
+                 0.078     0.022      0.316     0.078     0.125      0.676    got_pizza
+Weighted Avg.    0.872     0.816      0.821     0.872     0.836      0.676
+
+=== Confusion Matrix ===
+
+     a     b   <-- classified as
+ 15161   348 |     a = no_pizza
+  1902   161 |     b = got_pizza
+

@@ -1,0 +1,100 @@
+=== Run information ===
+
+Scheme:weka.classifiers.functions.Logistic -R 1.0E-8 -M -1
+Relation:     over_data
+Instances:    31018
+Attributes:   17
+              account_age
+              account_created_utc
+              link_karma
+              comment_karma
+              ups
+              num_comments
+              image_provided
+              reciprocate
+              exchange
+              text_length
+              money
+              time
+              job
+              student
+              family
+              craving
+              label
+Test mode:10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+Logistic Regression with ridge parameter of 1.0E-8
+Coefficients...
+                           Class
+Variable               got_pizza
+================================
+account_age                    0
+account_created_utc            0
+link_karma                     0
+comment_karma                  0
+ups                       0.0257
+num_comments              0.1386
+image_provided            0.2875
+reciprocate               0.4301
+exchange                  0.0308
+text_length               0.0067
+money                    -0.1111
+time                     -0.0489
+job                      -0.1931
+student                   -0.076
+family                   -0.0944
+craving                  -0.1812
+Intercept                -1.1804
+
+
+Odds Ratios...
+                           Class
+Variable               got_pizza
+================================
+account_age                    1
+account_created_utc            1
+link_karma                     1
+comment_karma                  1
+ups                       1.0261
+num_comments              1.1487
+image_provided            1.3331
+reciprocate               1.5375
+exchange                  1.0313
+text_length               1.0067
+money                     0.8948
+time                      0.9522
+job                       0.8244
+student                   0.9268
+family                      0.91
+craving                   0.8343
+
+
+Time taken to build model: 1.43 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances       20880               67.3158 %
+Incorrectly Classified Instances     10138               32.6842 %
+Kappa statistic                          0.3463
+Mean absolute error                      0.4337
+Root mean squared error                  0.4625
+Relative absolute error                 86.7447 %
+Root relative squared error             92.4932 %
+Total Number of Instances            31018     
+
+=== Detailed Accuracy By Class ===
+
+               TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
+                 0.588     0.241      0.709     0.588     0.643      0.735    got_pizza
+                 0.759     0.412      0.648     0.759     0.699      0.735    no_pizza
+Weighted Avg.    0.673     0.327      0.678     0.673     0.671      0.735
+
+=== Confusion Matrix ===
+
+     a     b   <-- classified as
+  9116  6393 |     a = got_pizza
+  3745 11764 |     b = no_pizza
+

@@ -1,0 +1,48 @@
+=== Run information ===
+
+Evaluator:    weka.attributeSelection.GainRatioAttributeEval 
+Search:weka.attributeSelection.Ranker -T -1.7976931348623157E308 -N -1
+Relation:     over_data
+Instances:    31018
+Attributes:   17
+              account_age
+              account_created_utc
+              link_karma
+              comment_karma
+              ups
+              num_comments
+              image_provided
+              reciprocate
+              exchange
+              text_length
+              money
+              time
+              job
+              student
+              family
+              craving
+              label
+Evaluation mode:10-fold cross-validation
+
+
+
+=== Attribute selection 10 fold cross-validation (stratified), seed: 1 ===
+
+average merit      average rank  attribute
+ 0.055 +- 0.003     1   +- 0       6 num_comments
+ 0.017 +- 0.001     2.8 +- 0.4     7 image_provided
+ 0.032 +- 0.016     3.6 +- 3.23   11 money
+ 0.016 +- 0         3.8 +- 0.4     5 ups
+ 0.013 +- 0.001     4.8 +- 0.4     4 comment_karma
+ 0.01  +- 0.001     6.4 +- 0.92    1 account_age
+ 0.01  +- 0.001     6.4 +- 0.49    3 link_karma
+ 0.009 +- 0.001     7.6 +- 0.66   10 text_length
+ 0.007 +- 0.001     8.8 +- 0.4     2 account_created_utc
+ 0.004 +- 0        10   +- 0.45    8 reciprocate
+ 0.003 +- 0        11.1 +- 0.54    9 exchange
+ 0.002 +- 0        11.8 +- 0.75   13 job
+ 0.002 +- 0        13.7 +- 0.9    14 student
+ 0.001 +- 0        14.1 +- 0.54   12 time
+ 0.002 +- 0        14.3 +- 1.19   16 craving
+ 0.001 +- 0        15.8 +- 0.6    15 family
+

@@ -1,0 +1,59 @@
+=== Run information ===
+
+Scheme:weka.classifiers.trees.RandomForest -I 100 -K 0 -S 1
+Relation:     over_data
+Instances:    31018
+Attributes:   17
+              account_age
+              account_created_utc
+              link_karma
+              comment_karma
+              ups
+              num_comments
+              image_provided
+              reciprocate
+              exchange
+              text_length
+              money
+              time
+              job
+              student
+              family
+              craving
+              label
+Test mode:10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+Random forest of 100 trees, each constructed while considering 5 random features.
+Out of bag error: 0.0151
+
+
+
+Time taken to build model: 27.33 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances       30498               98.3236 %
+Incorrectly Classified Instances       520                1.6764 %
+Kappa statistic                          0.9665
+Mean absolute error                      0.0838
+Root mean squared error                  0.1553
+Relative absolute error                 16.751  %
+Root relative squared error             31.0525 %
+Total Number of Instances            31018     
+
+=== Detailed Accuracy By Class ===
+
+               TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
+                 1         0.033      0.968     1         0.984      1        got_pizza
+                 0.967     0          1         0.967     0.983      1        no_pizza
+Weighted Avg.    0.983     0.017      0.984     0.983     0.983      1    
+
+=== Confusion Matrix ===
+
+     a     b   <-- classified as
+ 15506     3 |     a = got_pizza
+   517 14992 |     b = no_pizza
+

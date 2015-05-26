@@ -1,6 +1,6 @@
-money: money broke pay account rent buy bank cash due paycheck check spend poor credit budget loan buck deposit 
-time: now week until time last day when today tonight next first night after tomorrow month while before long friday ago soon past years till yesterday morning evening current
+money: money broke pay account rent bank check paycheck spend poor loan ramen cash afford empty
+time: time day week month year today tonight night tomorrow friday yesterday morning evening till
 job: work job paycheck unemployment interview fired employment hire
-student: college student school roommate study university finals semester class project dorm tuition
-family: family mom wife parent mother husband dad son daughter father
-craving: friend girlfriend crave birthday boyfriend celebrate party game movie date beer celebrate invite
+student: college student school roommate study university finals exam semester class project dorm tuition
+family: family mom wife parent mother husband dad son daughter father surprise
+craving: friend girlfriend boyfriend crave celebrate birthday party game beer invite
