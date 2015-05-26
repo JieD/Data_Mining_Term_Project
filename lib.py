@@ -22,11 +22,12 @@ MONTH_SECONDS = DAY_SECONDS * 30
 QUARTER_SECONDS = MONTH_SECONDS * 3
 YEAR_SECONDS = DAY_SECONDS * 365
 
-#
+# variables for storing meta information of retrieved stories from reddit
 FILE_NAME = 'roap_info.txt'
-FULL_FILE_NAME = 'full_roap_info.txt'
 count = 0
 THRESHOLD = 1000
+
+# data files
 OVER_FILE = 'data/over_data.csv'
 UNDER_FILE = 'data/under_data.csv'
 OUT_FILE = 'data/data.csv'
@@ -35,7 +36,10 @@ SUCCESS_OUT_FILE = 'data/success.csv'
 NOT_SUCCESS_OUT_FILE = 'data/not_success.csv'
 SUCCESS_TEXT_FILE = 'data/success_text.txt'
 NOT_SUCCESS_TEXT_FILE = 'data/not_success_text.txt'
+OVER_SKLEARN_FILE = 'data/over_data_sklearn.csv'
+UNDER_SKLEARN_FILE = 'data/under_data_sklearn.csv'
 
+# edit and label files
 EDIT_NOT_SUCCESS_FILE = 'edit/edit_not_success.txt'
 EDIT_SUCCESS_FILE = 'edit/edit_success.txt'
 LABELED_EDIT_NOT_SUCCESS = 'edit/labeled_edit_not_success.txt'
@@ -52,6 +56,7 @@ ROAP_TABLE_NAME = "roap"
 FULL_RAW_ROAP_TABLE_NAME = "full_raw_roap"
 FULL_ROAP_TABLE_NAME = "full_roap"
 
+# db value types
 INTEGER_TYPE = "INTEGER"
 BOOLEAN_TYPE = "INTEGER"
 LONG_TYPE = "INTEGER"
@@ -60,6 +65,7 @@ STRING_TYPE = "TEXT"
 BINARY_TYPE = "BLOB"
 NULL_TYPE = "NULL"
 
+# raw roap table primary key
 raw_story_primary_key = 'name'
 raw_story_primary_key_type = STRING_TYPE
 
@@ -78,8 +84,10 @@ RAW_FIELDS_DICT = {'approved_by':   STRING_TYPE,  'archived': STRING_TYPE,  'aut
                    'thumbnail':     STRING_TYPE,  'title':        STRING_TYPE,  'ups':           INTEGER_TYPE,
                    'url':           STRING_TYPE}
 
+# user info dictionary
 USER_INFO_DICT = {'comment_karma': INTEGER_TYPE, 'link_karma': INTEGER_TYPE, 'account_created_utc': FLOAT_TYPE}
 
+# label related fields
 story_label = 'label'
 story_label_type = STRING_TYPE
 THANKS = 'thanks'
@@ -87,9 +95,10 @@ REQUEST = 'request'
 OTHERS = 'others'
 SUCCESS = 'got_pizza'
 NOT_SUCCESS = 'no_pizza'
-HYPERLINK_FEATURE = 'http'
+#SUCCESS = '1'
+#NOT_SUCCESS = '0'
 
-
+# roap table primary key
 intermediate_story_primary_key = 'name'  # name
 intermediate_story_primary_key_type = STRING_TYPE
 
@@ -127,14 +136,13 @@ INTERMEDIATE_FIELDS_DICT = {
     'created_utc':    FLOAT_TYPE,
 }
 
-
+# ideal user data dictionary
 USER_FILEDS_DICT = {
     'account_age_in_days_at_request': FLOAT_TYPE,
     'account_age_in_days_at_retrieval': FLOAT_TYPE,
     'account_link_karma_at_retrieval': INTEGER_TYPE,
     'account_comment_karma_at_retrieval': INTEGER_TYPE,
 }
-
 
 # rename fields to be easy understandable
 FIELD_NAME_DICT = {
@@ -152,7 +160,6 @@ FIELD_NAME_DICT = {
     'created_utc': 'unix_timestamp_utc_of_request'
 }
 
-
 # intermediate story fields dictionary (prepare data)
 INTERMEDIATE_ELIGIBLE_FIELDS_DICT = {
     story_label: story_label_type,
@@ -169,12 +176,13 @@ INTERMEDIATE_ELIGIBLE_FIELDS_DICT = {
     'unix_timestamp_utc_of_request':    FLOAT_TYPE,  # created_utc
 }
 
-
+# text analysis related fields
 sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
 stemmer = SnowballStemmer("english")
 stopwords = nltk.corpus.stopwords.words('english')
 custom_stopwords = ['\'m', 'n\'t', 'reddit', 'redditor', 'random', 'raop', 'edit', 'location']
 
+# store request text into a list
 total_text = []
 total_success_text = []
 total_not_success_text = []
@@ -182,24 +190,28 @@ total_name = []
 total_success_name = []
 total_not_success_name = []
 
+# stem to word dictionary
 total_stemmed_success_words = []
 total_success_words = []
 vocab_frame = pd.DataFrame()
 
+# cluster related fields
 tfidf_matrix = []
 terms = []
 dist = []
-cluster_doc = 'cluster/doc_cluster.pkl'
+kmeans_doc = 'cluster/kmeans_doc.pkl'
+lda_doc = 'cluster/lda.pkl'
 number_topics = 10
 number_topic_features = 20
 
+# cluster files
 kmeans_topics_doc = 'cluster/kmeans_topics.txt'
 nmf_topics_doc = 'cluster/nmf_topics.txt'
-#topic_doc = 'cluster/topic_terms.txt'
+lda_topics_doc = 'cluster/lda_topics.txt'
 topic_doc = 'cluster/selected_topic_terms.txt'
-
 topic_term_dict = {}
 
+# for over/under-sampling
 success_count = 2083
 not_success_count = 15719
 file_header = ''

@@ -63,6 +63,7 @@ def write(conn, table_name, out_file_name, not_success_file_name, success_file_n
 
     writer = UnicodeWriter(open(out_file_name, "wb"))
     writer.writerow(args)
+    not_success = db_client.select_condition_no(cursor, table_name, lib.story_label, lib.NOT_SUCCESS, *args)
     writer.writerows(not_success)
     success = db_client.select_condition_no(cursor, table_name, lib.story_label, lib.SUCCESS, *args)
     writer.writerows(success)
