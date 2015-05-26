@@ -1,44 +1,44 @@
 
 cluster counts:
-9    36
-7    19
-5    18
-3    18
-6    15
-2    15
-4    13
-8    11
-1    10
-0    10
+0    711
+4    210
+6    185
+7    183
+8    175
+1    164
+9    140
+2    128
+3    100
+5     67
 dtype: int64
 
 Cluster 0 words:
-birthday tonight buy broke grandfather awesome years love someone something tuesday super thing news car fridge mom guys sub idea 
+work something today home anyone time someone years thing months tonight anything guys want pie dinner eating house way broke 
 
 Cluster 1 words:
-guys someone room night warm use people work stuck tomorrow anyone please advance home hope something internet shot power luck 
+college student broke time semester finals someone school pay anyone eating meal ramen loan guys months university hungry poor weekend 
 
 Cluster 2 words:
-story write place short poem trade sob anything hungry person stuff feel youtube unemployment wings impress something cards clear truth 
+family kids tonight dinner years wife months time anyone night pay school mother husband home care mom work brother request 
 
 Cluster 3 words:
-kids john work dominos time papa car draw tn unemployment way point school hut today baby options friday someone yay 
+please eating want someone something today work dinner tonight anything friends dont hungry broke house home pie brother jobs awesome 
 
 Cluster 4 words:
-today need bank mom tomorrow tonight usa work brother sucks groceries anyone dad dollars home nothing eating kindness pie butter 
+friends story night sob time tonight broke guys home work pie house today anything want bit someone dinner years anyone 
 
 Cluster 5 words:
-rice bag student cupboard sick months paycheck years past couple tea bank pasta make beans broke bit people employment folks 
+birthday today years party sons daughter tomorrow car spend family friends gift something jobs anything surprise work dinner want kindness 
 
 Cluster 6 words:
-anything years eating friends today school surprise dog family months let make wife alone starving check girlfriend lives cash error 
+pay friday forward broke paycheck rent months work time account payday today check someone anyone jobs hungry bank till years 
 
 Cluster 7 words:
-hungry house home hut mother offer feed trade uk draw lives months break broke today tomorrow fridge request college student 
+jobs months time work pay rent today broke anything couple someone eating rice years start unemployment anyone something paycheck ramen 
 
 Cluster 8 words:
-account got bank characters leave time happy valentines client pay yesterday tomorrow ramen something work thursday interview paper eating boyfriend 
+tomorrow cards ramen account bank gift someone anyone trade today broke dominos work tonight dinner guys time john eating papa 
 
 Cluster 9 words:
-jobs months dinner pay thing girl home morning years sure return pie plan sons time please birthday night something right 
+hungry broke anyone want request today home eating anything story someone thing time something house empty nothing work baby person 
 

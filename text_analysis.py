@@ -156,8 +156,6 @@ def main():
                  'text_length', 'money', 'time', 'job', 'student', 'family', 'craving', 'label')
     resampling(cursor, table_name)
 
-    count_yearly(cursor, table_name)
-
     conn.commit()
     conn.close()
 
