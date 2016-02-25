@@ -4,13 +4,20 @@ This is the term project for Data Mining course (CSc 869).
 We are asking for something online all the time. We search for a specific information on ​Google​ or Facebook​. We turn to ​StackOverflow.com​ for programming solutions. I based my study on Random Acts of Pizza (ROAP), which is a ​reddit​ online community that is dedicated to give free pizza to strangers. I collected about 18,000 posts between June 2011 and April 2015. The success rate is around 12%, which is pretty low. So **what makes people satisfy certain requests over other requests online?**
 
 The potential success factors can come from the following:
+
+
 **1. Who is requesting?
+
 2. How are they asking?
+
 3. When are they asking?
+
 4. What is being requested?**
+
 The goal of this study is to understand the success factors and quantify their effects.
 
 Description of the main strategy to realize the project:
+
 
 1. Attribute Generation
 The attribute generation phase in this project involves four major steps. They are raw ​reddit ​data collection, label generation, simple text analysis, and topic modeling.
