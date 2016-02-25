@@ -43,6 +43,15 @@ Based on the observation of the successful request, I used text clustering techn
 
   In total, I selected 16 attributes (listed below) plus class label to feed to WEKA.
   
+  
+  Success Factors | Selected Attributers                                        
+  ---------------------- | ----------------------------------------------------------- 
+  WHO - requester        | account_created_utc, account_age, link_karma, comment_karma
+  HOW - metadata         | up_votes, num_comments                                      
+  WHAT - simple analysis | image_provided, reciprocate, exchange, text_length          
+  WHAT - topic modeling  | money, time, job, student, family, craving                  
+  
+  
 **3. Evaluation results and discussions**
 
   I chose four classifiers: **Naive Bayesian**, **Logistic Regression**, **Decision Tree** and **Random Forest**, and compared the result based on 10 fold cross-validation on oversampling dataset.
@@ -56,11 +65,17 @@ Based on the observation of the successful request, I used text clustering techn
   Another interesting observation of the success count is that the earliest the request was made, the higher probability that it was satisfied.
 
 
-###Instructions on compiling and running my program:
+###Instructions on compiling and running the program:
   Programming Language: Python
+  
+  
   Development Environment: sqlite3, nltk, pandas, sklearn, gensim 
+  
+  
   Running Instructions:
-  	1. Unzip the file.
-  	2. Under the shell, run the following command:
+1. Unzip the file.
+2. 2. Under the shell, run the following command:
+
   	   cd <the newly created directory>
+  	   
   	   ./command
