@@ -6,13 +6,13 @@ We are asking for something online all the time. We search for a specific inform
 The potential success factors can come from the following:
 
 
-**1. Who is requesting?
+**1. Who is requesting?**
 
-2. How are they asking?
+**2. How are they asking?**
 
-3. When are they asking?
+**3. When are they asking?**
 
-4. What is being requested?**
+**4. What is being requested?**
 
 The goal of this study is to understand the success factors and quantify their effects.
 
